@@ -1,62 +1,35 @@
-# Fidelity Wallet — PWA v12.2 (ex Wallet Fedeltà)
+# TimeFlow — PWA v2.1
 
 ## Contenuto
-- `index.html`: applicazione (guida utente integrata in HTML, si apre subito e funziona offline)
-- `manifest.webmanifest`, `service-worker.js`: installazione come app, cache offline, notifiche
-- `icons/`: nuove icone (72–512 px, maskable 192/512, apple-touch-icon 180, favicon 64)
-- `Guida Utente Wallet Fedelta.pdf`: guida PDF originale (v11.0, con il vecchio nome), apribile dal link in fondo alla guida
+- `index.html`: applicazione (guida utente integrata)
+- `manifest.webmanifest`, `service-worker.js`: installazione come app e funzionamento offline
+- `icons/`: icone clessidra (72–512 px, maskable 192/512, apple-touch-icon 180, favicon 64)
+- `Guida_Utente_TimeFlow.pdf`: guida PDF originale, apribile dall'app
 
 ## Pubblicazione e installazione
-1. Carica TUTTI i file, mantenendo la cartella `icons`, su un hosting statico HTTPS (es. Netlify).
-2. Apri https://... (non file://): fotocamera, posizione, notifiche e installazione richiedono HTTPS.
-3. Android/Chrome/Edge: pulsante "Installa". iPhone/iPad: Safari -> Condividi -> Aggiungi alla schermata Home.
-4. La prima apertura richiede Internet: le librerie esterne vengono salvate in cache e poi l'app funziona offline.
-5. Aggiornamento da v11.x: il service worker si aggiorna alla prima apertura online; riapri l'app una seconda volta. Su alcuni telefoni l'icona sulla Home cambia solo reinstallando l'app. Le carte salvate restano (stessa chiave di archiviazione).
+1. Carica TUTTI i file, mantenendo la cartella `icons`, su un hosting statico HTTPS (Netlify, GitHub Pages...).
+2. Apri l'indirizzo https://... (non il file locale): installazione e offline richiedono HTTPS.
+3. Android/Chrome/Edge: pulsante "Installa" nell'intestazione (o menu del browser). iPhone/iPad: Safari -> Condividi -> Aggiungi alla schermata Home.
+4. La prima apertura richiede Internet: librerie e font vengono salvati e poi l'app funziona offline.
 
-## Novità v12.2 — backup su Google Drive per ogni utente
-- Chiunque installi l'app tocca Impostazioni -> Collega, sceglie il PROPRIO account Google e i backup vanno nel SUO Drive (scope drive.file: l'app vede solo il file che crea lei).
-- Il backup si aggiorna sempre sullo stesso file (prima ogni salvataggio creava un duplicato).
-- Backup automatico a ogni modifica delle carte (interruttore in Impostazioni), con "Salva ora" e "Ripristina da Drive" (con conferma e numero di carte).
-- Nuovo telefono: installa, Collega, e se nel Drive c'è un backup e le carte sono vuote viene ripristinato subito.
-- Mostra l'account collegato e la data dell'ultimo backup; se la sessione Google scade, il backup resta in attesa e parte al tocco successivo.
-- Rimossa la libreria gapi (api.js): ora solo Google Identity + chiamate dirette, più leggero.
+## IMPORTANTE
+- I dati stanno nel browser e sono legati all'indirizzo: da un nuovo indirizzo l'app parte vuota. Trasferiscili con Backup JSON -> Ripristina.
+- Google Calendar: aggiungi il NUOVO indirizzo tra le "Origini JavaScript autorizzate" del tuo ID client OAuth nella Google Cloud Console, altrimenti la connessione non funziona.
 
-### Configurazione Google Cloud (una volta sola, da te)
-Perché funzioni per TUTTI e non solo per te:
-1. Google Cloud Console -> API e servizi -> Schermata consenso OAuth: porta lo stato da "Test" a "In produzione". In Test solo gli utenti di test inseriti a mano possono accedere.
-2. Credenziali -> ID client OAuth (quello in index.html, costante CLIENT_ID) -> "Origini JavaScript autorizzate": aggiungi l'indirizzo https esatto dove pubblichi l'app (es. https://tuo-sito.netlify.app), senza barra finale e senza percorso.
-3. API e servizi -> Libreria: assicurati che "Google Drive API" sia abilitata.
-4. Nome app, email di assistenza e (consigliato) link a informativa privacy nella schermata consenso. Lo scope drive.file non è "sensibile", quindi in genere non serve la verifica di Google.
+## Novità v2.1
+- Nuove icone (clessidra): intestazione, favicon, installazione, schermata Home, scorciatoie.
+- Google Calendar: dopo un rinnovo silenzioso del token fallito (popup bloccato fuori da un clic) l'app non riprova per 2 minuti, evitando tentativi ripetuti a ogni rientro nell'app; usa "Riconnetti" per autorizzare subito.
+- Timer: indicatore sull'icona dell'app installata mentre corre (dove il sistema lo supporta); se resta acceso oltre 12 ore, alla chiusura chiede quante ore registrare (prima creava un'unica attività enorme).
+- Service worker v2.1 con cache aggiornata. Chi ha già installato la v2.0: apri l'app online e riaprila una seconda volta; su alcuni telefoni l'icona sulla Home cambia solo reinstallando l'app.
 
-## Novità v12.1 — ottimizzazione smartphone
-- Notch e barra di stato: l'intestazione scende sotto di essi (prima su iPhone l'app installata finiva sotto l'orologio); margini sicuri anche nei pannelli a tutto schermo e in orizzontale.
-- Altezze reali dei pannelli (dvh): nessuna parte nascosta dalla barra del browser; il codice a barre scorre se lo schermo è basso (telefono in orizzontale) e non esce mai dal riquadro.
-- Testi più grandi (minimo 11–12 px su telefono) e tasti dei pannelli di almeno 44 px.
-- Intestazione: lo stato del GPS non esce più dallo schermo (testo troncato con "…").
-- Cassa: lo schermo resta acceso finché la carta è aperta (Wake Lock) e c'è una breve vibrazione all'apertura. La vecchia "luminosità al massimo" non esisteva nei browser: testi della guida corretti, la luminosità va alzata dal telefono.
-- Caricamento più veloce: le librerie pesanti (OCR, scanner, codici a barre) non bloccano più la prima schermata; collegamenti anticipati ai server delle librerie.
-- Tastiera: tipo di tastiera adatto nei campi ricerca/codice/nome; il campo selezionato resta visibile con la tastiera aperta.
-- Colore della barra di stato coerente con tema chiaro/scuro; niente aggiornamento accidentale "tira per ricaricare" in app installata; riduzione animazioni se il sistema lo chiede.
-- Service worker v12.1.
+## Novità v2.0
+- Pulsante Guida (intestazione) con guida integrata e aggiornata.
+- Timer attività: avvio/stop, persistente alla chiusura, arrotondamento 15/30 min o esatto.
+- Inserimento IA migliorato: minuti, "1h30", "un'ora e mezza", ieri/altro ieri/dd-mm/giorno della settimana, "alle 14:30", cliente riconosciuto per nome o parola; non salva a caso se manca durata o cliente.
+- Correzioni: data odierna in ora locale (prima tra mezzanotte e le 2 poteva risultare il giorno prima); CSV con virgolette e "#" nel testo (prima il file si troncava), separatore ";" e BOM per Excel italiano, protezione da formule; etichetta "Anno Corrente" dinamica; caricamento sicuro dei dati corrotti; Ripristino con conferma e controlli.
+- Smartphone: margini notch, finestre a pannello scorrevole, campi a 16px (niente zoom automatico su iPhone), pulsanti da 40px, condivisione file nativa per backup/CSV.
+- PWA installabile e offline; scorciatoie "Nuova attività" e "Avvia timer"; promemoria backup dopo 30 giorni; Google/OAuth mai in cache.
 
-## Novità v12.0
-- Nome: Fidelity Wallet. Nuove icone in intestazione, guida, favicon, installazione.
-- Guida: ora è una pagina HTML dentro l'app (6 sezioni a comparsa) e si apre subito. Prima era un PDF in un iframe, che molti telefoni non mostrano o caricano lentamente.
-- Negozi vicini automatici: con l'app aperta segue la posizione, cerca su OpenStreetMap (Overpass) i negozi dei brand delle carte salvate, ne ricava l'indirizzo e, se sei entro 20 m dal perimetro del negozio (o dentro l'edificio), mostra un avviso in app e una notifica con il pulsante "Apri carta".
-  * Distanza regolabile (20/30/50 m), un solo avviso ogni 20 minuti per carta.
-  * Con segnale GPS impreciso (oltre ±40 m) non invia avvisi, per evitare falsi allarmi.
-  * Nel modulo carta: "Negozio vicino" (compila indirizzo e coordinate del punto vendita più vicino) e "GPS Attuale" (ricava l'indirizzo dalla posizione). L'indirizzo viene salvato nella carta.
-  * Impostazioni -> Rilevamento negozi: ricerca automatica on/off, distanza, schermo sempre acceso, "Prova notifica", "Cerca ora".
-  * Privacy: a OpenStreetMap vengono inviati solo un'area approssimativa (~100 m) e i nomi dei brand; codici e dati personali restano sul telefono.
-- Correzione Google Drive: gli script Google chiamavano le funzioni di avvio prima che fossero definite, quindi la sincronizzazione poteva non inizializzarsi mai. Ora l'avvio funziona in qualunque ordine di caricamento.
-- Le notifiche usano icone locali (prima venivano da siti esterni e offline non comparivano).
-- Service worker v12.0 con nuove cache (le vecchie "wallet-fedelta-*" vengono eliminate).
-
-## Limiti noti (non risolvibili da una PWA)
-- La posizione si legge solo con l'app aperta e schermo acceso: i browser non permettono geofencing in background né notifiche "push" basate sulla posizione a app chiusa (servirebbe un'app nativa). Per questo c'è l'opzione "Tieni lo schermo acceso".
-- 20 m sono vicini all'errore tipico del GPS vicino agli edifici (10–30 m).
-- I negozi devono esistere su OpenStreetMap con un nome simile al brand: altrimenti usa "GPS Attuale" per salvare le coordinate.
-- Le notifiche su iPhone richiedono l'app aggiunta alla schermata Home.
-- File di backup e di Drive mantengono il nome `wallet_fedelta_backup.json` per non perdere i backup esistenti.
-- Tailwind resta caricato da CDN (a runtime): su telefoni lenti la prima apertura è la più pesante; per eliminarlo serve generare un CSS statico con la CLI Tailwind (richiede Node, non fatto qui).
-- Il PDF della guida riporta ancora il vecchio nome.
+## Limiti noti
+- Tailwind resta caricato da CDN (a runtime); viene salvato in cache dopo la prima apertura online.
+- Su iPhone l'autorizzazione Google nell'app installata può essere bloccata dal sistema (autorizza prima da Safari).
