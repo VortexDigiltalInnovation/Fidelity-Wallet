@@ -1,4 +1,4 @@
-# Fidelity Wallet — PWA v12.2 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v12.1 (ex Wallet Fedeltà)
 
 ## Contenuto
 - `index.html`: applicazione (guida utente integrata in HTML, si apre subito e funziona offline)
@@ -12,21 +12,6 @@
 3. Android/Chrome/Edge: pulsante "Installa". iPhone/iPad: Safari -> Condividi -> Aggiungi alla schermata Home.
 4. La prima apertura richiede Internet: le librerie esterne vengono salvate in cache e poi l'app funziona offline.
 5. Aggiornamento da v11.x: il service worker si aggiorna alla prima apertura online; riapri l'app una seconda volta. Su alcuni telefoni l'icona sulla Home cambia solo reinstallando l'app. Le carte salvate restano (stessa chiave di archiviazione).
-
-## Novità v12.2 — backup su Google Drive per ogni utente
-- Chiunque installi l'app tocca Impostazioni -> Collega, sceglie il PROPRIO account Google e i backup vanno nel SUO Drive (scope drive.file: l'app vede solo il file che crea lei).
-- Il backup si aggiorna sempre sullo stesso file (prima ogni salvataggio creava un duplicato).
-- Backup automatico a ogni modifica delle carte (interruttore in Impostazioni), con "Salva ora" e "Ripristina da Drive" (con conferma e numero di carte).
-- Nuovo telefono: installa, Collega, e se nel Drive c'è un backup e le carte sono vuote viene ripristinato subito.
-- Mostra l'account collegato e la data dell'ultimo backup; se la sessione Google scade, il backup resta in attesa e parte al tocco successivo.
-- Rimossa la libreria gapi (api.js): ora solo Google Identity + chiamate dirette, più leggero.
-
-### Configurazione Google Cloud (una volta sola, da te)
-Perché funzioni per TUTTI e non solo per te:
-1. Google Cloud Console -> API e servizi -> Schermata consenso OAuth: porta lo stato da "Test" a "In produzione". In Test solo gli utenti di test inseriti a mano possono accedere.
-2. Credenziali -> ID client OAuth (quello in index.html, costante CLIENT_ID) -> "Origini JavaScript autorizzate": aggiungi l'indirizzo https esatto dove pubblichi l'app (es. https://tuo-sito.netlify.app), senza barra finale e senza percorso.
-3. API e servizi -> Libreria: assicurati che "Google Drive API" sia abilitata.
-4. Nome app, email di assistenza e (consigliato) link a informativa privacy nella schermata consenso. Lo scope drive.file non è "sensibile", quindi in genere non serve la verifica di Google.
 
 ## Novità v12.1 — ottimizzazione smartphone
 - Notch e barra di stato: l'intestazione scende sotto di essi (prima su iPhone l'app installata finiva sotto l'orologio); margini sicuri anche nei pannelli a tutto schermo e in orizzontale.

@@ -53,6 +53,7 @@
     <!-- Tesseract OCR per riconoscimento testi/brand in Locale -->
     <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
     <!-- Google APIs per Drive Sync -->
+    <script async defer src="https://apis.google.com/js/api.js" onload="window.__gapiReady=true;if(window.gapiLoaded)gapiLoaded()"></script>
     <script async defer src="https://accounts.google.com/gsi/client" onload="window.__gisReady=true;if(window.gisLoaded)gisLoaded()"></script>
     <style>
         body { -webkit-tap-highlight-color: transparent; }
@@ -457,25 +458,17 @@
 
                 <!-- Sezione Google Drive Sync -->
                 <div class="bg-slate-100/70 dark:bg-darkBg/60 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl space-y-2.5">
-                    <div class="flex items-center justify-between gap-2">
-                        <div class="min-w-0">
-                            <h4 class="font-semibold text-slate-800 dark:text-slate-200 text-xs"><i class="fa-brands fa-google text-red-500 mr-1.5"></i> Backup su Google Drive</h4>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate" id="drive-status-label">Collega il tuo account Google: i backup vanno nel tuo Drive</p>
-                            <p class="text-[10px] text-slate-400 truncate hidden" id="drive-last-label"></p>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="font-semibold text-slate-800 dark:text-slate-200 text-xs"><i class="fa-brands fa-google text-red-500 mr-1.5"></i> Google Drive Sync</h4>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400" id="drive-status-label">Sincronizzazione Cloud OAuth2</p>
                         </div>
                         <button id="drive-auth-btn" onclick="toggleGoogleDriveAuth()" class="h-10 px-4 bg-indigo-600 active:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow transition shrink-0">Collega</button>
                     </div>
-                    <div id="drive-sync-actions" class="hidden pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2">
-                        <label class="flex items-center justify-between text-xs text-slate-700 dark:text-slate-300 min-h-[44px]">
-                            <span>Backup automatico a ogni modifica</span>
-                            <input type="checkbox" id="drive-auto-chk" onchange="driveSetAuto(this.checked)" class="w-5 h-5 accent-indigo-600">
-                        </label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="syncUploadToDrive(true)" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Salva ora</button>
-                            <button onclick="syncDownloadFromDrive()" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Ripristina da Drive</button>
-                        </div>
+                    <div id="drive-sync-actions" class="hidden grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                        <button onclick="syncUploadToDrive()" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Salva su Drive</button>
+                        <button onclick="syncDownloadFromDrive()" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Carica da Drive</button>
                     </div>
-                    <p class="text-[10px] text-slate-400 leading-snug">L'app vede solo il file di backup che crea lei nel tuo Drive, nessun altro file. Su un nuovo telefono: installa l'app, tocca Collega e scegli Ripristina.</p>
                 </div>
 
                 <div class="space-y-2">
@@ -493,7 +486,7 @@
                     </div>
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                    <p class="text-[10px] text-slate-400">Fidelity Wallet v12.2 • Negozi vicini &amp; Notifiche</p>
+                    <p class="text-[10px] text-slate-400">Fidelity Wallet v12.1 • Negozi vicini &amp; Notifiche</p>
                 </div>
             </div>
         </div>
@@ -555,7 +548,7 @@
                         <li><b>Schermo acceso in cassa:</b> finché una carta è aperta lo schermo non si spegne (le app web non possono alzare la luminosità da sole: fallo dal telefono).</li>
                         <li><b>Cassa rapida e preferiti:</b> segna le carte più usate con la stella per averle nella barra in alto; cerca per nome o categoria.</li>
                         <li><b>Condivisione:</b> genera un QR della carta che un familiare può inquadrare per importarla.</li>
-                        <li><b>Backup:</b> esporta/importa un file JSON oppure collega il tuo Google Drive (<i>Impostazioni</i>): ogni utente salva nel proprio Drive, con backup automatico a ogni modifica.</li>
+                        <li><b>Backup:</b> esporta/importa un file JSON o sincronizza con Google Drive (<i>Impostazioni</i>).</li>
                     </ul>
                 </details>
 
@@ -578,7 +571,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.2 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.1 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a></p>
             </div>
         </div>
     </div>
@@ -1879,249 +1872,142 @@
             }
         }
 
-        // GOOGLE DRIVE – backup nel Drive di ciascun utente (OAuth2, scope drive.file)
-        // Ogni persona accede con il PROPRIO account Google: il file di backup viene creato e aggiornato
-        // nel SUO Drive. Lo scope drive.file permette all'app di vedere solo i file creati da lei.
+        // GOOGLE DRIVE OAUTH2 CONFIGURAZIONE
         const CLIENT_ID = '331743161733-6s5fg1d8obd4piosef9gnu3aei1l769n.apps.googleusercontent.com';
         const SCOPES = 'https://www.googleapis.com/auth/drive.file';
-        const DRIVE_FILE_NAME = 'wallet_fedelta_backup.json';
-        const DRV_KEY = 'fw_drive_state';
-        let tokenClient = null;
-        let driveToken = null;          // { value, exp }
-        let driveTokenWaiters = [];
-        let driveBusy = false;
-        let driveTimer = null;
-        let driveSuppress = false;
-        let drv = Object.assign({ linked: false, auto: true, fileId: '', email: '', last: 0, pending: false },
-            (() => { try { return JSON.parse(localStorage.getItem(DRV_KEY) || '{}'); } catch (e) { return {}; } })());
-        function drvSave() { try { localStorage.setItem(DRV_KEY, JSON.stringify(drv)); } catch (e) {} }
-        function driveMsg(t) {
-            let el = document.getElementById('drive-toast');
-            if (!el) {
-                el = document.createElement('div'); el.id = 'drive-toast';
-                el.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 24px);max-width:88vw;z-index:99999;background:#1e293b;color:#fff;font-size:13px;line-height:1.35;padding:12px 16px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.35);text-align:center;transition:opacity .25s;pointer-events:none';
-                document.body.appendChild(el);
-            }
-            el.textContent = t; el.style.opacity = '1';
-            clearTimeout(el._t); el._t = setTimeout(() => { el.style.opacity = '0'; }, 4200);
+        let tokenClient;
+        let gapiInited = false;
+        let gisInited = false;
+        let googleDriveConnected = false;
+
+        function gapiLoaded() {
+            if (typeof gapi === 'undefined') return;
+            gapi.load('client', initializeGapiClient);
+        }
+
+        async function initializeGapiClient() {
+            await gapi.client.init({
+                discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
+            });
+            gapiInited = true;
         }
 
         function gisLoaded() {
-            if (typeof google === 'undefined' || !google.accounts || tokenClient) return;
+            if (typeof google === 'undefined' || !google.accounts) return;
             tokenClient = google.accounts.oauth2.initTokenClient({
                 client_id: CLIENT_ID,
                 scope: SCOPES,
                 callback: (resp) => {
-                    const w = driveTokenWaiters; driveTokenWaiters = [];
-                    if (resp && resp.access_token) {
-                        driveToken = { value: resp.access_token, exp: Date.now() + ((resp.expires_in || 3600) - 120) * 1000 };
-                        w.forEach(x => x.ok(driveToken.value));
-                    } else {
-                        w.forEach(x => x.ko(resp && resp.error ? resp.error : 'errore'));
+                    if (resp.error !== undefined) {
+                        throw (resp);
                     }
-                },
-                error_callback: (err) => {
-                    const w = driveTokenWaiters; driveTokenWaiters = [];
-                    w.forEach(x => x.ko(err && err.type ? err.type : 'errore'));
+                    googleDriveConnected = true;
+                    updateDriveUIState();
+                    syncUploadToDrive();
                 }
             });
-            if (drv.linked) { updateDriveUIState(); driveTryResume(); }
+            gisInited = true;
         }
+
+        // Gli script Google possono terminare il caricamento prima di questo punto: avvia l'inizializzazione ora.
+        if (window.__gapiReady) gapiLoaded();
         if (window.__gisReady) gisLoaded();
 
-        // Ottiene un token valido. interactive=false: tenta in silenzio (senza finestre), se fallisce rifiuta.
-        function driveGetToken(interactive, firstTime) {
-            if (driveToken && Date.now() < driveToken.exp) return Promise.resolve(driveToken.value);
-            return new Promise((ok, ko) => {
-                if (!tokenClient) return ko('non_pronto');
-                driveTokenWaiters.push({ ok, ko });
-                if (driveTokenWaiters.length > 1) return;
-                try {
-                    tokenClient.requestAccessToken({ prompt: firstTime ? 'select_account' : '' });
-                } catch (e) { driveTokenWaiters = []; ko('errore'); }
-            });
-        }
-
-        async function driveFetch(url, opts, retry) {
-            const tk = await driveGetToken(true);
-            const r = await fetch(url, Object.assign({}, opts, { headers: Object.assign({ Authorization: 'Bearer ' + tk }, (opts && opts.headers) || {}) }));
-            if (r.status === 401 && !retry) { driveToken = null; return driveFetch(url, opts, true); }
-            return r;
-        }
-
-        // Prova a riprendere la sessione senza chiedere nulla; se il browser la blocca resta "in attesa" fino al prossimo tocco.
-        function driveTryResume() {
-            if (!drv.linked || (driveToken && Date.now() < driveToken.exp)) return;
-            driveGetToken(false).then(() => { updateDriveUIState(); if (drv.pending) driveScheduleBackup(500); }).catch(() => {
-                drv.pending = drv.pending || false; updateDriveUIState();
-                const once = () => { document.removeEventListener('pointerdown', once, true); if (drv.linked) driveGetToken(false).then(() => { updateDriveUIState(); if (drv.pending) driveScheduleBackup(500); }).catch(() => {}); };
-                document.addEventListener('pointerdown', once, true);
-            });
-        }
-
-        async function driveFindFile() {
-            const q = encodeURIComponent("name='" + DRIVE_FILE_NAME + "' and trashed=false");
-            const r = await driveFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&orderBy=modifiedTime%20desc&pageSize=1&fields=files(id,modifiedTime)');
-            if (!r.ok) throw new Error('find ' + r.status);
-            const j = await r.json();
-            return (j.files && j.files[0]) || null;
-        }
-
-        async function driveFetchEmail() {
-            try {
-                const r = await driveFetch('https://www.googleapis.com/drive/v3/about?fields=user(emailAddress)');
-                if (r.ok) { const j = await r.json(); if (j.user && j.user.emailAddress) { drv.email = j.user.emailAddress; drvSave(); } }
-            } catch (e) {}
-        }
-
         function toggleGoogleDriveAuth() {
-            if (drv.linked) {
-                if (!confirm('Scollegare Google Drive? I backup già salvati restano nel tuo Drive.')) return;
-                const t = driveToken && driveToken.value;
-                const done = () => { driveToken = null; drv = { linked: false, auto: true, fileId: '', email: '', last: 0, pending: false }; drvSave(); updateDriveUIState(); };
-                if (t && window.google && google.accounts) google.accounts.oauth2.revoke(t, done); else done();
+            if (CLIENT_ID.includes('INSERISCI_QUI')) {
+                alert('Attenzione: Inserisci il tuo Client ID di Google Cloud nel codice JavaScript prima di connetterti a Google Drive.');
                 return;
             }
-            if (!tokenClient) { driveMsg('Libreria Google non pronta: controlla la connessione e riprova.'); return; }
-            driveGetToken(true, true).then(async () => {
-                drv.linked = true; drv.fileId = ''; drvSave();
-                await driveFetchEmail();
-                updateDriveUIState();
-                await driveFirstSync();
-            }).catch(err => {
-                if (err === 'popup_closed' || err === 'access_denied') driveMsg('Collegamento annullato.');
-                else driveMsg('Impossibile collegare Google Drive (' + err + ').');
-            });
-        }
-
-        // Primo collegamento: decide se salvare, ripristinare o chiedere.
-        async function driveFirstSync() {
-            try {
-                const f = await driveFindFile();
-                if (f) drv.fileId = f.id;
-                drvSave();
-                if (!f) {
-                    if (cards.length) await syncUploadToDrive(false);
-                    driveMsg('Collegato. ' + (cards.length ? 'Backup creato nel tuo Drive.' : 'Il backup partirà alla prima carta salvata.'));
-                    return;
+            if (!googleDriveConnected) {
+                if (tokenClient) {
+                    tokenClient.requestAccessToken({ prompt: 'consent' });
+                } else {
+                    alert('La libreria Google non è ancora pronta. Riprova tra un istante.');
                 }
-                if (!cards.length) { await syncDownloadFromDrive(true); return; }
-                if (confirm('Nel tuo Drive c\'è già un backup di Fidelity Wallet.\n\nOK = ripristina le carte dal backup (sostituisce quelle di questo telefono)\nAnnulla = tieni quelle di questo telefono e aggiorna il backup')) await syncDownloadFromDrive(true);
-                else await syncUploadToDrive(false);
-            } catch (e) { driveMsg('Collegato, ma non riesco a leggere il Drive. Riprova da Impostazioni.'); }
-        }
-
-        function driveSetAuto(v) { drv.auto = !!v; drvSave(); if (v) driveScheduleBackup(500); }
-
-        function driveFmt(ts) {
-            try { return new Date(ts).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; }
+            } else {
+                const token = gapi.client.getToken();
+                if (token !== null) {
+                    google.accounts.oauth2.revoke(token.access_token, () => {
+                        gapi.client.setToken('');
+                        googleDriveConnected = false;
+                        updateDriveUIState();
+                    });
+                }
+            }
         }
 
         function updateDriveUIState() {
             const btn = document.getElementById('drive-auth-btn');
             const lbl = document.getElementById('drive-status-label');
-            const last = document.getElementById('drive-last-label');
             const actions = document.getElementById('drive-sync-actions');
-            const chk = document.getElementById('drive-auto-chk');
-            if (!btn) return;
-            if (drv.linked) {
-                btn.innerText = 'Scollega';
-                btn.className = 'h-10 px-4 bg-rose-600 active:bg-rose-500 text-white font-bold text-xs rounded-xl shadow transition shrink-0';
-                lbl.innerText = 'Collegato' + (drv.email ? ': ' + drv.email : ' a Google Drive');
-                last.classList.remove('hidden');
-                last.innerText = drv.pending ? 'Backup in attesa: si invia appena possibile' : (drv.last ? 'Ultimo backup: ' + driveFmt(drv.last) : 'Nessun backup ancora');
+
+            if (googleDriveConnected) {
+                btn.innerText = "Disconnetti";
+                btn.className = "h-10 px-4 bg-rose-600 active:bg-rose-500 text-white font-bold text-xs rounded-xl shadow transition shrink-0";
+                lbl.innerText = "Connesso a Google Drive";
                 actions.classList.remove('hidden');
-                if (chk) chk.checked = !!drv.auto;
             } else {
-                btn.innerText = 'Collega';
-                btn.className = 'h-10 px-4 bg-indigo-600 active:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow transition shrink-0';
-                lbl.innerText = 'Collega il tuo account Google: i backup vanno nel tuo Drive';
-                last.classList.add('hidden');
+                btn.innerText = "Collega";
+                btn.className = "h-10 px-4 bg-indigo-600 active:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow transition shrink-0";
+                lbl.innerText = "Sincronizzazione Cloud OAuth2";
                 actions.classList.add('hidden');
             }
         }
 
-        // Salvataggio: aggiorna sempre lo stesso file (niente duplicati).
-        async function syncUploadToDrive(manual) {
-            if (!drv.linked) { if (manual) driveMsg('Prima collega Google Drive.'); return; }
-            if (driveBusy) return;
-            driveBusy = true;
+        async function syncUploadToDrive() {
             try {
-                const body = JSON.stringify(cards, null, 2);
-                const boundary = 'fwb' + Date.now();
-                const mk = (meta) => '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(meta) +
-                    '\r\n--' + boundary + '\r\nContent-Type: application/json\r\n\r\n' + body + '\r\n--' + boundary + '--';
-                const hdr = { 'Content-Type': 'multipart/related; boundary=' + boundary };
-                let id = drv.fileId;
-                let r = null;
-                if (id) {
-                    r = await driveFetch('https://www.googleapis.com/upload/drive/v3/files/' + id + '?uploadType=multipart', { method: 'PATCH', headers: hdr, body: mk({ name: DRIVE_FILE_NAME }) });
-                    if (r.status === 404) { id = ''; drv.fileId = ''; }
-                }
-                if (!id) {
-                    const f = await driveFindFile();
-                    if (f) {
-                        id = f.id; drv.fileId = id;
-                        r = await driveFetch('https://www.googleapis.com/upload/drive/v3/files/' + id + '?uploadType=multipart', { method: 'PATCH', headers: hdr, body: mk({ name: DRIVE_FILE_NAME }) });
-                    } else {
-                        r = await driveFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', { method: 'POST', headers: hdr, body: mk({ name: DRIVE_FILE_NAME, mimeType: 'application/json' }) });
-                        if (r.ok) { const j = await r.json(); drv.fileId = j.id; }
-                    }
-                }
-                if (r && r.ok) {
-                    drv.last = Date.now(); drv.pending = false; drvSave(); updateDriveUIState();
-                    if (manual) driveMsg('Backup salvato nel tuo Google Drive.');
-                } else { throw new Error('upload ' + (r && r.status)); }
-            } catch (err) {
-                drv.pending = true; drvSave(); updateDriveUIState();
-                if (manual) driveMsg('Backup non riuscito: ' + (err && err.message ? err.message : err) + '. Riproverò appena possibile.');
-            } finally { driveBusy = false; }
-        }
+                const fileContent = JSON.stringify(cards, null, 2);
+                const file = new Blob([fileContent], { type: 'application/json' });
+                const metadata = { name: 'wallet_fedelta_backup.json', mimeType: 'application/json' };
 
-        function driveScheduleBackup(ms) {
-            if (!drv.linked || !drv.auto || driveSuppress) return;
-            drv.pending = true; drvSave();
-            clearTimeout(driveTimer);
-            driveTimer = setTimeout(() => {
-                if (!navigator.onLine) { updateDriveUIState(); return; }
-                if (!(driveToken && Date.now() < driveToken.exp)) { driveTryResume(); updateDriveUIState(); return; }
-                syncUploadToDrive(false);
-            }, ms == null ? 4000 : ms);
-        }
+                const form = new FormData();
+                form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+                form.append('file', file);
 
-        async function syncDownloadFromDrive(skipConfirm) {
-            if (!drv.linked) { driveMsg('Prima collega Google Drive.'); return; }
-            try {
-                const f = await driveFindFile();
-                if (!f) { driveMsg('Nessun backup trovato nel tuo Google Drive.'); return; }
-                const r = await driveFetch('https://www.googleapis.com/drive/v3/files/' + f.id + '?alt=media');
-                if (!r.ok) throw new Error('lettura ' + r.status);
-                const cloud = await r.json();
-                if (!Array.isArray(cloud)) throw new Error('formato non valido');
-                if (!skipConfirm && !confirm('Ripristinare ' + cloud.length + ' carte dal backup del ' + driveFmt(f.modifiedTime) + '?\nLe carte attuali di questo telefono verranno sostituite.')) return;
-                driveSuppress = true;
-                cards = cloud;
-                saveToStorage();
-                renderCards();
-                driveSuppress = false;
-                drv.fileId = f.id; drv.last = Date.now(); drv.pending = false; drvSave(); updateDriveUIState();
-                driveMsg('Ripristinate ' + cloud.length + ' carte da Google Drive.');
-            } catch (err) {
-                driveSuppress = false;
-                driveMsg('Ripristino non riuscito: ' + (err && err.message ? err.message : err));
+                const accessToken = gapi.client.getToken().access_token;
+                const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                    method: 'POST',
+                    headers: new Headers({ 'Authorization': 'Bearer ' + accessToken }),
+                    body: form,
+                });
+                
+                if (response.ok) {
+                    alert('Backup caricato con successo su Google Drive!');
+                } else {
+                    alert('Errore durante il salvataggio su Drive.');
+                }
+            } catch(err) {
+                alert('Errore di connessione a Google Drive.');
             }
         }
 
-        // Backup automatico: ogni salvataggio delle carte pianifica l'invio a Drive (con attesa di 4 s per raggruppare le modifiche).
-        (function () {
-            const orig = saveToStorage;
-            saveToStorage = function () { orig.apply(this, arguments); driveScheduleBackup(); };
-        })();
-        window.addEventListener('online', () => { if (drv.pending) driveScheduleBackup(500); });
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden' && drv.pending && driveToken && Date.now() < driveToken.exp && !driveBusy) syncUploadToDrive(false);
-        });
-        document.addEventListener('DOMContentLoaded', updateDriveUIState);
-        </script>
+        async function syncDownloadFromDrive() {
+            try {
+                const accessToken = gapi.client.getToken().access_token;
+                const response = await fetch("https://www.googleapis.com/drive/v3/files?q=name='wallet_fedelta_backup.json' and trashed=false", {
+                    headers: new Headers({ 'Authorization': 'Bearer ' + accessToken })
+                });
+                const result = await response.json();
+                
+                if (result.files && result.files.length > 0) {
+                    const fileId = result.files[0].id;
+                    const fileRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+                        headers: new Headers({ 'Authorization': 'Bearer ' + accessToken })
+                    });
+                    const cloudCards = await fileRes.json();
+                    if (Array.isArray(cloudCards)) {
+                        cards = cloudCards;
+                        saveToStorage();
+                        renderCards();
+                        alert('Carte scaricate e sincronizzate da Google Drive!');
+                    }
+                } else {
+                    alert('Nessun file di backup trovato su Google Drive.');
+                }
+            } catch(err) {
+                alert('Errore durante il recupero del file da Drive.');
+            }
+        }
+    </script>
 </body>
 </html>
