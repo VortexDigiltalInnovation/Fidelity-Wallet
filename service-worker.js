@@ -1,16 +1,16 @@
-/* TimeFlow – Service Worker v2.1 */
-const VERSION = 'v2-1';
-const SHELL_CACHE = 'timeflow-shell-' + VERSION;
-const RUNTIME_CACHE = 'timeflow-runtime-' + VERSION;
-const RUNTIME_MAX_ENTRIES = 80;
+/* Fidelity Wallet – Service Worker v12.2 */
+const VERSION = 'v12-2';
+const SHELL_CACHE = 'fidelity-wallet-shell-' + VERSION;
+const RUNTIME_CACHE = 'fidelity-wallet-runtime-' + VERSION;
+const RUNTIME_MAX_ENTRIES = 150;
 const NAV_TIMEOUT_MS = 3500;
 
-// File locali: obbligatori per l'installazione.
+// File locali: obbligatori. Se uno manca l'installazione fallisce (comportamento voluto).
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './Guida_Utente_TimeFlow.pdf',
+  './Guida%20Utente%20Wallet%20Fedelta.pdf',
   './icons/favicon-64.png',
   './icons/icon-72.png',
   './icons/icon-96.png',
@@ -32,16 +32,22 @@ const CDN_PRECACHE = [
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
+  'https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js',
+  'https://cdn.jsdelivr.net/npm/qrcode_js@1.0.0/qrcode.min.js',
+  'https://unpkg.com/html5-qrcode@2.3.8',
+  'https://unpkg.com/@zxing/library@0.21.3',
+  'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js'
 ];
 
-// Solo questi host vengono messi in cache; Google Calendar/OAuth (googleapis, accounts.google.com) passano sempre dalla rete.
+// Solo questi host vengono messi in cache. Tutto il resto (Google Drive/OAuth, Nominatim, ecc.)
+// passa direttamente dalla rete: niente dati sincronizzati o risposte autenticate in cache.
 const CACHEABLE_HOSTS = [
   'cdn.tailwindcss.com',
   'cdnjs.cloudflare.com',
   'cdn.jsdelivr.net',
-  'fonts.googleapis.com',
-  'fonts.gstatic.com'
+  'unpkg.com',
+  'icon.horse',
+  'cdn-icons-png.flaticon.com'
 ];
 
 self.addEventListener('install', event => {
@@ -61,7 +67,7 @@ self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keep = [SHELL_CACHE, RUNTIME_CACHE];
     const keys = await caches.keys();
-    await Promise.all(keys.filter(k => k.startsWith('timeflow-') && !keep.includes(k)).map(k => caches.delete(k)));
+    await Promise.all(keys.filter(k => (k.startsWith('wallet-fedelta') || k.startsWith('fidelity-wallet')) && !keep.includes(k)).map(k => caches.delete(k)));
     if (self.registration.navigationPreload) {
       try { await self.registration.navigationPreload.enable(); } catch (e) {}
     }
@@ -82,7 +88,7 @@ function withTimeout(promise, ms) {
   });
 }
 
-// Navigazione: rete (con preload e timeout), poi cache.
+// Navigazione: rete (con preload e timeout), poi cache. Funziona anche con ?openCard=... o ?source=pwa.
 async function handleNavigation(event) {
   const shell = await caches.open(SHELL_CACHE);
   try {
@@ -95,10 +101,10 @@ async function handleNavigation(event) {
   }
 }
 
-// File locali statici: risposta immediata dalla cache e aggiornamento in background.
+// File locali statici: risponde subito dalla cache e aggiorna in background.
 async function staleWhileRevalidate(event, cacheName) {
   const cache = await caches.open(cacheName);
-  const cached = await cache.match(event.request);
+  const cached = await cache.match(event.request, { ignoreSearch: false });
   const update = fetch(event.request).then(res => {
     if (res && res.ok) cache.put(event.request, res.clone()).catch(() => {});
     return res;
@@ -107,7 +113,7 @@ async function staleWhileRevalidate(event, cacheName) {
   return (await update) || Response.error();
 }
 
-// Librerie esterne: cache-first (le versioni sono fisse).
+// Librerie/immagini esterne: cache-first (le versioni sono fisse).
 async function cacheFirst(request) {
   const cache = await caches.open(RUNTIME_CACHE);
   const cached = await cache.match(request);
@@ -134,9 +140,11 @@ self.addEventListener('fetch', event => {
   }
 
   if (url.origin === self.location.origin) {
+    // Richieste Range (anteprima PDF): risposta completa dalla cache se presente.
     if (request.headers.has('range')) {
       event.respondWith(
-        caches.match(request.url, { ignoreSearch: true, ignoreVary: true }).then(hit => hit || fetch(request))
+        caches.match(request.url, { ignoreSearch: true, ignoreVary: true })
+          .then(hit => hit || fetch(request))
       );
       return;
     }
@@ -147,8 +155,26 @@ self.addEventListener('fetch', event => {
   if (CACHEABLE_HOSTS.includes(url.hostname)) {
     event.respondWith(cacheFirst(request));
   }
+  // Altri host: nessuna intercettazione.
 });
 
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  const cardId = event.notification.data && event.notification.data.cardId;
+  event.waitUntil((async () => {
+    const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const client of windows) {
+      if ('focus' in client) {
+        await client.focus();
+        client.postMessage({ type: 'OPEN_CARD', cardId });
+        return;
+      }
+    }
+    const target = new URL('./', self.location).href + '?openCard=' + encodeURIComponent(cardId || '');
+    await self.clients.openWindow(target);
+  })());
 });
