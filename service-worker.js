@@ -1,5 +1,5 @@
-/* Fidelity Wallet – Service Worker v12.2 */
-const VERSION = 'v12-2';
+/* Fidelity Wallet – Service Worker v12.3 */
+const VERSION = 'v12-3';
 const SHELL_CACHE = 'fidelity-wallet-shell-' + VERSION;
 const RUNTIME_CACHE = 'fidelity-wallet-runtime-' + VERSION;
 const RUNTIME_MAX_ENTRIES = 150;

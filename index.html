@@ -468,6 +468,7 @@
                     <div id="drive-sync-actions" class="hidden grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                         <button onclick="syncUploadToDrive()" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Salva su Drive</button>
                         <button onclick="syncDownloadFromDrive()" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Carica da Drive</button>
+                        <button onclick="openDriveBackupFolder()" class="col-span-2 h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition"><i class="fa-solid fa-folder-open mr-1.5"></i>Apri cartella backup su Drive</button>
                     </div>
                     <p id="drive-backup-time" class="text-[10px] text-slate-500 dark:text-slate-400"></p>
                 </div>
@@ -488,7 +489,7 @@
                     </div>
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                    <p class="text-[10px] text-slate-400">Fidelity Wallet v12.2 • Negozi vicini &amp; Notifiche</p>
+                    <p class="text-[10px] text-slate-400">Fidelity Wallet v12.3 • Negozi vicini &amp; Notifiche</p>
                 </div>
             </div>
         </div>
@@ -573,7 +574,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.2 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.3 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a></p>
             </div>
         </div>
     </div>
@@ -1908,12 +1909,15 @@
         }
 
         // GOOGLE DRIVE OAUTH2 CONFIGURAZIONE
-        // Correzione v12.2: il token restituito da Google Identity non veniva memorizzato
+        // Correzione v12.3: il token restituito da Google Identity non veniva memorizzato
         // (gapi.client.getToken() restava vuoto), quindi il salvataggio su Drive falliva.
         // Ora il token è gestito direttamente, rinnovato quando scade, e le chiamate usano fetch.
         const CLIENT_ID = '331743161733-6s5fg1d8obd4piosef9gnu3aei1l769n.apps.googleusercontent.com';
         const SCOPES = 'https://www.googleapis.com/auth/drive.file';
         const DRIVE_BACKUP_PREFIX = 'wallet_fedelta_backup';
+        const DRIVE_FOLDER_NAME = 'Fidelity Wallet Backup';
+        const DRIVE_FOLDER_MIME = 'application/vnd.google-apps.folder';
+        const DRIVE_FOLDER_KEY = 'fw_drive_folder_id';
         let tokenClient;
         let gisInited = false;
         let googleDriveConnected = localStorage.getItem('fw_drive_connected') === '1';
@@ -2017,13 +2021,59 @@
             updateBackupLabels();
         }
 
+        // Cartella dedicata "Fidelity Wallet Backup" nel Drive dell'utente.
+        // Con lo scope drive.file l'app vede solo i file/cartelle che ha creato lei: la cartella
+        // è visibile in Drive (Il mio Drive), l'utente può aprirla, rinominare/modificare i file.
+        async function getDriveBackupFolder() {
+            let id = null;
+            try { id = localStorage.getItem(DRIVE_FOLDER_KEY); } catch (e) {}
+            if (id) {
+                try {
+                    const r = await driveFetch('https://www.googleapis.com/drive/v3/files/' + id + '?fields=id,trashed,mimeType,webViewLink');
+                    const f = await r.json();
+                    if (!f.trashed && f.mimeType === DRIVE_FOLDER_MIME) return f;
+                } catch (e) { /* cartella eliminata o non più accessibile: la cerco/ricreo */ }
+            }
+            // Cerca una cartella già creata dall'app (es. da un altro dispositivo)
+            const q = encodeURIComponent("mimeType='" + DRIVE_FOLDER_MIME + "' and trashed=false and appProperties has { key='fidelityWalletFolder' and value='1' }");
+            const sr = await driveFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&orderBy=createdTime&pageSize=1&fields=files(id,webViewLink)');
+            const found = (await sr.json()).files || [];
+            let folder = found[0];
+            if (!folder) {
+                const cr = await driveFetch('https://www.googleapis.com/drive/v3/files?fields=id,webViewLink', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+                    body: JSON.stringify({
+                        name: DRIVE_FOLDER_NAME,
+                        mimeType: DRIVE_FOLDER_MIME,
+                        description: 'Backup delle carte di Fidelity Wallet. Puoi aprire e modificare i file JSON qui dentro.',
+                        appProperties: { fidelityWalletFolder: '1' }
+                    })
+                });
+                folder = await cr.json();
+            }
+            try { localStorage.setItem(DRIVE_FOLDER_KEY, folder.id); } catch (e) {}
+            return folder;
+        }
+
+        async function openDriveBackupFolder() {
+            try {
+                const folder = await getDriveBackupFolder();
+                window.open(folder.webViewLink || ('https://drive.google.com/drive/folders/' + folder.id), '_blank', 'noopener');
+            } catch (err) {
+                alert('Impossibile aprire la cartella su Drive: ' + (err && err.message || err));
+            }
+        }
+
         async function syncUploadToDrive() {
             try {
+                const folder = await getDriveBackupFolder();
                 const now = new Date();
                 const name = backupFileName(now);
                 const metadata = {
                     name,
                     mimeType: 'application/json',
+                    parents: [folder.id],
                     description: 'Backup Fidelity Wallet del ' + formatDateTimeIT(now) + ' (' + cards.length + ' carte)',
                     appProperties: { fidelityWalletBackup: '1', createdAt: now.toISOString() }
                 };
@@ -2037,7 +2087,7 @@
                     body
                 });
                 recordBackup('drive');
-                alert('Backup salvato su Google Drive!\n' + name + '\n' + formatDateTimeIT(now));
+                alert('Backup salvato su Google Drive!\nCartella: ' + DRIVE_FOLDER_NAME + '\n' + name + '\n' + formatDateTimeIT(now));
             } catch (err) {
                 alert('Errore durante il salvataggio su Drive: ' + (err && err.message || err));
             }
@@ -2045,19 +2095,30 @@
 
         async function syncDownloadFromDrive() {
             try {
-                const q = encodeURIComponent("name contains '" + DRIVE_BACKUP_PREFIX + "' and trashed=false");
-                const res = await driveFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&orderBy=createdTime%20desc&pageSize=1&fields=files(id,name,createdTime)');
-                const result = await res.json();
-                if (!result.files || result.files.length === 0) { alert('Nessun file di backup trovato su Google Drive.'); return; }
-                const f = result.files[0];
-                if (!confirm('Ripristinare il backup del ' + formatDateTimeIT(f.createdTime) + '?\n(' + f.name + ')\nLe carte attuali verranno sostituite.')) return;
+                const folder = await getDriveBackupFolder();
+                // File nella cartella dedicata + eventuali vecchi backup creati dall'app fuori dalla cartella.
+                // Ordine per ultima modifica: se modifichi un file su Drive, risulta il più recente.
+                const q = encodeURIComponent("('" + folder.id + "' in parents or appProperties has { key='fidelityWalletBackup' and value='1' } or name contains '" + DRIVE_BACKUP_PREFIX + "') and trashed=false and mimeType!='" + DRIVE_FOLDER_MIME + "'");
+                const res = await driveFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&orderBy=modifiedTime%20desc&pageSize=10&fields=files(id,name,createdTime,modifiedTime)');
+                const files = (await res.json()).files || [];
+                if (files.length === 0) { alert('Nessun file di backup trovato su Google Drive.'); return; }
+                let f = files[0];
+                if (files.length > 1) {
+                    const list = files.map((x, i) => (i + 1) + ') ' + x.name + ' — ' + formatDateTimeIT(x.modifiedTime)).join('\n');
+                    const ans = prompt('Quale backup vuoi ripristinare? Scrivi il numero.\n\n' + list, '1');
+                    if (ans === null) return;
+                    const n = parseInt(ans, 10);
+                    if (!(n >= 1 && n <= files.length)) { alert('Numero non valido.'); return; }
+                    f = files[n - 1];
+                }
+                if (!confirm('Ripristinare il backup del ' + formatDateTimeIT(f.modifiedTime) + '?\n(' + f.name + ')\nLe carte attuali verranno sostituite.')) return;
                 const fileRes = await driveFetch('https://www.googleapis.com/drive/v3/files/' + f.id + '?alt=media');
                 const cloudCards = await fileRes.json();
                 if (!Array.isArray(cloudCards)) { alert('Il file su Drive non è un backup valido.'); return; }
                 cards = cloudCards;
                 saveToStorage();
                 renderCards();
-                alert('Carte ripristinate dal backup del ' + formatDateTimeIT(f.createdTime) + '.');
+                alert('Carte ripristinate dal backup del ' + formatDateTimeIT(f.modifiedTime) + '.');
             } catch (err) {
                 alert('Errore durante il recupero del file da Drive: ' + (err && err.message || err));
             }
