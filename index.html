@@ -471,6 +471,7 @@
                         <button onclick="openDriveBackupFolder()" class="col-span-2 h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition"><i class="fa-solid fa-folder-open mr-1.5"></i>Apri cartella backup su Drive</button>
                     </div>
                     <p id="drive-backup-time" class="text-[10px] text-slate-500 dark:text-slate-400"></p>
+                    <p id="drive-folder-label" class="text-[10px] text-slate-500 dark:text-slate-400"></p>
                 </div>
 
                 <div class="space-y-2">
@@ -489,7 +490,7 @@
                     </div>
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                    <p class="text-[10px] text-slate-400">Fidelity Wallet v12.3 • Negozi vicini &amp; Notifiche</p>
+                    <p class="text-[10px] text-slate-400">Fidelity Wallet v12.4 • Negozi vicini &amp; Notifiche</p>
                 </div>
             </div>
         </div>
@@ -574,7 +575,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.3 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.4 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a></p>
             </div>
         </div>
     </div>
@@ -1909,7 +1910,7 @@
         }
 
         // GOOGLE DRIVE OAUTH2 CONFIGURAZIONE
-        // Correzione v12.3: il token restituito da Google Identity non veniva memorizzato
+        // Correzione v12.4: il token restituito da Google Identity non veniva memorizzato
         // (gapi.client.getToken() restava vuoto), quindi il salvataggio su Drive falliva.
         // Ora il token è gestito direttamente, rinnovato quando scade, e le chiamate usano fetch.
         const CLIENT_ID = '331743161733-6s5fg1d8obd4piosef9gnu3aei1l769n.apps.googleusercontent.com';
@@ -1943,6 +1944,7 @@
                     try { localStorage.setItem('fw_drive_connected', '1'); } catch (e) {}
                     updateDriveUIState();
                     if (pending) pending.resolve(driveToken.access_token);
+                    getDriveBackupFolder().catch(err => alert('Collegato a Drive, ma non sono riuscito a creare la cartella "' + DRIVE_FOLDER_NAME + '": ' + (err && err.message || err)));
                     if (uploadAfterConnect) { uploadAfterConnect = false; syncUploadToDrive(); }
                 },
                 error_callback: (err) => {
@@ -2019,6 +2021,7 @@
                 actions.classList.add('hidden');
             }
             updateBackupLabels();
+            try { const fid = localStorage.getItem(DRIVE_FOLDER_KEY); if (googleDriveConnected && fid) setDriveFolderLabel({ id: fid }); else setDriveFolderLabel(null); } catch (e) {}
         }
 
         // Cartella dedicata "Fidelity Wallet Backup" nel Drive dell'utente.
@@ -2031,7 +2034,7 @@
                 try {
                     const r = await driveFetch('https://www.googleapis.com/drive/v3/files/' + id + '?fields=id,trashed,mimeType,webViewLink');
                     const f = await r.json();
-                    if (!f.trashed && f.mimeType === DRIVE_FOLDER_MIME) return f;
+                    if (!f.trashed && f.mimeType === DRIVE_FOLDER_MIME) { setDriveFolderLabel(f); return f; }
                 } catch (e) { /* cartella eliminata o non più accessibile: la cerco/ricreo */ }
             }
             // Cerca una cartella già creata dall'app (es. da un altro dispositivo)
@@ -2053,7 +2056,16 @@
                 folder = await cr.json();
             }
             try { localStorage.setItem(DRIVE_FOLDER_KEY, folder.id); } catch (e) {}
+            setDriveFolderLabel(folder);
             return folder;
+        }
+
+        function setDriveFolderLabel(folder) {
+            const el = document.getElementById('drive-folder-label');
+            if (!el) return;
+            if (!folder) { el.textContent = ''; return; }
+            const url = folder.webViewLink || ('https://drive.google.com/drive/folders/' + folder.id);
+            el.innerHTML = 'Cartella su Drive: <a href="' + url + '" target="_blank" rel="noopener" class="underline text-indigo-600 dark:text-indigo-400">' + DRIVE_FOLDER_NAME + '</a>';
         }
 
         async function openDriveBackupFolder() {
@@ -2081,13 +2093,15 @@
                 const body = '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) +
                     '\r\n--' + boundary + '\r\nContent-Type: application/json\r\n\r\n' + JSON.stringify(cards, null, 2) +
                     '\r\n--' + boundary + '--';
-                await driveFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,createdTime', {
+                const upRes = await driveFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,createdTime,parents', {
                     method: 'POST',
                     headers: { 'Content-Type': 'multipart/related; boundary=' + boundary },
                     body
                 });
+                const up = await upRes.json();
+                const inFolder = Array.isArray(up.parents) && up.parents.indexOf(folder.id) !== -1;
                 recordBackup('drive');
-                alert('Backup salvato su Google Drive!\nCartella: ' + DRIVE_FOLDER_NAME + '\n' + name + '\n' + formatDateTimeIT(now));
+                alert('Backup salvato su Google Drive!\n' + (inFolder ? 'Cartella: ' : 'ATTENZIONE, file non nella cartella: ') + DRIVE_FOLDER_NAME + '\n' + name + '\n' + formatDateTimeIT(now));
             } catch (err) {
                 alert('Errore durante il salvataggio su Drive: ' + (err && err.message || err));
             }

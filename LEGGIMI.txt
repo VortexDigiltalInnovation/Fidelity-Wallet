@@ -1,4 +1,4 @@
-# Fidelity Wallet — PWA v12.3 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v12.4 (ex Wallet Fedeltà)
 
 ## Contenuto
 - `index.html`: applicazione (guida utente integrata in HTML, si apre subito e funziona offline)
@@ -12,6 +12,10 @@
 3. Android/Chrome/Edge: pulsante "Installa". iPhone/iPad: Safari -> Condividi -> Aggiungi alla schermata Home.
 4. La prima apertura richiede Internet: le librerie esterne vengono salvate in cache e poi l'app funziona offline.
 5. Aggiornamento da v11.x: il service worker si aggiorna alla prima apertura online; riapri l'app una seconda volta. Su alcuni telefoni l'icona sulla Home cambia solo reinstallando l'app. Le carte salvate restano (stessa chiave di archiviazione).
+
+## Novità v12.4
+- Drive: la cartella "Fidelity Wallet Backup" viene creata subito al collegamento a Google; in Impostazioni compare il link per aprirla. Dopo ogni backup l'app verifica che il file sia dentro la cartella e lo segnala. Se la creazione fallisce, mostra il motivo.
+- Service worker v12.4.
 
 ## Novità v12.3
 - Google Drive: i backup vengono salvati in una cartella dedicata "Fidelity Wallet Backup" nel Drive dell'utente (creata automaticamente, visibile in "Il mio Drive"). Dentro ci sono i file wallet_fedelta_backup_AAAA-MM-GG_HH-MM-SS.json, apribili e modificabili direttamente da Drive.
