@@ -114,7 +114,7 @@
             <img src="./icons/icon-96.png" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
             <div class="min-w-0">
                 <h1 class="font-black text-xs tracking-tight text-slate-900 dark:text-white flex items-center">
-                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span>
+                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v12.5</span>
                 </h1>
                 <p class="text-[10px] text-slate-500 dark:text-slate-400 block truncate" id="gps-status-text">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block align-middle mr-1 animate-pulse"></span>In attesa del GPS…
@@ -282,7 +282,12 @@
                     </div>
                     <div>
                         <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Nome Negozio *</label>
-                        <input type="text" id="store-name" autocapitalize="words" autocomplete="off" required placeholder="Es. Esselunga" class="w-full h-12 bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 text-xs focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-slate-100">
+                        <input type="text" id="store-name" onchange="fwAutoFromForm(false)" autocapitalize="words" autocomplete="off" required placeholder="Es. Esselunga" class="w-full h-12 bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 text-xs focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-slate-100">
+                    </div>
+                    <div class="-mt-2 space-y-1.5">
+                        <input type="hidden" id="store-logo" value="">
+                        <button type="button" onclick="fwAutoFromForm(true)" class="w-full h-10 bg-indigo-600/10 active:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 rounded-xl text-xs font-semibold transition flex items-center justify-center"><i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> Auto: dominio, logo e negozio più vicino</button>
+                        <p id="fw-enrich-status" class="text-[11px] text-slate-500 dark:text-slate-400 min-h-[14px]"></p>
                     </div>
                     <div class="grid grid-cols-2 gap-2.5">
                         <div>
@@ -490,7 +495,9 @@
                     </div>
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                    <p class="text-[10px] text-slate-400">Fidelity Wallet v12.4 • Negozi vicini &amp; Notifiche</p>
+                    <img src="./icons/icon-96.png" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">12.5</span></p>
+                    <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
                 </div>
             </div>
         </div>
@@ -504,7 +511,7 @@
                     <img src="./icons/icon-96.png" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 12.5</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -521,6 +528,7 @@
                     <ol class="mt-2 space-y-2 list-decimal pl-5">
                         <li><b>Installa l'app.</b> Premi <i>Installa</i> in alto. Su iPhone: Safari → Condividi → Aggiungi alla schermata Home.</li>
                         <li><b>Aggiungi una carta.</b> Con l'icona <i>Scanner</i> inquadra il codice a barre oppure importa una foto dalla galleria. Puoi anche usare <i>Aggiungi</i> e scegliere un preset.</li>
+                        <li><b>Compilazione automatica.</b> Appena inserisci o scansioni la carta, l'app cerca da sola il dominio ufficiale e il logo del negozio, trova il punto vendita più vicino (indirizzo e coordinate) e salva tutto nella carta. Puoi rilanciarla con il pulsante <i>Auto</i>. Vengono inviati a Wikidata/OpenStreetMap/servizi di icone solo il nome del brand e un'area approssimativa (~1 km).</li>
                         <li><b>Controlla il riconoscimento.</b> L'IA locale riconosce brand, logo e colori (Esselunga, Coop, Conad, Decathlon…). Correggi codice e titolare se serve.</li>
                         <li><b>Consenti posizione e notifiche.</b> Consenti la posizione quando il browser lo chiede e premi <i>Attiva</i> in <i>Impostazioni → Notifiche Push</i>.</li>
                         <li><b>Alla cassa</b> tocca la carta: lo schermo resta acceso. Se la cassa fatica a leggere il codice alza la luminosità del telefono e tienilo a 10–15 cm dallo scanner.</li>
@@ -575,7 +583,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.4 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.5 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a></p>
             </div>
         </div>
     </div>
@@ -803,7 +811,7 @@
                     item.onclick = () => openBarcodeModal(card.id);
 
                     const logoHtml = card.domain 
-                        ? `<img src="https://icon.horse/icon/${sanitizeHTML(card.domain)}" class="w-full h-full object-contain p-1 rounded-xl bg-white/90 shadow-sm" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-sm\\' style=\\'color:${brandColor}\\'>${safeName.charAt(0)}</span>';">`
+                        ? `<img src="${fwLogoSrc(card)}" class="w-full h-full object-contain p-1 rounded-xl bg-white/90 shadow-sm" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-sm\\' style=\\'color:${brandColor}\\'>${safeName.charAt(0)}</span>';">`
                         : `<span class="font-bold text-sm" style="color:${brandColor}">${safeName.charAt(0)}</span>`;
 
                     item.innerHTML = `
@@ -834,7 +842,7 @@
                 const safeHolder = card.holder ? sanitizeHTML(card.holder) : '';
 
                 const logoHtml = card.domain 
-                    ? `<img src="https://icon.horse/icon/${sanitizeHTML(card.domain)}" class="w-full h-full object-contain rounded-xl bg-white/90 p-1" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-sm text-slate-800\\'>${safeName.charAt(0)}</span>';">`
+                    ? `<img src="${fwLogoSrc(card)}" class="w-full h-full object-contain rounded-xl bg-white/90 p-1" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-sm text-slate-800\\'>${safeName.charAt(0)}</span>';">`
                     : `<span class="font-bold text-sm text-white">${safeName.charAt(0)}</span>`;
 
                 cardEl.innerHTML = `
@@ -911,7 +919,7 @@
 
                 const safeName = sanitizeHTML(card.name);
                 const logoHtml = card.domain 
-                    ? `<img src="https://icon.horse/icon/${sanitizeHTML(card.domain)}" class="w-full h-full object-contain rounded-xl" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-xs\\' style=\\'color:${brandColor}\\'>${safeName.charAt(0)}</span>';">`
+                    ? `<img src="${fwLogoSrc(card)}" class="w-full h-full object-contain rounded-xl" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-xs\\' style=\\'color:${brandColor}\\'>${safeName.charAt(0)}</span>';">`
                     : `<span class="font-bold text-xs text-white">${safeName.charAt(0)}</span>`;
 
                 item.innerHTML = `
@@ -985,7 +993,7 @@
             logoContainer.style.backgroundColor = brandColor;
             logoContainer.style.color = '#ffffff';
             if (card.domain) {
-                logoContainer.innerHTML = `<img src="https://icon.horse/icon/${sanitizeHTML(card.domain)}" class="w-full h-full object-contain p-1 bg-white/90 rounded-xl" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-base text-white\\'>${sanitizeHTML(card.name).charAt(0)}</span>';">`;
+                logoContainer.innerHTML = `<img src="${fwLogoSrc(card)}" class="w-full h-full object-contain p-1 bg-white/90 rounded-xl" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-base text-white\\'>${sanitizeHTML(card.name).charAt(0)}</span>';">`;
             } else {
                 logoContainer.innerHTML = `<span class="font-bold text-base text-white">${sanitizeHTML(card.name).charAt(0)}</span>`;
             }
@@ -1041,6 +1049,8 @@
         function openAddModal() {
             document.getElementById('modal-title').innerText = 'Aggiungi Carta Fedeltà';
             document.getElementById('card-form').reset();
+            document.getElementById('store-logo').value = ''; document.getElementById('store-logo').dataset.domain = '';
+            document.getElementById('fw-enrich-status').textContent = '';
             document.getElementById('edit-card-id').value = '';
             document.getElementById('gps-coords-display').innerText = 'Nessuna coordinata registrata';
             document.getElementById('gps-lat').value = '';
@@ -1057,6 +1067,8 @@
             document.getElementById('edit-card-id').value = card.id;
             document.getElementById('store-name').value = card.name;
             document.getElementById('store-domain').value = card.domain || '';
+            document.getElementById('store-logo').value = card.logo || ''; document.getElementById('store-logo').dataset.domain = card.domain || '';
+            document.getElementById('fw-enrich-status').textContent = '';
             document.getElementById('store-color').value = card.color || '#e11d48';
             document.getElementById('card-code').value = card.code;
             document.getElementById('card-type').value = card.type || 'EAN13';
@@ -1085,6 +1097,8 @@
             document.getElementById('store-name').value = name;
             document.getElementById('store-domain').value = domain;
             document.getElementById('store-color').value = color;
+            const lg = document.getElementById('store-logo'); if (lg.dataset.domain !== domain) { lg.value = ''; lg.dataset.domain = ''; }
+            if (name && name !== 'Altro') setTimeout(() => fwAutoFromForm(false), 150);
         }
 
         function saveCard(e) {
@@ -1099,6 +1113,9 @@
             const lat = document.getElementById('gps-lat').value ? parseFloat(document.getElementById('gps-lat').value) : null;
             const lng = document.getElementById('gps-lng').value ? parseFloat(document.getElementById('gps-lng').value) : null;
             const address = document.getElementById('map-address-input').value.trim().slice(0, 200) || null;
+            const logoEl = document.getElementById('store-logo');
+            const logo = (logoEl.value && logoEl.dataset.domain === domain) ? logoEl.value : null;
+            let savedCard = null;
 
             if (id) {
                 const card = cards.find(c => c.id === id);
@@ -1112,19 +1129,23 @@
                     card.lat = lat;
                     card.lng = lng;
                     card.address = address;
+                    card.logo = logo || (card.domain === domain ? card.logo : null) || null;
+                    savedCard = card;
                 }
             } else {
                 const newCard = {
                     id: 'card_' + Date.now(),
-                    name, domain, color, code, type, holder, lat, lng, address,
+                    name, domain, color, code, type, holder, lat, lng, address, logo,
                     favorite: false
                 };
                 cards.push(newCard);
+                savedCard = newCard;
             }
 
             saveToStorage();
             renderCards();
             closeAddModal();
+            if (savedCard) setTimeout(() => fwEnrichCard(savedCard), 100);
         }
 
         function toggleGpsMode() {
@@ -1251,7 +1272,7 @@
                 if (!matched.length) return;
                 const geom = fwGeometry(el);
                 if (!geom) return;
-                out.push({ id: el.type + el.id, name: t.name || t.brand || matched[0].name, address: fwAddress(t), geom, cardIds: matched.map(c => c.id) });
+                out.push({ id: el.type + el.id, name: t.name || t.brand || matched[0].name, address: fwAddress(t), site: t.website || t['contact:website'] || t['brand:website'] || '', geom, cardIds: matched.map(c => c.id) });
             });
             return out;
         }
@@ -1580,6 +1601,278 @@
         }
 
 
+        /* ===== Fidelity Wallet v12.5 – compilazione automatica (dominio, logo, negozio più vicino) =====
+           Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
+           (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
+           4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
+        const FW_VERSION = '12.5';
+        let fwEnrichBusy = false;
+
+        function fwCleanDomain(u) {
+            try {
+                let h = String(u || '').trim();
+                if (!h) return '';
+                if (!/^https?:\/\//i.test(h)) h = 'https://' + h;
+                return new URL(h).hostname.replace(/^www\./, '').toLowerCase();
+            } catch (e) { return ''; }
+        }
+
+        // Il logo memorizzato (data URL) ha la precedenza; altrimenti si usa il servizio online come prima.
+        function fwLogoSrc(card) {
+            if (card && card.logo) return card.logo;
+            return 'https://icon.horse/icon/' + sanitizeHTML((card && card.domain) || '');
+        }
+
+        function fwToast(msg) {
+            let t = document.getElementById('fw-toast');
+            if (!t) {
+                t = document.createElement('div');
+                t.id = 'fw-toast';
+                t.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 92px);max-width:88vw;z-index:9999;background:rgba(15,23,42,.94);color:#fff;font-size:12px;padding:10px 14px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.35);text-align:center;transition:opacity .3s;opacity:0;pointer-events:none';
+                document.body.appendChild(t);
+            }
+            t.textContent = msg;
+            t.style.opacity = '1';
+            clearTimeout(t._h);
+            t._h = setTimeout(() => { t.style.opacity = '0'; }, 3800);
+        }
+
+        async function fwFetchJson(url, ms) {
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), ms || 6000);
+            try {
+                const res = await fetch(url, { signal: ctrl.signal });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return await res.json();
+            } finally { clearTimeout(timer); }
+        }
+
+        function fwLoadImg(src, minW, cors) {
+            return new Promise(resolve => {
+                const im = new Image();
+                let done = false;
+                const end = ok => { if (done) return; done = true; clearTimeout(t); resolve(ok && im.naturalWidth >= minW ? im : null); };
+                const t = setTimeout(() => end(false), 6000);
+                im.onload = () => end(true);
+                im.onerror = () => end(false);
+                if (cors) im.crossOrigin = 'anonymous';
+                im.referrerPolicy = 'no-referrer';
+                im.src = src;
+            });
+        }
+
+        function fwImgToData(im) {
+            try {
+                const S = 96, c = document.createElement('canvas');
+                c.width = c.height = S;
+                const x = c.getContext('2d');
+                const k = Math.min(S / im.naturalWidth, S / im.naturalHeight);
+                const w = im.naturalWidth * k, h = im.naturalHeight * k;
+                x.drawImage(im, (S - w) / 2, (S - h) / 2, w, h);
+                const logo = c.toDataURL('image/png');
+                // colore dominante (ignora bianchi, grigi e trasparenze)
+                const d = x.getImageData(0, 0, S, S).data, bins = {};
+                for (let i = 0; i < d.length; i += 4) {
+                    const r = d[i], g = d[i + 1], b = d[i + 2], a = d[i + 3];
+                    if (a < 200) continue;
+                    const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+                    if (mx - mn < 40 || (mn > 235)) continue;
+                    const key = (r >> 5) + ',' + (g >> 5) + ',' + (b >> 5);
+                    const o = bins[key] || (bins[key] = { n: 0, r: 0, g: 0, b: 0 });
+                    o.n++; o.r += r; o.g += g; o.b += b;
+                }
+                let best = null;
+                Object.values(bins).forEach(o => { if (!best || o.n > best.n) best = o; });
+                const hex = v => ('0' + Math.round(v).toString(16)).slice(-2);
+                const color = best ? '#' + hex(best.r / best.n) + hex(best.g / best.n) + hex(best.b / best.n) : null;
+                return { logo, color };
+            } catch (e) { return null; }   // canvas "tainted" (server senza CORS)
+        }
+
+        async function fwProbeLogo(domain) {
+            if (!domain) return null;
+            const sources = [
+                ['https://icon.horse/icon/' + domain, 16],
+                ['https://www.google.com/s2/favicons?domain=' + domain + '&sz=128', 32],
+                ['https://icons.duckduckgo.com/ip3/' + domain + '.ico', 16]
+            ];
+            for (const [src, minW] of sources) {
+                const im = await fwLoadImg(src, minW, true);
+                if (im) { const r = fwImgToData(im); if (r) return r; }
+            }
+            return null;
+        }
+
+        async function fwWikidataDomain(name) {
+            try {
+                const base = 'https://www.wikidata.org/w/api.php?format=json&origin=*';
+                const s = await fwFetchJson(base + '&action=wbsearchentities&type=item&limit=6&language=it&uselang=it&search=' + encodeURIComponent(name));
+                const found = (s.search || []);
+                if (!found.length) return '';
+                const ids = found.map(x => x.id);
+                const g = await fwFetchJson(base + '&action=wbgetentities&props=claims|descriptions&languages=it|en&ids=' + ids.join('|'));
+                const retail = /(catena|supermerc|negozi|retail|store|company|azienda|brand|marchio|distribuzione|chain|shop|farmaci|profumer|cosmetic|elettronic|bricolage|abbigliament|arredament|carburant|ristorazione)/i;
+                const nn = fwNorm(name);
+                for (const f of found) {
+                    const e = (g.entities || {})[f.id];
+                    const cl = e && e.claims && e.claims.P856;
+                    if (!cl || !cl.length) continue;
+                    const pref = cl.find(c => c.rank === 'preferred') || cl[0];
+                    const dom = fwCleanDomain(pref.mainsnak && pref.mainsnak.datavalue && pref.mainsnak.datavalue.value);
+                    if (!dom) continue;
+                    const desc = ((e.descriptions || {}).it || (e.descriptions || {}).en || {}).value || '';
+                    if (retail.test(desc) || fwNorm(f.label) === nn) return dom;
+                }
+            } catch (e) {}
+            return '';
+        }
+
+        async function fwGuessDomain(name) {
+            const slug = fwNorm(name).replace(/ /g, '');
+            if (slug.length < 3) return '';
+            for (const d of [slug + '.it', slug + '.com']) {
+                // Google restituisce un'icona di 16 px per i domini sconosciuti: sopra i 32 px il sito esiste davvero
+                const im = await fwLoadImg('https://www.google.com/s2/favicons?domain=' + d + '&sz=128', 32, false);
+                if (im) return d;
+            }
+            return '';
+        }
+
+        // Cuore della ricerca. need = { domain, place, logo }. Restituisce solo ciò che ha trovato.
+        async function fwEnrichCore(name, curDomain, need, status) {
+            const say = status || (() => {});
+            const out = { domain: '', logo: null, color: null, place: null, storeSite: '' };
+            const nn = fwNorm(name);
+            const brand = BRAND_DATABASE.find(b => fwNorm(b.name) === nn);
+            if (brand) { out.color = brand.color; }
+
+            let domain = curDomain || (brand && brand.domain) || '';
+
+            // 1) negozio più vicino (indirizzo, coordinate, eventuale sito ufficiale)
+            if (need.place || (!domain && need.domain)) {
+                say('Cerco il negozio più vicino…');
+                try {
+                    const pos = await fwGetPosition();
+                    const lat = pos.coords.latitude, lng = pos.coords.longitude;
+                    const clat = Math.round(lat * 100) / 100, clng = Math.round(lng * 100) / 100;   // area approssimativa (~1 km)
+                    const json = await fwOverpass(fwBuildQuery(clat, clng, 2500, [name]));
+                    const stores = fwParse(json, [{ id: 'auto', name }]);
+                    if (stores.length) {
+                        stores.forEach(s => { s.d = fwDistToGeom(lat, lng, s.geom); });
+                        stores.sort((a, b) => a.d - b.d);
+                        const s = stores[0], c = fwCentroid(s.geom);
+                        const addr = s.address || await fwReverse(c.lat, c.lng);
+                        out.place = { lat: c.lat, lng: c.lng, address: addr, label: (s.name || name) + ' a ' + Math.round(s.d) + ' m' };
+                        out.storeSite = fwCleanDomain(s.site);
+                    }
+                } catch (e) {}
+            }
+
+            // 2) dominio
+            if (!domain && need.domain) {
+                say('Cerco il dominio ufficiale…');
+                domain = out.storeSite || await fwWikidataDomain(name) || await fwGuessDomain(name);
+            }
+            out.domain = domain || '';
+
+            // 3) logo + colore
+            if (domain && need.logo) {
+                say('Scarico il logo…');
+                const r = await fwProbeLogo(domain);
+                if (r) { out.logo = r.logo; if (!brand && r.color) out.color = r.color; }
+            }
+            return out;
+        }
+
+        // --- Applicazione al modulo carta ---
+        async function fwAutoFromForm(force) {
+            if (fwEnrichBusy) return;
+            const g = id => document.getElementById(id);
+            const st = g('fw-enrich-status');
+            const name = g('store-name').value.trim();
+            if (fwNorm(name).length < 3 || fwNorm(name) === 'nuova carta') {
+                if (force) st.textContent = 'Scrivi il nome del negozio, poi premi "Auto".';
+                return;
+            }
+            const domainEl = g('store-domain'), logoEl = g('store-logo');
+            const hasPlace = g('gps-lat').value && g('gps-lng').value && g('map-address-input').value.trim();
+            const need = {
+                domain: !domainEl.value.trim(),
+                place: !!force || !hasPlace,
+                logo: !logoEl.value || logoEl.dataset.domain !== domainEl.value.trim()
+            };
+            if (!need.domain && !need.place && !need.logo) return;
+            fwEnrichBusy = true;
+            const formId = g('edit-card-id').value;
+            try {
+                const res = await fwEnrichCore(name, domainEl.value.trim(), need, t => { st.textContent = t; });
+                const done = [];
+                if (res.domain && need.domain) { domainEl.value = res.domain; done.push('dominio ' + res.domain); }
+                if (res.color && (need.domain || !formId)) { g('store-color').value = res.color; }
+                const dom = domainEl.value.trim();
+                if (res.logo && dom) { logoEl.value = res.logo; logoEl.dataset.domain = dom; done.push('logo'); }
+                if (res.place && need.place) {
+                    fwSetFormPlace(res.place.lat, res.place.lng, res.place.address, res.place.label);
+                    done.push('negozio più vicino' + (res.place.address ? ' (' + res.place.address + ')' : ''));
+                }
+                st.textContent = done.length ? 'Compilato: ' + done.join(', ') + '.' : 'Nessun dato trovato: controlla il nome o compila a mano.';
+                // memorizza subito anche se la carta esiste già (es. appena scansionata)
+                if (formId && done.length) {
+                    const card = cards.find(c => c.id === formId);
+                    if (card) {
+                        card.domain = domainEl.value.trim();
+                        card.color = g('store-color').value;
+                        card.logo = (logoEl.value && logoEl.dataset.domain === card.domain) ? logoEl.value : (card.logo || null);
+                        if (g('gps-lat').value) { card.lat = parseFloat(g('gps-lat').value); card.lng = parseFloat(g('gps-lng').value); }
+                        card.address = g('map-address-input').value.trim().slice(0, 200) || card.address || null;
+                        saveToStorage(); renderCards();
+                    }
+                }
+            } catch (e) {
+                st.textContent = 'Ricerca automatica non riuscita: controlla connessione e permesso di posizione.';
+            } finally { fwEnrichBusy = false; }
+        }
+
+        // --- Carta già salvata (salvataggio manuale senza dati, o logo da scaricare) ---
+        async function fwEnrichCard(card, silent) {
+            if (!card || fwNorm(card.name).length < 3 || fwNorm(card.name) === 'nuova carta') return false;
+            const need = {
+                domain: !card.domain,
+                place: !(card.lat && card.lng && card.address),
+                logo: !card.logo
+            };
+            if (!need.domain && !need.place && !need.logo) return false;
+            try {
+                const res = await fwEnrichCore(card.name, card.domain || '', need, null);
+                let changed = false;
+                if (res.domain && !card.domain) { card.domain = res.domain; if (res.color) card.color = res.color; changed = true; }
+                if (res.logo && card.domain && (res.domain === card.domain || !need.domain)) { card.logo = res.logo; changed = true; }
+                if (res.place && need.place) {
+                    if (!card.lat || !card.lng) { card.lat = res.place.lat; card.lng = res.place.lng; }
+                    if (!card.address && res.place.address) card.address = res.place.address;
+                    changed = true;
+                }
+                if (changed) {
+                    saveToStorage(); renderCards();
+                    if (!silent) fwToast('Fidelity Wallet ha compilato e salvato i dati di ' + card.name);
+                }
+                return changed;
+            } catch (e) { return false; }
+        }
+
+        // Carte già presenti: scarica in silenzio i loghi mancanti (max 3 per avvio) così restano anche offline.
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(async () => {
+                if (!navigator.onLine) return;
+                const todo = cards.filter(c => c.domain && !c.logo).slice(0, 3);
+                for (const c of todo) {
+                    const r = await fwProbeLogo(c.domain);
+                    if (r) { c.logo = r.logo; }
+                }
+                if (todo.length) { saveToStorage(); renderCards(); }
+            }, 5000);
+        });
+
         /* ===== Ottimizzazioni smartphone ===== */
         let fwBcWake = null;
         async function fwBarcodeWake(on) {
@@ -1715,6 +2008,7 @@
                     document.getElementById('store-domain').value = matchedBrand.domain;
                     document.getElementById('store-color').value = matchedBrand.color;
                 }
+                setTimeout(() => fwAutoFromForm(true), 150);
             } else {
                 const brandName = matchedBrand ? matchedBrand.name : 'Nuova Carta';
                 const brandDomain = matchedBrand ? matchedBrand.domain : '';
@@ -1734,6 +2028,7 @@
                 saveToStorage();
                 renderCards();
                 openEditModal(newCard.id);
+                setTimeout(() => fwAutoFromForm(true), 150);
             }
         }
 
@@ -1910,7 +2205,7 @@
         }
 
         // GOOGLE DRIVE OAUTH2 CONFIGURAZIONE
-        // Correzione v12.4: il token restituito da Google Identity non veniva memorizzato
+        // Correzione v12.5: il token restituito da Google Identity non veniva memorizzato
         // (gapi.client.getToken() restava vuoto), quindi il salvataggio su Drive falliva.
         // Ora il token è gestito direttamente, rinnovato quando scade, e le chiamate usano fetch.
         const CLIENT_ID = '331743161733-6s5fg1d8obd4piosef9gnu3aei1l769n.apps.googleusercontent.com';

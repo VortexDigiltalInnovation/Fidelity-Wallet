@@ -1,4 +1,4 @@
-# Fidelity Wallet — PWA v12.4 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v12.5 (ex Wallet Fedeltà)
 
 ## Contenuto
 - `index.html`: applicazione (guida utente integrata in HTML, si apre subito e funziona offline)
@@ -12,6 +12,13 @@
 3. Android/Chrome/Edge: pulsante "Installa". iPhone/iPad: Safari -> Condividi -> Aggiungi alla schermata Home.
 4. La prima apertura richiede Internet: le librerie esterne vengono salvate in cache e poi l'app funziona offline.
 5. Aggiornamento da v11.x: il service worker si aggiorna alla prima apertura online; riapri l'app una seconda volta. Su alcuni telefoni l'icona sulla Home cambia solo reinstallando l'app. Le carte salvate restano (stessa chiave di archiviazione).
+
+## Novità v12.5
+- Compilazione automatica: appena inserisci o scansioni una carta (o scrivi il nome del negozio) l'app cerca da sola il dominio ufficiale (database interno -> sito del negozio su OpenStreetMap -> Wikidata -> tentativo sul nome), scarica il logo e il colore del brand, trova il negozio più vicino (indirizzo + coordinate) e memorizza tutto nella carta. Pulsante "Auto" nel modulo per rilanciarla.
+- Il logo viene salvato nella carta (resta visibile anche offline); per le carte già presenti i loghi mancanti vengono scaricati in silenzio all'avvio.
+- Versione del software ben visibile: accanto al logo nell'intestazione, in Impostazioni e nella guida.
+- Privacy: a Wikidata, OpenStreetMap e ai servizi di icone vanno solo il nome del brand, il dominio e un'area di ~1 km.
+- Service worker v12.5.
 
 ## Novità v12.4
 - Drive: la cartella "Fidelity Wallet Backup" viene creata subito al collegamento a Google; in Impostazioni compare il link per aprirla. Dopo ogni backup l'app verifica che il file sia dentro la cartella e lo segnala. Se la creazione fallisce, mostra il motivo.
