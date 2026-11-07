@@ -1,4 +1,4 @@
-# Fidelity Wallet — PWA v12.5 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v12.7 (ex Wallet Fedeltà)
 
 ## Contenuto
 - `index.html`: applicazione (guida utente integrata in HTML, si apre subito e funziona offline)
@@ -12,6 +12,21 @@
 3. Android/Chrome/Edge: pulsante "Installa". iPhone/iPad: Safari -> Condividi -> Aggiungi alla schermata Home.
 4. La prima apertura richiede Internet: le librerie esterne vengono salvate in cache e poi l'app funziona offline.
 5. Aggiornamento da v11.x: il service worker si aggiorna alla prima apertura online; riapri l'app una seconda volta. Su alcuni telefoni l'icona sulla Home cambia solo reinstallando l'app. Le carte salvate restano (stessa chiave di archiviazione).
+
+## Novità v12.7
+- Cartella di backup sul telefono: in Impostazioni ("Cartella backup sul telefono") scegli una cartella e l'app ci crea la sottocartella "Fidelity Wallet Backup", dove salva i backup (wallet_fedelta_backup_AAAA-MM-GG_HH-MM-SS.json).
+- Numero limitato di backup (3/5/7/10/20, predefinito 7): superato il limite l'app cancella i più vecchi, quindi la cartella non cresce.
+- Salvataggio automatico (predefinito: al massimo 1 al giorno, solo se le carte sono cambiate; in alternativa a ogni modifica o spento) + "Salva ora" e "Ripristina" (scegli tra i backup presenti).
+- "Cambia cartella" in qualsiasi momento; i vecchi backup restano nella cartella precedente.
+- Dove il browser non permette di scegliere una cartella (iPhone/Safari, Firefox) i backup restano in una cartella interna dell'app con la stessa rotazione, e "Salva una copia in…" apre il menu di sistema per salvare un file dove vuoi (File, Drive, ...).
+- Su Chrome/Edge il browser può chiedere ogni tanto di riconfermare l'accesso alla cartella: compare il pulsante "Riattiva l'accesso alla cartella".
+- Richiesta di archiviazione persistente per ridurre il rischio che il browser cancelli i dati.
+- Service worker v12.7. Le carte salvate restano.
+
+## Novità v12.6
+- Privacy: nuova pagina `privacy.html` (informativa completa), linkata in Impostazioni (in fondo), nella guida e nel service worker (disponibile offline).
+- Ricerca vocale: pulsante microfono nella barra di ricerca (lingua italiana, risultati filtrati in tempo reale). Compare solo sui browser che supportano il riconoscimento vocale (Chrome, Edge, Safari); serve il permesso del microfono e, su Chrome/Android, Internet.
+- Versione 12.6 in intestazione, Impostazioni e guida. Service worker v12.6.
 
 ## Novità v12.5
 - Compilazione automatica: appena inserisci o scansioni una carta (o scrivi il nome del negozio) l'app cerca da sola il dominio ufficiale (database interno -> sito del negozio su OpenStreetMap -> Wikidata -> tentativo sul nome), scarica il logo e il colore del brand, trova il negozio più vicino (indirizzo + coordinate) e memorizza tutto nella carta. Pulsante "Auto" nel modulo per rilanciarla.

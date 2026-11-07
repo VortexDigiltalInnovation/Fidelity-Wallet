@@ -114,7 +114,7 @@
             <img src="./icons/icon-96.png" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
             <div class="min-w-0">
                 <h1 class="font-black text-xs tracking-tight text-slate-900 dark:text-white flex items-center">
-                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v12.5</span>
+                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v12.7</span>
                 </h1>
                 <p class="text-[10px] text-slate-500 dark:text-slate-400 block truncate" id="gps-status-text">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block align-middle mr-1 animate-pulse"></span>In attesa del GPS…
@@ -151,7 +151,10 @@
         <div class="flex items-center space-x-2">
             <div class="relative flex-1 flex items-center">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400 text-xs"></i>
-                <input type="text" id="search-input" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" oninput="filterCards()" placeholder="Cerca negozio o categoria..." class="w-full h-11 bg-cardLight dark:bg-cardDark border border-slate-200 dark:border-slate-700/70 rounded-2xl pl-9 pr-9 text-xs focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-900 dark:text-slate-100 placeholder-slate-400 shadow-sm transition-all">
+                <input type="text" id="search-input" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" oninput="filterCards()" placeholder="Cerca negozio o categoria..." class="w-full h-11 bg-cardLight dark:bg-cardDark border border-slate-200 dark:border-slate-700/70 rounded-2xl pl-9 pr-[4.5rem] text-xs focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-900 dark:text-slate-100 placeholder-slate-400 shadow-sm transition-all">
+                <button onclick="startVoiceSearch()" id="voice-search-btn" type="button" aria-label="Ricerca vocale" title="Ricerca vocale" class="absolute right-9 text-slate-400 hover:text-indigo-500 hidden w-8 h-8 flex items-center justify-center rounded-full transition">
+                    <i class="fa-solid fa-microphone text-xs"></i>
+                </button>
                 <button onclick="clearSearch()" id="clear-search-btn" class="absolute right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hidden w-8 h-8 flex items-center justify-center">
                     <i class="fa-solid fa-xmark text-xs"></i>
                 </button>
@@ -479,6 +482,35 @@
                     <p id="drive-folder-label" class="text-[10px] text-slate-500 dark:text-slate-400"></p>
                 </div>
 
+                <!-- Cartella backup sul telefono (v12.7) -->
+                <div class="bg-slate-100/70 dark:bg-darkBg/60 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl space-y-2.5">
+                    <div>
+                        <h4 class="font-semibold text-slate-800 dark:text-slate-200 text-xs"><i class="fa-solid fa-folder-tree text-indigo-500 mr-1.5"></i> Cartella backup sul telefono</h4>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400" id="fw-bk-status">—</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400" id="fw-bk-folder"></p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" id="fw-bk-choose" onclick="fwBkChoose()" class="hidden col-span-2 h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition"><i class="fa-solid fa-folder-open mr-1.5"></i><span id="fw-bk-choose-txt">Scegli cartella</span></button>
+                        <button type="button" id="fw-bk-reauth" onclick="fwBkReauth()" class="hidden col-span-2 h-11 bg-amber-500 active:bg-amber-400 text-white text-xs font-bold rounded-xl">Riattiva l'accesso alla cartella</button>
+                        <button type="button" onclick="fwBkNow()" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Salva ora</button>
+                        <button type="button" onclick="fwBkRestore()" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Ripristina</button>
+                        <button type="button" onclick="fwBkShareCopy()" class="col-span-2 h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition"><i class="fa-solid fa-share-from-square mr-1.5"></i>Salva una copia in&hellip; (scegli dove)</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 items-center">
+                        <label class="text-[10px] text-slate-500 dark:text-slate-400">Backup da tenere
+                            <select id="fw-bk-max" onchange="fwBkSettingChanged()" class="mt-1 w-full h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs px-2 text-slate-700 dark:text-slate-200">
+                                <option value="3">3</option><option value="5">5</option><option value="7">7</option><option value="10">10</option><option value="20">20</option>
+                            </select>
+                        </label>
+                        <label class="text-[10px] text-slate-500 dark:text-slate-400">Salvataggio automatico
+                            <select id="fw-bk-auto" onchange="fwBkSettingChanged()" class="mt-1 w-full h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs px-2 text-slate-700 dark:text-slate-200">
+                                <option value="daily">Al massimo 1 al giorno</option><option value="change">A ogni modifica</option><option value="off">Spento</option>
+                            </select>
+                        </label>
+                    </div>
+                    <p id="fw-bk-note" class="text-[10px] text-slate-400 leading-snug"></p>
+                </div>
+
                 <div class="space-y-2">
                     <h4 class="font-semibold text-slate-600 dark:text-slate-300 text-[10px] uppercase tracking-wider">Backup Locale (Sicuro)</h4>
                     <p id="local-backup-time" class="text-[10px] text-slate-500 dark:text-slate-400"></p>
@@ -496,8 +528,9 @@
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
                     <img src="./icons/icon-96.png" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">12.5</span></p>
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">12.7</span></p>
                     <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
+                    <p class="text-[10px] mt-1"><a href="./privacy.html" target="_blank" rel="noopener" class="underline text-indigo-500">Informativa sulla privacy</a></p>
                 </div>
             </div>
         </div>
@@ -511,7 +544,7 @@
                     <img src="./icons/icon-96.png" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 12.5</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 12.7</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -548,7 +581,8 @@
                     <ul class="mt-1 space-y-1.5 list-disc pl-5">
                         <li><b>Funziona con l'app aperta.</b> Le app web non possono leggere la posizione a schermo spento o con l'app chiusa: è un limite di iOS e Android, non dell'app. Apri Fidelity Wallet mentre ti avvicini, oppure attiva <i>Tieni lo schermo acceso</i>.</li>
                         <li><b>20 metri sono pochi:</b> il GPS dentro o vicino agli edifici può sbagliare di 10–30 m. Se il segnale è poco preciso (oltre ±40 m) l'app non invia avvisi per evitare falsi allarmi; in tal caso porta la distanza a 50 m.</li>
-                        <li><b>Privacy:</b> per cercare i negozi viene inviata a OpenStreetMap solo un'area approssimativa (circa 100 m) e i nomi dei brand delle tue carte. Codici e dati personali non lasciano mai il telefono.</li>
+                        <li><b>Privacy:</b> per cercare i negozi viene inviata a OpenStreetMap solo un'area approssimativa (circa 100 m) e i nomi dei brand delle tue carte. Codici e dati personali non lasciano mai il telefono. La ricerca vocale usa il riconoscimento del tuo browser/telefono. <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Leggi l'informativa completa</a>.</li>
+                        <li><b>Ricerca vocale:</b> premi il microfono nella barra di ricerca, concedi il permesso e pronuncia il nome del negozio o la categoria.</li>
                         <li><b>Serve Internet</b> per cercare i negozi. Senza rete usa gli ultimi risultati e le coordinate salvate nelle carte.</li>
                     </ul>
                 </details>
@@ -561,6 +595,7 @@
                         <li><b>Cassa rapida e preferiti:</b> segna le carte più usate con la stella per averle nella barra in alto; cerca per nome o categoria.</li>
                         <li><b>Condivisione:</b> genera un QR della carta che un familiare può inquadrare per importarla.</li>
                         <li><b>Backup:</b> esporta/importa un file JSON o sincronizza con Google Drive (<i>Impostazioni</i>).</li>
+                        <li><b>Cartella backup sul telefono:</b> in <i>Impostazioni</i> scegli una cartella (dove il browser lo permette): l'app ci crea &quot;Fidelity Wallet Backup&quot;, salva i backup in automatico e tiene solo gli ultimi N (3–20), sovrascrivendo i più vecchi. Puoi cambiare cartella quando vuoi; &quot;Salva una copia in…&quot; ti fa scegliere dove salvare un file anche su iPhone.</li>
                     </ul>
                 </details>
 
@@ -583,7 +618,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.5 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.7 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
             </div>
         </div>
     </div>
@@ -1601,11 +1636,68 @@
         }
 
 
+
+        /* ===== Fidelity Wallet v12.6 – ricerca vocale (Web Speech API) ===== */
+        let fwRecog = null, fwListening = false;
+        function initVoiceSearch() {
+            const btn = document.getElementById('voice-search-btn');
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (btn && SR) btn.classList.remove('hidden');
+        }
+        function setVoiceUI(on) {
+            fwListening = on;
+            const btn = document.getElementById('voice-search-btn');
+            if (!btn) return;
+            btn.classList.toggle('text-red-500', on);
+            btn.classList.toggle('animate-pulse', on);
+            btn.classList.toggle('text-slate-400', !on);
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            const input = document.getElementById('search-input');
+            if (input) input.placeholder = on ? 'Sto ascoltando…' : 'Cerca negozio o categoria...';
+        }
+        function startVoiceSearch() {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) { fwToast('Ricerca vocale non supportata da questo browser'); return; }
+            if (fwListening && fwRecog) { try { fwRecog.stop(); } catch (e) {} return; }
+            const input = document.getElementById('search-input');
+            try {
+                fwRecog = new SR();
+                fwRecog.lang = 'it-IT';
+                fwRecog.interimResults = true;
+                fwRecog.maxAlternatives = 1;
+                fwRecog.continuous = false;
+                fwRecog.onstart = () => setVoiceUI(true);
+                fwRecog.onresult = (ev) => {
+                    let txt = '';
+                    for (let i = 0; i < ev.results.length; i++) txt += ev.results[i][0].transcript;
+                    input.value = txt.trim().replace(/[.!?]+$/, '');
+                    filterCards();
+                };
+                fwRecog.onerror = (ev) => {
+                    const m = {
+                        'not-allowed': 'Microfono non consentito: abilitalo nelle impostazioni del browser',
+                        'service-not-allowed': 'Riconoscimento vocale non consentito su questo dispositivo',
+                        'no-speech': 'Non ho sentito nulla, riprova',
+                        'audio-capture': 'Microfono non disponibile',
+                        'network': 'Serve una connessione Internet per la ricerca vocale'
+                    };
+                    if (ev.error !== 'aborted') fwToast(m[ev.error] || 'Errore ricerca vocale');
+                };
+                fwRecog.onend = () => setVoiceUI(false);
+                fwRecog.start();
+            } catch (e) {
+                setVoiceUI(false);
+                fwToast('Impossibile avviare la ricerca vocale');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', initVoiceSearch);
+        if (document.readyState !== 'loading') initVoiceSearch();
+
         /* ===== Fidelity Wallet v12.5 – compilazione automatica (dominio, logo, negozio più vicino) =====
            Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
            (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
            4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
-        const FW_VERSION = '12.5';
+        const FW_VERSION = '12.7';
         let fwEnrichBusy = false;
 
         function fwCleanDomain(u) {
@@ -2432,6 +2524,248 @@
                 alert('Errore durante il recupero del file da Drive: ' + (err && err.message || err));
             }
         }
+    </script>
+
+    <script>
+    /* ===== Fidelity Wallet v12.7 – cartella di backup locale con rotazione =====
+       - Se il browser lo consente (Chrome/Edge, Chrome Android recente) l'utente sceglie una cartella del telefono e l'app
+         ci crea dentro la sottocartella "Fidelity Wallet Backup", dove scrive i backup e cancella i più vecchi oltre il limite.
+       - Dove non è possibile (iPhone/Safari, Firefox) i backup stanno in una cartella interna dell'app (IndexedDB) con la stessa
+         rotazione; "Salva una copia in…" apre il menu di sistema per scegliere dove salvare un file. */
+    (function () {
+        'use strict';
+        const FOLDER_NAME = 'Fidelity Wallet Backup';
+        const FILE_RE = /^wallet_fedelta_backup_.*\.json$/;
+        const K_MAX = 'fw_bk_max', K_AUTO = 'fw_bk_auto', K_HASH = 'fw_bk_hash', K_LAST = 'fw_bk_last_ts', K_WHERE = 'fw_bk_where';
+        const hasPicker = typeof window.showDirectoryPicker === 'function';
+        let timer = null, busy = false;
+
+        const $ = id => document.getElementById(id);
+        const getMax = () => { const n = parseInt(localStorage.getItem(K_MAX), 10); return n > 0 ? n : 7; };
+        const getAuto = () => localStorage.getItem(K_AUTO) || 'daily';
+        function hash(str) { let h = 5381; for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0; return str.length + ':' + h; }
+
+        /* ---- IndexedDB: handle della cartella + cartella interna di riserva ---- */
+        const rq = r => new Promise((res, rej) => { r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+        function openDB() {
+            return new Promise((res, rej) => {
+                const r = indexedDB.open('fw-backup', 1);
+                r.onupgradeneeded = () => { const d = r.result; d.createObjectStore('kv'); d.createObjectStore('backups', { keyPath: 'name' }); };
+                r.onsuccess = () => res(r.result);
+                r.onerror = () => rej(r.error);
+            });
+        }
+        async function dbDo(store, mode, fn) {
+            const d = await openDB();
+            try {
+                const t = d.transaction(store, mode);
+                const out = await fn(t.objectStore(store));
+                if (mode === 'readwrite') await new Promise((a, b) => { t.oncomplete = a; t.onerror = () => b(t.error); t.onabort = () => b(t.error); });
+                return out;
+            } finally { d.close(); }
+        }
+        const kvGet = k => dbDo('kv', 'readonly', s => rq(s.get(k)));
+        const kvSet = (k, v) => dbDo('kv', 'readwrite', s => rq(s.put(v, k)));
+        const bkList = () => dbDo('backups', 'readonly', s => rq(s.getAll()));
+        const bkPut = rec => dbDo('backups', 'readwrite', s => rq(s.put(rec)));
+        const bkDel = name => dbDo('backups', 'readwrite', s => rq(s.delete(name)));
+        const bkClear = () => dbDo('backups', 'readwrite', s => rq(s.clear()));
+
+        /* ---- Cartella reale scelta dall'utente ---- */
+        async function getRoot() { if (!hasPicker) return null; try { return (await kvGet('root')) || null; } catch (e) { return null; } }
+        async function hasPerm(h, ask) {
+            const o = { mode: 'readwrite' };
+            try {
+                if ((await h.queryPermission(o)) === 'granted') return true;
+                if (ask) return (await h.requestPermission(o)) === 'granted';
+            } catch (e) {}
+            return false;
+        }
+        async function getFolderDir(ask) {
+            const root = await getRoot();
+            if (!root) return null;
+            if (!(await hasPerm(root, ask))) return null;
+            return root.getDirectoryHandle(FOLDER_NAME, { create: true });
+        }
+        async function folderFiles(dir) {
+            const out = [];
+            for await (const [name, h] of dir.entries()) if (h.kind === 'file' && FILE_RE.test(name)) out.push(name);
+            return out.sort();
+        }
+
+        /* ---- Salvataggio con rotazione ---- */
+        async function doBackup(opts) {
+            opts = opts || {};
+            if (busy) return null;
+            if (!Array.isArray(cards)) return null;
+            busy = true;
+            try {
+                const json = JSON.stringify(cards, null, 2);
+                const name = backupFileName();
+                const max = getMax();
+                let where = 'internal', note = '';
+                const root = await getRoot();
+                const dir = root ? await getFolderDir(!!opts.interactive).catch(() => null) : null;
+                if (dir) {
+                    const fh = await dir.getFileHandle(name, { create: true });
+                    const w = await fh.createWritable();
+                    await w.write(json); await w.close();
+                    const names = await folderFiles(dir);
+                    for (let i = 0; i < names.length - max; i++) { try { await dir.removeEntry(names[i]); } catch (e) {} }
+                    try { await bkClear(); } catch (e) {}   // le copie interne di riserva non servono più
+                    where = 'folder';
+                } else {
+                    if (root) note = 'noperm';
+                    await bkPut({ name, savedAt: Date.now(), json });
+                    const all = (await bkList()).map(r => r.name).sort();
+                    for (let i = 0; i < all.length - max; i++) await bkDel(all[i]);
+                }
+                localStorage.setItem(K_HASH, hash(json));
+                localStorage.setItem(K_LAST, String(Date.now()));
+                localStorage.setItem(K_WHERE, where + (note ? ':' + note : ''));
+                recordBackup('local');
+                refreshUI();
+                return { name, where, note };
+            } catch (e) {
+                console.warn('Backup non riuscito', e);
+                if (opts.interactive) alert('Backup non riuscito: ' + (e && e.message || e));
+                return null;
+            } finally { busy = false; }
+        }
+
+        /* ---- Automatico ---- */
+        function schedule() { if (getAuto() === 'off') return; clearTimeout(timer); timer = setTimeout(autoRun, 4000); }
+        async function autoRun() {
+            const mode = getAuto();
+            if (mode === 'off' || !Array.isArray(cards) || cards.length === 0) return;
+            if (hash(JSON.stringify(cards, null, 2)) === localStorage.getItem(K_HASH)) return;
+            if (mode === 'daily') {
+                const last = parseInt(localStorage.getItem(K_LAST), 10) || 0;
+                if (Date.now() - last < 864e5) return;
+            }
+            await doBackup({ interactive: false });
+        }
+        // ogni salvataggio delle carte può far partire un backup automatico
+        const origSave = window.saveToStorage;
+        window.saveToStorage = function () { const r = origSave.apply(this, arguments); schedule(); return r; };
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') setTimeout(autoRun, 1500); else if (timer) { clearTimeout(timer); autoRun(); } });
+        window.addEventListener('load', () => { setTimeout(autoRun, 5000); try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {} });
+
+        /* ---- Azioni dei pulsanti ---- */
+        window.fwBkChoose = async function () {
+            if (!hasPicker) return;
+            try {
+                const h = await window.showDirectoryPicker({ id: 'fidelity-wallet', mode: 'readwrite' });
+                await kvSet('root', h);
+                await h.getDirectoryHandle(FOLDER_NAME, { create: true });
+                const r = await doBackup({ interactive: true });
+                refreshUI();
+                if (r && r.where === 'folder') alert('Cartella impostata: «' + h.name + '».\nL\'app ha creato dentro la sottocartella "' + FOLDER_NAME + '" e ci salva gli ultimi ' + getMax() + ' backup, sovrascrivendo i più vecchi.\nI backup della cartella precedente (se c\'era) non vengono toccati.');
+            } catch (e) {
+                if (e && e.name === 'AbortError') return;
+                alert('Non posso usare questa cartella (' + (e && e.message || e) + ').\nScegline un\'altra, ad esempio una nuova cartella creata apposta: i browser bloccano alcune cartelle di sistema come Download o la radice di Documenti.');
+            }
+        };
+        window.fwBkReauth = async function () {
+            const root = await getRoot();
+            if (root && await hasPerm(root, true)) { await doBackup({ interactive: true }); }
+            refreshUI();
+        };
+        window.fwBkNow = async function () {
+            const r = await doBackup({ interactive: true });
+            if (!r) return;
+            alert(r.where === 'folder' ? 'Backup salvato nella cartella scelta.\n' + r.name : 'Backup salvato nella cartella interna dell\'app.\n' + r.name + (r.note === 'noperm' ? '\n\nL\'accesso alla cartella scelta è scaduto: premi "Riattiva l\'accesso alla cartella".' : ''));
+        };
+        window.fwBkSettingChanged = function () {
+            localStorage.setItem(K_MAX, $('fw-bk-max').value);
+            localStorage.setItem(K_AUTO, $('fw-bk-auto').value);
+            refreshUI();
+        };
+        window.fwBkShareCopy = async function () {
+            const name = backupFileName();
+            const json = JSON.stringify(cards, null, 2);
+            const tries = [new File([json], name, { type: 'application/json' }), new File([json], name, { type: 'text/plain' })];
+            try {
+                if (navigator.canShare && navigator.share) {
+                    for (const f of tries) {
+                        if (navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: 'Backup Fidelity Wallet' }); recordBackup('local'); return; }
+                    }
+                }
+                if (window.showSaveFilePicker) {
+                    const h = await window.showSaveFilePicker({ suggestedName: name, types: [{ description: 'Backup JSON', accept: { 'application/json': ['.json'] } }] });
+                    const w = await h.createWritable(); await w.write(json); await w.close(); recordBackup('local'); return;
+                }
+                exportJSON();
+            } catch (e) { if (e && e.name === 'AbortError') return; exportJSON(); }
+        };
+        function niceName(n) {
+            const m = /(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/.exec(n);
+            return m ? m[3] + '/' + m[2] + '/' + m[1] + ' ' + m[4] + ':' + m[5] + ':' + m[6] : n;
+        }
+        window.fwBkRestore = async function () {
+            try {
+                let items = [];   // { name, read: () => Promise<string> }
+                const root = await getRoot();
+                const dir = root ? await getFolderDir(true).catch(() => null) : null;
+                if (dir) {
+                    for (const n of (await folderFiles(dir)).reverse()) items.push({ name: n, read: async () => (await (await dir.getFileHandle(n)).getFile()).text() });
+                } else {
+                    for (const r of (await bkList()).sort((a, b) => b.name.localeCompare(a.name))) items.push({ name: r.name, read: async () => r.json });
+                }
+                if (!items.length) { alert('Nessun backup trovato nella cartella.' + (root && !dir ? '\nRiattiva prima l\'accesso alla cartella.' : '')); return; }
+                let pick = items[0];
+                if (items.length > 1) {
+                    const list = items.map((it, i) => (i + 1) + ') ' + niceName(it.name)).join('\n');
+                    const ans = prompt('Quale backup vuoi ripristinare? Scrivi il numero.\n\n' + list, '1');
+                    if (ans === null) return;
+                    pick = items[parseInt(ans, 10) - 1];
+                    if (!pick) { alert('Numero non valido.'); return; }
+                }
+                if (!confirm('Ripristinare il backup del ' + niceName(pick.name) + '?\nLe carte attuali verranno sostituite.')) return;
+                const data = JSON.parse(await pick.read());
+                if (!Array.isArray(data)) { alert('Il file non è un backup valido.'); return; }
+                localStorage.setItem(K_HASH, hash(JSON.stringify(data, null, 2)));
+                cards = data;
+                saveToStorage();
+                renderCards();
+                closeSettingsModal();
+                alert('Carte ripristinate dal backup del ' + niceName(pick.name) + '.');
+            } catch (e) { alert('Ripristino non riuscito: ' + (e && e.message || e)); }
+        };
+
+        /* ---- Interfaccia ---- */
+        async function refreshUI() {
+            if (!$('fw-bk-status')) return;
+            $('fw-bk-max').value = String(getMax());
+            $('fw-bk-auto').value = getAuto();
+            const root = await getRoot();
+            let granted = false, count = 0;
+            try {
+                if (root) {
+                    granted = await hasPerm(root, false);
+                    if (granted) { const d = await getFolderDir(false); count = (await folderFiles(d)).length; }
+                }
+                if (!granted) count = (await bkList()).length;
+            } catch (e) {}
+            const ch = $('fw-bk-choose');
+            if (hasPicker) { ch.classList.remove('hidden'); $('fw-bk-choose-txt').innerText = root ? 'Cambia cartella' : 'Scegli cartella'; }
+            else ch.classList.add('hidden');
+            $('fw-bk-reauth').classList.toggle('hidden', !(root && !granted));
+            const last = localStorage.getItem('fw_last_backup_local');
+            $('fw-bk-status').innerText = (last ? 'Ultimo backup: ' + formatDateTimeIT(last) + ' · ' : 'Nessun backup ancora · ') + 'presenti ' + count + ' su ' + getMax();
+            let f, n;
+            if (root && granted) { f = 'Cartella scelta: «' + root.name + '» › ' + FOLDER_NAME; n = 'Il telefono non mostra il percorso completo: il nome indicato è quello della cartella che hai scelto. Quando i backup superano il limite, l\'app elimina i più vecchi.'; }
+            else if (root) { f = 'Cartella scelta: «' + root.name + '» (accesso da riattivare). Nel frattempo i backup vanno nella cartella interna.'; n = 'Il browser chiede di riconfermare l\'accesso alla cartella ogni tanto: tocca "Riattiva".'; }
+            else if (hasPicker) { f = 'Nessuna cartella scelta: i backup stanno nella cartella interna dell\'app.'; n = 'Premi "Scegli cartella": l\'app creerà dentro "' + FOLDER_NAME + '" e potrai cambiarla quando vuoi.'; }
+            else { f = 'Cartella interna dell\'app "' + FOLDER_NAME + '" (non visibile in Gestione file).'; n = 'Questo browser (es. Safari su iPhone) non permette di scegliere una cartella. Usa "Salva una copia in…" per mandare un file dove vuoi (File, Drive, ecc.).'; }
+            $('fw-bk-folder').innerText = f;
+            $('fw-bk-note').innerText = n;
+        }
+        const origOpen = window.openSettingsModal;
+        window.openSettingsModal = function () { const r = origOpen.apply(this, arguments); refreshUI(); return r; };
+        document.addEventListener('DOMContentLoaded', refreshUI);
+        window.fwBkRefresh = refreshUI;
+    })();
     </script>
 </body>
 </html>

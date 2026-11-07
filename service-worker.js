@@ -1,5 +1,5 @@
-/* Fidelity Wallet – Service Worker v12.5 */
-const VERSION = 'v12-5';
+/* Fidelity Wallet – Service Worker v12.7 */
+const VERSION = 'v12-7';
 const SHELL_CACHE = 'fidelity-wallet-shell-' + VERSION;
 const RUNTIME_CACHE = 'fidelity-wallet-runtime-' + VERSION;
 const RUNTIME_MAX_ENTRIES = 150;
@@ -10,6 +10,7 @@ const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
+  './privacy.html',
   './Guida%20Utente%20Wallet%20Fedelta.pdf',
   './icons/favicon-64.png',
   './icons/icon-72.png',

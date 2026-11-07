@@ -1,230 +1,79 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informativa sulla Privacy & Architettura Dati - Fidelity Wallet</title>
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --text-color: #f8fafc;
-            --container-bg: #1e293b;
-            --accent-color: #10b981;
-            --accent-soft: rgba(16, 185, 129, 0.1);
-            --border-color: #334155;
-            --muted-color: #94a3b8;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            background: var(--container-bg);
-            padding: 40px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-        }
-
-        .logo-container {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .logo-container img {
-            max-width: 220px;
-            height: auto;
-            border-radius: 8px;
-        }
-
-        h1 {
-            color: #ffffff;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 12px;
-            font-size: 2rem;
-            letter-spacing: -0.025em;
-        }
-
-        h2 {
-            color: #f1f5f9;
-            margin-top: 32px;
-            margin-bottom: 12px;
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        p, ul {
-            margin-bottom: 16px;
-            color: #cbd5e1;
-        }
-
-        ul {
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-        }
-
-        strong {
-            color: #ffffff;
-        }
-
-        code {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--border-color);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            color: var(--accent-color);
-        }
-
-        .hero-box {
-            background-color: var(--accent-soft);
-            border: 1px solid var(--accent-color);
-            padding: 20px;
-            margin: 24px 0;
-            border-radius: 8px;
-        }
-
-        .hero-box p {
-            color: #e2e8f0;
-            font-size: 1.05rem;
-            margin-bottom: 0;
-        }
-
-        .highlight-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin: 24px 0;
-        }
-
-        .grid-card {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border-color);
-            padding: 16px;
-            border-radius: 8px;
-        }
-
-        .grid-card h3 {
-            color: var(--accent-color);
-            font-size: 1rem;
-            margin-bottom: 8px;
-        }
-
-        .grid-card p {
-            font-size: 0.9rem;
-            margin-bottom: 0;
-            color: var(--muted-color);
-        }
-
-        .last-updated {
-            font-size: 0.85rem;
-            color: var(--muted-color);
-            margin-top: 8px;
-            margin-bottom: 24px;
-        }
-
-        a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .footer {
-            margin-top: 48px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            font-size: 0.85rem;
-            color: var(--muted-color);
-            text-align: center;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#060913">
+<title>Privacy – Fidelity Wallet</title>
+<link rel="icon" type="image/png" href="./icons/favicon-64.png">
+<style>
+:root{--bg:#f8fafc;--card:#fff;--tx:#0f172a;--mut:#475569;--bd:#e2e8f0;--ac:#4f46e5}
+@media (prefers-color-scheme:dark){:root{--bg:#060913;--card:#0f172a;--tx:#f1f5f9;--mut:#94a3b8;--bd:#1e293b;--ac:#818cf8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+main{max-width:720px;margin:0 auto;padding:16px}
+a{color:var(--ac)}
+.back{display:inline-block;margin:4px 0 12px;font-weight:600;text-decoration:none}
+h1{font-size:1.5rem;margin:.2em 0}
+h2{font-size:1.05rem;margin:0 0 .4em}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px 16px;margin:12px 0}
+.muted{color:var(--mut);font-size:.85rem}
+ul{padding-left:1.2em;margin:.4em 0}
+</style>
 </head>
 <body>
+<main>
+<a class="back" href="./index.html">← Torna a Fidelity Wallet</a>
+<h1>Informativa sulla privacy</h1>
+<p class="muted">Fidelity Wallet · versione 12.7 · aggiornata a novembre 2026</p>
 
-<div class="container">
-    <div class="logo-container">
-        <img src="Vortex Digital Logo Bicolore.jpeg" alt="Vortex Digital Logo">
-    </div>
-
-    <h1>Informativa sulla Privacy e Architettura Dati</h1>
-    <p class="last-updated">Ultimo aggiornamento: 6 Novembre 2026</p>
-
-    <div class="hero-box">
-        <p><strong>Controllo Esclusivo dell'Utente:</strong> <strong>Fidelity Wallet</strong> è un'applicazione <em>Local-First / Offline-First</em>[cite: 2, 3]. Nessun dato personale o contenuto memorizzato viene trattenuto, utilizzato, tracciato o visionato da noi o da terzi[cite: 2, 3]. <strong>Tutte le informazioni risiedono ed esistono esclusivamente nelle mani dell'utente finale.</strong></p>
-    </div>
-
-    <div class="highlight-grid">
-        <div class="grid-card">
-            <h3>Nessun Server</h3>
-            <p>Le carte fedeltà, i codici e le immagini non lasciano mai il tuo dispositivo. Nessun database remoto[cite: 2, 3].</p>
-        </div>
-        <div class="grid-card">
-            <h3>Zero Inserzioni / Telemetria</h3>
-            <p>Nessuna profilazione commerciale, nessun tracciamento del comportamento o cookie analitici[cite: 2, 3].</p>
-        </div>
-        <div class="grid-card">
-            <h3>Backup Sovrani</h3>
-            <p>I salvataggi delle carte sono gestiti e conservati unicamente dall'utente dove desidera[cite: 2, 3].</p>
-        </div>
-    </div>
-
-    <h2>1. Raccolta, Archiviazione e Visione dei Dati</h2>
-    <p>Fidelity Wallet opera interamente in ambiente locale sul tuo dispositivo[cite: 2, 3]:</p>
-    <ul>
-        <li><strong>Nessun Trattenimento o Visione:</strong> Non raccogliamo, non memorizziamo, non usiamo e non possiamo visionare alcuna carta fedeltà, codice a barre, nota o immagine inserita[cite: 2, 3].</li>
-        <li><strong>Archiviazione Locale:</strong> Tutti i dati relativi alle tue carte vengono salvati esclusivamente nella memoria locale del tuo browser/dispositivo (tramite tecnologie quali <code>localStorage</code> o <code>IndexedDB</code>)[cite: 2, 3].</li>
-        <li><strong>Nessuna Trasmissione Remota:</strong> L'applicazione non invia alcuna informazione a server gestiti dagli sviluppatori o a terze parti[cite: 2, 3].</li>
-    </ul>
-
-    <h2>2. Permessi del Dispositivo</h2>
-    <p>Per offrire funzionalità avanzate in totale riservatezza, l'applicazione può richiedere permessi specifici[cite: 2, 3]:</p>
-    <ul>
-        <li><strong>Fotocamera:</strong> Utilizzata esclusivamente sul dispositivo per la scansione istantanea dei codici a barre o QR code delle carte[cite: 2, 3]. L'immagine non viene salvata esternamente né trasmessa[cite: 2, 3].</li>
-        <li><strong>Geolocalizzazione:</strong> Utilizzata localmente per ordinare o suggerire le carte pertinenti quando ti trovi nei pressi dei punti vendita[cite: 2, 3]. Nessun dato sulla posizione abbandona mai il tuo dispositivo[cite: 2, 3].</li>
-    </ul>
-
-    <h2>3. Backup e Trasferimento Dati</h2>
-    <p>Qualsiasi operazione di backup o ripristino delle carte è sotto il controllo diretto ed esclusivo dell'utente[cite: 2, 3]:</p>
-    <ul>
-        <li>I file di esportazione/backup vengono generati ed elaborati unicamente sul tuo hardware[cite: 2, 3].</li>
-        <li>Non forniamo né gestiamo server di sincronizzazione o cloud proprietari[cite: 2, 3].</li>
-    </ul>
-
-    <h2>4. Cookie, Tracciamento e Hosting</h2>
-    <p>L'applicazione non utilizza cookie di profilazione o strumenti di analisi di terze parti[cite: 2, 3].</p>
-    <p>L'applicazione è distribuita tramite GitHub Pages[cite: 2, 3]. Il servizio di hosting può raccogliere log di rete standard (es. indirizzi IP) a fini di sicurezza e operatività infrastrutturale[cite: 2, 3]. Per maggiori informazioni, puoi consultare la <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>[cite: 2, 3].</p>
-
-    <h2>5. Modifiche alla Privacy Policy</h2>
-    <p>Ci riserviamo il diritto di aggiornare questa informativa in qualsiasi momento[cite: 2, 3]. Eventuali modifiche saranno pubblicate direttamente su questa pagina[cite: 2, 3].</p>
-
-    <h2>6. Contatti</h2>
-    <p>Per chiarimenti relativi all'architettura o a questa informativa, è possibile aprire una segnalazione (issue) direttamente sul repository GitHub del progetto[cite: 2, 3].</p>
-
-    <div class="footer">
-        &copy; 2026 Vortex Digital — Fidelity Wallet (Architettura Client-Side a Controllo Esclusivo dell'Utente)[cite: 2, 3]
-    </div>
+<div class="card">
+<h2>In breve</h2>
+<p>Le tue carte, i codici e le impostazioni restano <b>solo sul tuo dispositivo</b> (archiviazione locale del browser). Non esiste un server di Fidelity Wallet e non abbiamo account, pubblicità o strumenti di tracciamento.</p>
 </div>
 
+<div class="card">
+<h2>Dati salvati sul dispositivo</h2>
+<ul>
+<li>Nome, numero/codice, categoria, note, logo e indirizzo/coordinate del negozio di ogni carta.</li>
+<li>Preferenze dell'app (tema, vista, stato del collegamento a Drive, data dell'ultimo backup).</li>
+<li>Backup locali (facoltativi): file JSON delle tue carte nella cartella del telefono che scegli tu (sottocartella "Fidelity Wallet Backup") oppure, se il browser non lo consente, in una cartella interna dell'app. Ne vengono conservati solo gli ultimi, gli altri sono sovrascritti. Non vengono inviati a nessun server.</li>
+</ul>
+<p>Cancellando i dati del sito dal browser o disinstallando l'app, questi dati vengono eliminati (se non hai fatto un backup).</p>
+</div>
+
+<div class="card">
+<h2>Servizi esterni usati dalle funzioni</h2>
+<ul>
+<li><b>Posizione (GPS)</b> – usata per trovare i negozi vicini e inviarti la notifica "Apri carta". Viene chiesta dal browser e puoi revocarla in ogni momento. La posizione non viene salvata né inviata a noi.</li>
+<li><b>OpenStreetMap (Overpass e Nominatim)</b> – ricevono il nome del brand e un'area di circa 1 km attorno a te per trovare il negozio più vicino e il suo indirizzo.</li>
+<li><b>Wikidata e servizi di icone (icon.horse, Google Favicons, DuckDuckGo)</b> – ricevono solo il nome del brand o il dominio per trovare sito e logo.</li>
+<li><b>Google Drive (facoltativo)</b> – se colleghi il tuo account, l'app crea una cartella "Fidelity Wallet Backup" e salva lì i file di backup. Usa il permesso limitato <code>drive.file</code>: l'app vede solo i file che ha creato lei. I backup restano nel tuo Drive e li gestisci tu.</li>
+<li><b>Ricerca vocale (facoltativa)</b> – quando premi il microfono, la registrazione è elaborata dal servizio di riconoscimento vocale del tuo browser o sistema (ad esempio Google su Chrome/Android, Apple su Safari/iPhone), che può inviare l'audio ai propri server secondo la loro informativa. L'app riceve solo il testo riconosciuto e non registra né conserva l'audio. Se preferisci, scrivi la ricerca a mano.</li>
+<li><b>Librerie dell'app</b> – grafica e lettura dei codici vengono caricate da CDN (Tailwind, Font Awesome, jsDelivr, unpkg, cdnjs); come ogni sito, ricevono il tuo indirizzo IP al caricamento. La lettura dei codici e l'OCR avvengono sul telefono: le foto delle carte non vengono inviate.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>Fotocamera e notifiche</h2>
+<p>La fotocamera serve solo a scansionare i codici e le immagini non vengono salvate né inviate. Le notifiche sono locali, generate dall'app sul tuo dispositivo.</p>
+</div>
+
+<div class="card">
+<h2>I tuoi controlli</h2>
+<ul>
+<li>Esporta o importa i dati in JSON dalle Impostazioni.</li>
+<li>Scollega Google Drive e cancella la cartella di backup dal tuo Drive quando vuoi.</li>
+<li>Revoca posizione, microfono, fotocamera e notifiche dalle impostazioni del browser/telefono.</li>
+<li>Elimina tutto cancellando i dati del sito o disinstallando l'app.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>Modifiche</h2>
+<p>Se l'app cambierà il modo in cui tratta i dati, questa pagina verrà aggiornata insieme alla versione indicata in alto.</p>
+</div>
+<p class="muted" style="text-align:center">Fidelity Wallet · v12.7</p>
+</main>
 </body>
 </html>
