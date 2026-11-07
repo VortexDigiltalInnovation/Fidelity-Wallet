@@ -1,4 +1,11 @@
-# Fidelity Wallet — PWA v12.7 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v12.8 (ex Wallet Fedeltà)
+
+## Novità v12.8 — assistente vocale offline
+- Nuovo assistente integrato nella barra inferiore: risponde su carte salvate, preferite, ricerca e funzioni dell’app usando i dati locali, senza chiamare servizi IA o inviare le carte.
+- Puoi scrivere oppure dettare le domande se il browser supporta il riconoscimento vocale locale; sui browser compatibili puoi preparare il pacchetto italiano per l’uso offline. Se non è supportato, la chat testuale resta disponibile.
+- Le risposte possono essere lette ad alta voce con la sintesi vocale del dispositivo. Per restare offline viene usata solo una voce locale installata; la disponibilità della voce italiana dipende da telefono, sistema e browser.
+- Include azioni pratiche per mostrare una tessera e risposte guidate su backup, privacy, GPS e modalità offline. Non è IA generativa e non gestisce punti, saldo o transazioni dei negozi.
+- Service worker v12.8: cache aggiornata dell’app. Aprila online una volta per ricevere gli aggiornamenti, poi la chat è utilizzabile senza rete; il microfono e la voce dipendono dalle funzioni locali del dispositivo.
 
 ## Contenuto
 - `index.html`: applicazione (guida utente integrata in HTML, si apre subito e funziona offline)
@@ -25,8 +32,10 @@
 
 ## Novità v12.6
 - Privacy: nuova pagina `privacy.html` (informativa completa), linkata in Impostazioni (in fondo), nella guida e nel service worker (disponibile offline).
-- Ricerca vocale: pulsante microfono nella barra di ricerca (lingua italiana, risultati filtrati in tempo reale). Compare solo sui browser che supportano il riconoscimento vocale (Chrome, Edge, Safari); serve il permesso del microfono e, su Chrome/Android, Internet.
+- Ricerca vocale nella barra di ricerca (lingua italiana). La disponibilità offline dipende dal browser e dalle lingue installate; la funzione preesistente può usare il servizio vocale del browser.
 - Versione 12.6 in intestazione, Impostazioni e guida. Service worker v12.6.
+
+La dettatura dell'assistente v12.8 è separata dalla vecchia ricerca vocale: richiede il supporto alla Speech Recognition API locale (`processLocally`) e un modello italiano installato. L'assistente non ripiega mai sulla dettatura cloud.
 
 ## Novità v12.5
 - Compilazione automatica: appena inserisci o scansioni una carta (o scrivi il nome del negozio) l'app cerca da sola il dominio ufficiale (database interno -> sito del negozio su OpenStreetMap -> Wikidata -> tentativo sul nome), scarica il logo e il colore del brand, trova il negozio più vicino (indirizzo + coordinate) e memorizza tutto nella carta. Pulsante "Auto" nel modulo per rilanciarla.
@@ -74,6 +83,11 @@
 - Correzione Google Drive: gli script Google chiamavano le funzioni di avvio prima che fossero definite, quindi la sincronizzazione poteva non inizializzarsi mai. Ora l'avvio funziona in qualunque ordine di caricamento.
 - Le notifiche usano icone locali (prima venivano da siti esterni e offline non comparivano).
 - Service worker v12.0 con nuove cache (le vecchie "wallet-fedelta-*" vengono eliminate).
+
+## Limiti voce e privacy
+- Il browser può non offrire dettatura offline; in quel caso usa la chat testuale. Non tutti i telefoni permettono di scaricare il pacchetto italiano dall'app.
+- La sintesi vocale offline dipende dalle voci locali installate nel sistema operativo. Se non è presente una voce italiana locale, l'assistente non usa servizi vocali remoti.
+- La vecchia Ricerca vocale nella barra usa l'API standard del browser, che su alcuni browser può inviare l'audio al relativo servizio. Per la dettatura privata offline usa il microfono dentro l'Assistente, quando è disponibile.
 
 ## Limiti noti (non risolvibili da una PWA)
 - La posizione si legge solo con l'app aperta e schermo acceso: i browser non permettono geofencing in background né notifiche "push" basate sulla posizione a app chiusa (servirebbe un'app nativa). Per questo c'è l'opzione "Tieni lo schermo acceso".

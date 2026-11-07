@@ -80,7 +80,12 @@
         #barcode-target-container canvas, #barcode-target-container img { max-width: 100%; height: auto; }
         #guide-modal { padding-top: max(.5rem, env(safe-area-inset-top)); padding-bottom: max(.5rem, env(safe-area-inset-bottom)); }
         #guide-modal > div { height: 100% !important; max-height: 100% !important; }
-        #add-modal > div, #settings-modal > div { max-height: 92dvh !important; padding-bottom: env(safe-area-inset-bottom); }
+        #add-modal > div, #settings-modal > div, #assistant-modal > div { max-height: 92dvh !important; padding-bottom: env(safe-area-inset-bottom); }
+        #assistant-messages { overscroll-behavior: contain; }
+        #assistant-mic.is-listening { color: #ef4444; background: rgba(239,68,68,.12); animation: assistant-pulse 1.2s ease-in-out infinite; }
+        @keyframes assistant-pulse { 50% { box-shadow: 0 0 0 7px rgba(239,68,68,.10); } }
+        @media (prefers-reduced-motion: reduce) { #assistant-mic.is-listening { animation: none; } }
+        #assistant-mic:disabled { opacity: .45; cursor: not-allowed; }
         @media (max-width: 640px) {
             .text-\[8px\] { font-size: 9px !important; }
             .text-\[10px\] { font-size: 11px !important; }
@@ -114,7 +119,7 @@
             <img src="./icons/icon-96.png" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
             <div class="min-w-0">
                 <h1 class="font-black text-xs tracking-tight text-slate-900 dark:text-white flex items-center">
-                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v12.7</span>
+                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v12.8</span>
                 </h1>
                 <p class="text-[10px] text-slate-500 dark:text-slate-400 block truncate" id="gps-status-text">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block align-middle mr-1 animate-pulse"></span>In attesa del GPS…
@@ -181,6 +186,7 @@
             </div>
             <h3 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Nessuna carta salvata</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 max-w-xs mt-1">Usa i pulsanti in basso per scansionare o aggiungere manualmente una tessera.</p>
+            <button type="button" onclick="openWalletAssistant()" class="mt-3 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow">Chiedi all’assistente</button>
         </div>
     </main>
 
@@ -212,6 +218,13 @@
                 <i class="fa-solid fa-book-open text-sm"></i>
             </div>
             <span class="text-[10px] font-bold tracking-tight">Guida</span>
+        </button>
+
+        <button onclick="openWalletAssistant()" id="wallet-assistant-nav" class="flex-1 flex flex-col items-center justify-center py-1.5 min-h-[52px] rounded-2xl text-indigo-600 dark:text-indigo-400 hover:text-violet-600 dark:hover:text-violet-400 transition active:scale-95" aria-label="Apri assistente vocale">
+            <div class="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-sm mb-0.5">
+                <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+            </div>
+            <span class="text-[10px] font-bold tracking-tight">Assistente</span>
         </button>
 
         <button onclick="openSettingsModal()" class="flex-1 flex flex-col items-center justify-center py-1.5 min-h-[52px] rounded-2xl text-slate-500 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-400 transition active:scale-95">
@@ -403,6 +416,42 @@
         </div>
     </div>
 
+    <!-- ASSISTENTE VOCALE OFFLINE: risposte deterministicamente generate dai dati locali del wallet -->
+    <div id="assistant-modal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="assistant-title" onclick="if(event.target===this)closeWalletAssistant()">
+        <section class="bg-cardLight dark:bg-cardDark text-slate-900 dark:text-slate-100 w-full max-w-lg rounded-t-3xl sm:rounded-3xl border-t sm:border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden" style="height:min(86dvh,720px)">
+            <header class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-11 h-11 shrink-0 rounded-2xl bg-indigo-600/10 text-indigo-500 flex items-center justify-center"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <div class="min-w-0"><h2 id="assistant-title" class="font-extrabold text-sm">Assistente Wallet</h2><p id="assistant-status" class="text-[10px] text-slate-500 dark:text-slate-400">Offline · risposte vocali sul dispositivo</p></div>
+                </div>
+                <button type="button" onclick="closeWalletAssistant()" aria-label="Chiudi assistente" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"><i class="fa-solid fa-xmark"></i></button>
+            </header>
+            <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 shrink-0">
+                <p class="text-[10px] text-slate-500 dark:text-slate-400 mb-2">Puoi parlare, scrivere o toccare un suggerimento. La voce usa la sintesi del dispositivo; le carte non vengono inviate in rete.</p>
+                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                    <button type="button" onclick="askWalletPreset('Quante carte ho?')" class="shrink-0 px-3 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 text-[11px] font-semibold">Quante carte ho?</button>
+                    <button type="button" onclick="askWalletPreset('Quali sono le mie carte preferite?')" class="shrink-0 px-3 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 text-[11px] font-semibold">Le mie preferite</button>
+                    <button type="button" onclick="askWalletPreset('Come funziona offline?')" class="shrink-0 px-3 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 text-[11px] font-semibold">Offline?</button>
+                    <button type="button" onclick="askWalletPreset('Come proteggo i miei dati?')" class="shrink-0 px-3 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 text-[11px] font-semibold">Privacy</button>
+                </div>
+            </div>
+            <div id="assistant-messages" class="flex-1 min-h-0 overflow-y-auto p-4 space-y-3" aria-live="polite" aria-relevant="additions text"></div>
+            <div class="px-3 py-3 border-t border-slate-200 dark:border-slate-800 shrink-0">
+                <form id="assistant-form" onsubmit="submitWalletAssistant(event)" class="flex items-center gap-2">
+                    <input id="assistant-input" type="text" autocomplete="off" maxlength="240" placeholder="Chiedi qualcosa al wallet…" class="min-w-0 flex-1 h-12 rounded-2xl bg-slate-100 dark:bg-darkBg border border-slate-200 dark:border-slate-700 px-4 text-sm focus:outline-none focus:border-indigo-500">
+                    <button id="assistant-mic" type="button" onclick="toggleWalletAssistantListening()" aria-label="Parla con l'assistente" title="Detta una domanda" class="w-12 h-12 shrink-0 rounded-2xl bg-slate-100 dark:bg-darkBg border border-slate-200 dark:border-slate-700 text-slate-500 flex items-center justify-center"><i class="fa-solid fa-microphone"></i></button>
+                    <button type="submit" aria-label="Invia domanda" class="w-12 h-12 shrink-0 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-600/20"><i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+                <div class="flex justify-between items-center mt-2 px-1 gap-2">
+                    <span id="assistant-voice-note" class="text-[10px] text-slate-400">Voce del dispositivo quando disponibile</span>
+                    <button type="button" onclick="toggleWalletSpeech()" id="assistant-speech-toggle" aria-pressed="true" class="text-[10px] text-indigo-500 font-semibold px-2 py-1 whitespace-nowrap"><i class="fa-solid fa-volume-high mr-1" aria-hidden="true"></i>Voce attiva</button>
+                </div>
+                <div class="text-right"><button type="button" onclick="prepareAssistantOfflineVoice()" id="assistant-offline-language-btn" class="hidden text-[10px] text-indigo-500 underline px-2 py-1">Prepara riconoscimento offline</button></div>
+                <p class="text-[9px] text-slate-400 text-center mt-1">Assistente locale: non è IA generativa. Non fornisce consulenza finanziaria e non carica dati personali.</p>
+            </div>
+        </section>
+    </div>
+
     <!-- MODALE IMPOSTAZIONI & NOTIFICHE PUSH (BOTTOM SHEET MOBILE) -->
     <div id="settings-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-end justify-center p-0">
         <div class="bg-cardLight dark:bg-cardDark w-full max-w-md rounded-t-3xl border-t border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-in slide-in-from-bottom duration-200">
@@ -528,7 +577,7 @@
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
                     <img src="./icons/icon-96.png" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">12.7</span></p>
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">12.8</span></p>
                     <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
                     <p class="text-[10px] mt-1"><a href="./privacy.html" target="_blank" rel="noopener" class="underline text-indigo-500">Informativa sulla privacy</a></p>
                 </div>
@@ -544,7 +593,7 @@
                     <img src="./icons/icon-96.png" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 12.7</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 12.8</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -590,6 +639,7 @@
                 <details class="rounded-2xl bg-slate-100/70 dark:bg-darkBg/60 border border-slate-200 dark:border-slate-800 p-3.5">
                     <summary class="font-bold text-sm text-slate-900 dark:text-white cursor-pointer">Funzioni principali</summary>
                     <ul class="mt-2 space-y-1.5 list-disc pl-5">
+                        <li><b>Assistente vocale offline:</b> tocca <i>Assistente</i> nella barra in basso. Puoi scrivere domande sulle carte, chiedere di aprire una tessera e ascoltare le risposte; microfono e voci italiane offline dipendono dal browser e dalle lingue installate. Le domande e i dati delle carte restano sul dispositivo. Non è IA generativa.</li>
                         <li><b>IA e OCR locale:</b> riconosce brand, logo e cifre dalla fotocamera o da una foto, senza inviare dati a server esterni.</li>
                         <li><b>Schermo acceso in cassa:</b> finché una carta è aperta lo schermo non si spegne (le app web non possono alzare la luminosità da sole: fallo dal telefono).</li>
                         <li><b>Cassa rapida e preferiti:</b> segna le carte più usate con la stella per averle nella barra in alto; cerca per nome o categoria.</li>
@@ -618,7 +668,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.7 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.8 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
             </div>
         </div>
     </div>
@@ -1637,6 +1687,241 @@
 
 
 
+        /* ===== Assistente locale Fidelity Wallet v12.8 ===== */
+        let walletAssistantRecognition = null;
+        let walletAssistantSpeechEnabled = true;
+        let walletAssistantStarted = false;
+        const WALLET_ASSISTANT_WELCOME = 'Ciao! Sono l’assistente del wallet. Puoi chiedermi quante carte hai, cercare una tessera o sapere come funzionano backup, privacy e modalità offline. Le risposte sono elaborate sul dispositivo.';
+
+        function walletAssistantMessage(text, role = 'assistant') {
+            const list = document.getElementById('assistant-messages');
+            if (!list) return;
+            const row = document.createElement('div');
+            row.className = role === 'user' ? 'flex justify-end' : 'flex justify-start';
+            const bubble = document.createElement('div');
+            bubble.className = role === 'user'
+                ? 'max-w-[88%] rounded-2xl rounded-br-md bg-indigo-600 text-white px-3.5 py-2.5 text-sm leading-relaxed shadow-sm'
+                : 'max-w-[88%] rounded-2xl rounded-bl-md bg-slate-100 dark:bg-darkBg text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800 px-3.5 py-2.5 text-sm leading-relaxed shadow-sm';
+            bubble.textContent = text;
+            row.appendChild(bubble);
+            list.appendChild(row);
+            list.scrollTop = list.scrollHeight;
+            if (role === 'assistant') walletAssistantSpeak(text);
+        }
+
+        function walletAssistantSpeak(text) {
+            if (!walletAssistantSpeechEnabled || !('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return;
+            try {
+                const voices = window.speechSynthesis.getVoices();
+                // Per mantenere l'assistente offline non usare voci remote/cloud o in altre lingue.
+                const italianVoice = voices.find(voice => voice.localService === true && /^it(?:-|$)/i.test(voice.lang));
+                if (!italianVoice) return;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'it-IT';
+                utterance.rate = 1;
+                utterance.voice = italianVoice;
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {}
+        }
+
+        function walletAssistantSetVoiceStatus() {
+            const note = document.getElementById('assistant-voice-note');
+            const mic = document.getElementById('assistant-mic');
+            const prepare = document.getElementById('assistant-offline-language-btn');
+            if (!note || !mic) return;
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const localRecognition = !!(SR && typeof SR.available === 'function' && typeof SR.install === 'function');
+            const hasOfflineItalianVoice = 'speechSynthesis' in window && window.speechSynthesis.getVoices().some(voice => voice.localService === true && /^it(?:-|$)/i.test(voice.lang));
+            mic.disabled = !localRecognition;
+            mic.title = localRecognition ? 'Detta offline con il modello vocale installato' : 'Questo browser non offre il riconoscimento vocale offline: puoi scrivere e ascoltare le risposte';
+            note.textContent = localRecognition ? 'Dettatura locale disponibile (se installi la lingua)' : (hasOfflineItalianVoice ? 'Voce italiana offline pronta · dettatura non disponibile' : 'Chat offline; le voci italiane installate dipendono dal dispositivo');
+            if (prepare) prepare.classList.toggle('hidden', !localRecognition);
+            const status = document.getElementById('assistant-status');
+            if (status) status.textContent = 'Risposte sul dispositivo · nessun dato inviato';
+        }
+
+        function openWalletAssistant() {
+            const modal = document.getElementById('assistant-modal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            walletAssistantSetVoiceStatus();
+            if (!walletAssistantStarted) {
+                walletAssistantMessage(WALLET_ASSISTANT_WELCOME);
+                walletAssistantStarted = true;
+            }
+            setTimeout(() => document.getElementById('assistant-input')?.focus(), 100);
+        }
+
+        function closeWalletAssistant() {
+            const modal = document.getElementById('assistant-modal');
+            if (modal) modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            if (walletAssistantRecognition) {
+                try { walletAssistantRecognition.abort(); } catch (e) {}
+                walletAssistantRecognition = null;
+            }
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            const mic = document.getElementById('assistant-mic');
+            if (mic) mic.classList.remove('is-listening');
+            const messages = document.getElementById('assistant-messages');
+            if (messages) messages.replaceChildren();
+            walletAssistantStarted = false;
+        }
+
+        function walletAssistantNormalize(text) {
+            const plain = String(text || '').toLocaleLowerCase('it-IT').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            return plain.replace(/[’']/g, ' ').replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
+        }
+
+        function walletAssistantAnswer(rawQuestion) {
+            const question = walletAssistantNormalize(rawQuestion);
+            const total = cards.length;
+            const favorites = cards.filter(card => card.favorite);
+            if (!question) return 'Scrivi o detta una domanda. Posso aiutarti con le carte, le preferite, la ricerca, i backup, la privacy e l’uso offline.';
+
+            if (/^(ciao|salve|buongiorno|buonasera|ehi)( |$)/.test(question)) return 'Ciao! Posso contare o cercare le tue carte e spiegarti le funzioni del wallet. Prova: “Quante carte ho?” oppure “Apri Esselunga”.';
+            if (/(quante|numero|totale).*(carte|tessere)|(carte|tessere).*(quante|totale)/.test(question)) return total ? `Hai ${total} ${total === 1 ? 'carta salvata' : 'carte salvate'}${favorites.length ? `, di cui ${favorites.length} ${favorites.length === 1 ? 'preferita' : 'preferite'}` : ''}. I dati sono letti da questo dispositivo.` : 'Non hai ancora carte salvate. Tocca Aggiungi nella barra in basso per inserire una tessera.';
+            if (/(preferit|preferit|stell|favorite)/.test(question)) return favorites.length ? `Le tue ${favorites.length === 1 ? 'carta preferita è' : 'carte preferite sono'}: ${favorites.map(card => card.name).join(', ')}.` : 'Non hai ancora carte preferite. Tocca la stella su una carta per aggiungerla ai preferiti.';
+            if (/(offline|senza (internet|rete|connessione)|modalita aereo)/.test(question)) return 'Dopo aver aperto l’app almeno una volta con Internet e completato la cache, puoi consultare le carte e usare questa chat senza rete. Il microfono funziona offline solo se il browser supporta e ha installato il riconoscimento italiano locale. Le risposte vocali usano le voci installate sul telefono.';
+            if (/(privacy|sicurezza|dati|inviat|server)/.test(question)) return 'Le carte e le domande di questa chat restano in memoria locale e non vengono inviate a un modello o a un server. La dettatura dell’assistente richiede un modello vocale offline supportato dal browser; non avvio il riconoscimento cloud. Le altre funzioni online, come Drive e ricerca negozi, si collegano ai rispettivi servizi quando le usi.';
+            if (/(backup|salvataggio|ripristin|esporta|importa)/.test(question)) return 'Per proteggere le carte apri Opzioni nella barra in basso. Da lì puoi esportare o importare un file JSON, usare la cartella backup sul telefono e, se configurato, Google Drive. Prima di ripristinare verifica di aver scelto il file giusto.';
+            if (/(gps|posizione|negozi vicini|geolocal)/.test(question)) return 'Il GPS e gli avvisi dei negozi vicini si controllano dal pulsante GPS in basso e nelle Opzioni. Il GPS può consumare batteria e per trovare negozi online l’app invia un’area approssimativa al servizio cartografico.';
+            if (/(aggiungere|aggiungo|creare|creo|nuova carta|aggiungi una carta)/.test(question)) return 'Tocca Aggiungi nella barra in basso, scegli un preset o inserisci nome e codice, poi salva. Puoi anche usare Scanner per leggere una tessera.';
+            if (/(scanner|scansion|codice a barre|barcode|qr)/.test(question)) return 'Tocca Scanner in basso e inquadra il codice oppure importa un’immagine. Puoi aprire una carta salvata per mostrare il codice alla cassa; il codice resta sul dispositivo.';
+            if (/(guida|manuale|come si usa)/.test(question)) return 'Per istruzioni dettagliate tocca Guida nella barra in basso. Posso anche rispondere qui a domande su carte, scansione, backup, privacy e connessione.';
+            if (/(voce|microfono|parlare|ascolt|dettatura)/.test(question)) return 'Puoi scrivere o parlare usando il microfono se questo browser supporta il riconoscimento italiano locale e la lingua è installata. Con il pulsante della voce puoi attivare o disattivare le risposte parlate. La disponibilità dipende dal browser e dalle voci presenti sul telefono.';
+            if (/(apri|mostra|cerca|trova|dove).*(carta|tessera|negozio)/.test(question) || /^(apri|mostra|cerca|trova) /.test(question)) {
+                const ignored = new Set(['la','il','lo','le','i','gli','un','una','carta','carte','tessera','tessere','negozio','negozi','preferita','preferite','mia','mie','miei','aprimi','per','favore','mio','portafoglio','mostra','cerca','trova','dove','apri','aprire','mi','vorrei','voglio','fammi','vedere']);
+                const tokens = question.split(' ').filter(word => !ignored.has(word));
+                const found = cards.find(card => {
+                    const name = walletAssistantNormalize(card.name);
+                    return tokens.some(token => name === token || name.includes(token) || token.includes(name));
+                });
+                if (found) {
+                    if (found.type === 'QR' ? typeof window.QRCode === 'undefined' : typeof window.JsBarcode !== 'function') {
+                        document.getElementById('search-input').value = found.name;
+                        filterCards();
+                        return `Ho trovato ${found.name}, ma il generatore del codice non è disponibile in questa apertura. Ho filtrato l’elenco dietro questa finestra: chiudi l’assistente e tocca la carta per riprovare.`;
+                    }
+                    openBarcodeModal(found.id);
+                    return `Ho aperto la carta ${found.name}. Il codice è pronto da mostrare alla cassa.`;
+                }
+                if (tokens.length && total) return `Non trovo una carta corrispondente a “${tokens.join(' ')}”. Le carte salvate sono: ${cards.map(card => card.name).join(', ')}. Puoi anche scrivere parte del nome nella ricerca.`;
+                return total ? `Hai queste carte: ${cards.map(card => card.name).join(', ')}. Dimmi quale vuoi aprire, per esempio “Apri Esselunga”.` : 'Non ci sono carte da aprire. Tocca Aggiungi oppure Scanner.';
+            }
+            if (/(saldo|punti|spesa|sconto|coupon|premio)/.test(question)) return 'Fidelity Wallet conserva e mostra le tessere, ma non legge saldo punti, coupon o transazioni dei negozi. Per questi dettagli consulta l’app ufficiale del negozio.';
+            return 'Posso aiutarti a contare o aprire le carte e spiegarti preferiti, scansione, backup, GPS, privacy e uso offline. Per esempio: “Quante carte ho?” o “Apri Coop”.';
+        }
+
+        function submitWalletAssistant(event) {
+            if (event) event.preventDefault();
+            const input = document.getElementById('assistant-input');
+            if (!input) return;
+            const question = input.value.trim().slice(0, 240);
+            if (!question) return;
+            walletAssistantMessage(question, 'user');
+            input.value = '';
+            const answer = walletAssistantAnswer(question);
+            setTimeout(() => walletAssistantMessage(answer), 100);
+        }
+
+        function askWalletPreset(question) {
+            const input = document.getElementById('assistant-input');
+            if (!input) return;
+            input.value = question;
+            submitWalletAssistant();
+        }
+
+        function toggleWalletSpeech() {
+            walletAssistantSpeechEnabled = !walletAssistantSpeechEnabled;
+            const button = document.getElementById('assistant-speech-toggle');
+            if (button) {
+                button.setAttribute('aria-pressed', String(walletAssistantSpeechEnabled));
+                button.innerHTML = walletAssistantSpeechEnabled
+                    ? '<i class="fa-solid fa-volume-high mr-1" aria-hidden="true"></i>Voce attiva'
+                    : '<i class="fa-solid fa-volume-xmark mr-1" aria-hidden="true"></i>Voce disattiva';
+            }
+            if (walletAssistantSpeechEnabled) walletAssistantSetVoiceStatus();
+            else {
+                const note = document.getElementById('assistant-voice-note');
+                if (note) note.textContent = 'Risposte scritte · voce disattivata';
+            }
+            if (!walletAssistantSpeechEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+
+        async function prepareAssistantOfflineVoice() {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const button = document.getElementById('assistant-offline-language-btn');
+            if (!SR || typeof SR.install !== 'function') return;
+            if (button) { button.disabled = true; button.textContent = 'Preparazione…'; }
+            try {
+                const result = await SR.install({ langs: ['it-IT'] });
+                walletAssistantMessage(result ? 'Pacchetto italiano pronto. Puoi usare il microfono offline.' : 'Il browser non ha potuto installare il pacchetto vocale. Puoi comunque scrivere le domande e ascoltare le risposte.');
+            } catch (error) {
+                walletAssistantMessage('Non sono riuscito a preparare la dettatura offline. Controlla che il browser supporti i pacchetti vocali locali. La chat e le risposte vocali restano disponibili.');
+            } finally {
+                if (button) { button.disabled = false; button.textContent = 'Prepara riconoscimento offline'; }
+                walletAssistantSetVoiceStatus();
+            }
+        }
+
+        async function toggleWalletAssistantListening() {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const mic = document.getElementById('assistant-mic');
+            if (!SR || typeof SR.available !== 'function' || typeof SR.install !== 'function') {
+                walletAssistantMessage('Questo browser non offre la dettatura offline. Puoi scrivere la domanda: la chat e le risposte vocali funzionano senza inviare i dati del wallet in rete.');
+                return;
+            }
+            if (walletAssistantRecognition) {
+                try { walletAssistantRecognition.stop(); } catch (e) {}
+                return;
+            }
+            try {
+                const availability = await SR.available({ langs: ['it-IT'], processLocally: true });
+                if (availability !== 'available') {
+                    walletAssistantMessage(availability === 'downloadable' || availability === 'downloading'
+                        ? 'Per dettare offline, prepara prima il pacchetto italiano con il pulsante qui sotto.'
+                        : 'Il riconoscimento vocale italiano offline non è supportato su questo dispositivo. Puoi scrivere la domanda.');
+                    return;
+                }
+                const recognition = new SR();
+                recognition.lang = 'it-IT';
+                recognition.processLocally = true;
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+                recognition.onstart = () => { if (mic) mic.classList.add('is-listening'); };
+                recognition.onresult = event => {
+                    const transcript = event.results?.[0]?.[0]?.transcript?.trim();
+                    if (transcript) {
+                        const input = document.getElementById('assistant-input');
+                        if (input) input.value = transcript;
+                        submitWalletAssistant();
+                    }
+                };
+                recognition.onerror = event => {
+                    if (event.error !== 'aborted') walletAssistantMessage(event.error === 'not-allowed' ? 'Microfono non consentito. Abilita il permesso nelle impostazioni del browser.' : 'Dettatura non riuscita. Puoi scrivere la domanda o riprovare.');
+                };
+                recognition.onend = () => {
+                    if (mic) mic.classList.remove('is-listening');
+                    if (walletAssistantRecognition === recognition) walletAssistantRecognition = null;
+                };
+                walletAssistantRecognition = recognition;
+                recognition.start();
+            } catch (error) {
+                walletAssistantRecognition = null;
+                if (mic) mic.classList.remove('is-listening');
+                walletAssistantMessage('Non riesco ad avviare il microfono offline su questo dispositivo. Puoi scrivere la domanda.');
+            }
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && !document.getElementById('assistant-modal')?.classList.contains('hidden')) closeWalletAssistant();
+        });
+        document.addEventListener('DOMContentLoaded', walletAssistantSetVoiceStatus);
+        if (document.readyState !== 'loading') walletAssistantSetVoiceStatus();
+        if ('speechSynthesis' in window) window.speechSynthesis.addEventListener('voiceschanged', walletAssistantSetVoiceStatus);
+
         /* ===== Fidelity Wallet v12.6 – ricerca vocale (Web Speech API) ===== */
         let fwRecog = null, fwListening = false;
         function initVoiceSearch() {
@@ -1697,7 +1982,7 @@
            Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
            (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
            4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
-        const FW_VERSION = '12.7';
+        const FW_VERSION = '12.8';
         let fwEnrichBusy = false;
 
         function fwCleanDomain(u) {
@@ -2527,7 +2812,7 @@
     </script>
 
     <script>
-    /* ===== Fidelity Wallet v12.7 – cartella di backup locale con rotazione =====
+    /* ===== Fidelity Wallet v12.8 – cartella di backup locale con rotazione =====
        - Se il browser lo consente (Chrome/Edge, Chrome Android recente) l'utente sceglie una cartella del telefono e l'app
          ci crea dentro la sottocartella "Fidelity Wallet Backup", dove scrive i backup e cancella i più vecchi oltre il limite.
        - Dove non è possibile (iPhone/Safari, Firefox) i backup stanno in una cartella interna dell'app (IndexedDB) con la stessa
