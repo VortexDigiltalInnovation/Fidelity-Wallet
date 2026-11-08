@@ -103,6 +103,70 @@
         @media (min-width: 1024px) {
             #cards-container { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
+
+        /* ===== v13.0 – gestione backup ===== */
+        .fw-bk-row{display:flex;flex-direction:column;gap:.6rem;padding:.7rem;border-radius:1.1rem;background:#fff;border:1px solid #e2e8f0}
+        html.dark .fw-bk-row{background:#0b1226;border-color:#1e293b}
+        .fw-bk-top{display:flex;align-items:center;gap:.7rem}
+        .fw-bk-ico{width:2.5rem;height:2.5rem;border-radius:.9rem;display:flex;align-items:center;justify-content:center;flex:none;background:rgba(99,102,241,.13);color:#6366f1;font-size:1rem}
+        .fw-bk-main{flex:1;min-width:0}
+        .fw-bk-t{font-size:.82rem;font-weight:800;color:#0f172a;line-height:1.2}
+        html.dark .fw-bk-t{color:#f1f5f9}
+        .fw-bk-s{font-size:.68rem;color:#64748b;margin-top:3px;display:flex;flex-wrap:wrap;gap:.3rem;align-items:center}
+        .fw-bk-w{font-size:.62rem;color:#94a3b8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .fw-bk-act{display:flex;gap:.4rem}
+        .fw-bk-btn{min-height:2.5rem;height:2.5rem;min-width:2.5rem;padding:0 .75rem;border-radius:.85rem;background:#e2e8f0;color:#475569;font-size:.74rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:.35rem;transition:transform .1s,background .15s}
+        html.dark .fw-bk-btn{background:#1e293b;color:#cbd5e1}
+        .fw-bk-btn:active{transform:scale(.95)}
+        .fw-bk-btn:disabled{opacity:.5}
+        .fw-bk-btn.grow{flex:1}
+        .fw-bk-btn.pri{background:#4f46e5;color:#fff}
+        .fw-bk-btn.danger{background:#e11d48;color:#fff}
+        .fw-bk-edit{display:flex;flex-direction:column;gap:.5rem}
+        .fw-bk-input{width:100%;height:2.75rem;border-radius:.85rem;padding:0 .8rem;background:#f8fafc;border:1px solid #cbd5e1;color:#0f172a}
+        html.dark .fw-bk-input{background:#020617;border-color:#334155;color:#f1f5f9}
+        .fw-bk-hint{font-size:.64rem;color:#94a3b8;line-height:1.35}
+        .fw-chip{display:inline-flex;align-items:center;gap:.25rem;padding:.08rem .5rem;border-radius:999px;font-size:.62rem;font-weight:700;background:#e2e8f0;color:#475569}
+        .fw-chip.pin{background:rgba(245,158,11,.16);color:#d97706}
+        .fw-chip.src{background:rgba(99,102,241,.13);color:#6366f1}
+        html.dark .fw-chip{background:#1e293b;color:#cbd5e1}
+        html.dark .fw-chip.pin{background:rgba(245,158,11,.18);color:#fbbf24}
+        html.dark .fw-chip.src{background:rgba(99,102,241,.2);color:#a5b4fc}
+        .fw-empty{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1.6rem 1rem;text-align:center;color:#94a3b8;font-size:.74rem;border:1px dashed #cbd5e1;border-radius:1.1rem}
+        html.dark .fw-empty{border-color:#334155}
+        .fw-empty i{font-size:1.6rem;opacity:.7}
+        .fw-seg{display:flex;padding:.25rem;border-radius:1rem;background:#e2e8f0;gap:.25rem}
+        html.dark .fw-seg{background:#020617}
+        .fw-seg button{flex:1;min-height:2.5rem;border-radius:.8rem;font-size:.76rem;font-weight:700;color:#64748b;display:flex;align-items:center;justify-content:center;gap:.4rem}
+        .fw-seg button.on{background:#fff;color:#4f46e5;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+        html.dark .fw-seg button.on{background:#1e293b;color:#a5b4fc}
+        .fw-det{display:flex;flex-direction:column;gap:.9rem}
+        .fw-hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.4rem;padding:1.2rem 1rem;border-radius:1.4rem;background:linear-gradient(135deg,rgba(99,102,241,.16),rgba(139,92,246,.1));border:1px solid rgba(99,102,241,.28)}
+        .fw-hero .big{width:3.4rem;height:3.4rem;border-radius:1.15rem;display:flex;align-items:center;justify-content:center;background:#4f46e5;color:#fff;font-size:1.35rem;box-shadow:0 8px 22px rgba(79,70,229,.38)}
+        .fw-hero .t{font-size:1rem;font-weight:800;color:#0f172a}
+        html.dark .fw-hero .t{color:#fff}
+        .fw-hero .s{font-size:.72rem;color:#64748b;display:flex;gap:.3rem;flex-wrap:wrap;justify-content:center;align-items:center}
+        .fw-stats{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+        .fw-stat{padding:.75rem;border-radius:1.1rem;text-align:center;background:#f1f5f9;border:1px solid #e2e8f0}
+        html.dark .fw-stat{background:#0b1226;border-color:#1e293b}
+        .fw-stat b{display:block;font-size:1.3rem;font-weight:800;color:#4f46e5}
+        html.dark .fw-stat b{color:#a5b4fc}
+        .fw-stat span{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;font-weight:700}
+        .fw-prev-h{font-size:.64rem;text-transform:uppercase;letter-spacing:.06em;font-weight:800;color:#64748b;margin-bottom:.4rem}
+        .fw-prev{display:flex;flex-wrap:wrap;gap:.35rem}
+        .fw-warn{display:flex;gap:.6rem;padding:.8rem;border-radius:1rem;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);color:#b45309;font-size:.7rem;line-height:1.4}
+        html.dark .fw-warn{color:#fbbf24}
+        .fw-warn i{margin-top:2px}
+        .fw-err{display:flex;flex-direction:column;gap:.6rem;padding:.9rem;border-radius:1rem;background:rgba(225,29,72,.1);border:1px solid rgba(225,29,72,.3);color:#be123c;font-size:.72rem;line-height:1.4}
+        html.dark .fw-err{color:#fda4af}
+        .fw-big{min-height:3rem;width:100%;border-radius:1rem;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;gap:.5rem;background:#e2e8f0;color:#334155;transition:transform .1s}
+        html.dark .fw-big{background:#1e293b;color:#e2e8f0}
+        .fw-big:active{transform:scale(.97)}
+        .fw-big.pri{background:#4f46e5;color:#fff;box-shadow:0 8px 20px rgba(79,70,229,.35)}
+        .fw-big:disabled{opacity:.6}
+        .fw-load{display:flex;align-items:center;justify-content:center;gap:.6rem;padding:2rem 0;color:#94a3b8;font-size:.74rem}
+        .fw-bk-h{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#475569}
+        html.dark .fw-bk-h{color:#cbd5e1}
     </style>
 </head>
 <body class="bg-lightBg dark:bg-darkBg text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans select-none pb-28 transition-colors duration-300">
@@ -298,7 +362,7 @@
                     </div>
                     <div>
                         <label class="block font-semibold text-slate-500 dark:text-slate-400 mb-1">Nome Negozio *</label>
-                        <input type="text" id="store-name" onchange="fwAutoFromForm(false)" autocapitalize="words" autocomplete="off" required placeholder="Es. Esselunga" class="w-full h-12 bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 text-xs focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-slate-100">
+                        <input type="text" id="store-name" oninput="fwAutoSoon()" onchange="fwAutoFromForm(false)" autocapitalize="words" autocomplete="off" required placeholder="Es. Esselunga" class="w-full h-12 bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 text-xs focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-slate-100">
                     </div>
                     <div class="-mt-2 space-y-1.5">
                         <input type="hidden" id="store-logo" value="">
@@ -399,6 +463,31 @@
                 <input type="file" id="image-upload-input" accept="image/*" onchange="processImageUpload(event)" class="hidden">
             </label>
             <p class="text-[11px] text-slate-400 text-center">L'IA locale estrae il brand, il logo e il codice in modo totalmente privato.</p>
+        </div>
+    </div>
+
+    <!-- RECUPERA BACKUP (v13.0) -->
+    <div id="fw-sheet" class="fixed inset-0 z-[90] hidden flex items-end justify-center" role="dialog" aria-modal="true" aria-labelledby="fw-sheet-title">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="fwSheet.close()"></div>
+        <div class="relative bg-cardLight dark:bg-cardDark w-full max-w-md rounded-t-3xl border-t border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden" style="max-height:90dvh;padding-bottom:env(safe-area-inset-bottom)">
+            <div class="w-12 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full mx-auto my-2 shrink-0"></div>
+            <div class="px-4 py-2 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 shrink-0">
+                <div class="flex items-center gap-2 min-w-0">
+                    <button id="fw-sheet-back" type="button" onclick="fwSheet.back()" style="display:none" class="w-10 h-10 shrink-0 flex items-center justify-center rounded-full text-slate-500 active:bg-slate-100 dark:active:bg-slate-800" aria-label="Indietro"><i class="fa-solid fa-chevron-left"></i></button>
+                    <div class="min-w-0">
+                        <h3 id="fw-sheet-title" class="font-bold text-base text-slate-900 dark:text-white truncate">Recupera backup</h3>
+                        <p id="fw-sheet-sub" class="text-[10px] text-slate-500 dark:text-slate-400 truncate"></p>
+                    </div>
+                </div>
+                <button type="button" onclick="fwSheet.close()" class="text-slate-400 w-10 h-10 shrink-0 flex items-center justify-center rounded-full active:bg-slate-100 dark:active:bg-slate-800" aria-label="Chiudi"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="fw-sheet-tabs" class="px-4 pt-3 shrink-0">
+                <div class="fw-seg">
+                    <button type="button" data-src="local" onclick="fwSheet.list('local')"><i class="fa-solid fa-mobile-screen-button"></i>Telefono</button>
+                    <button type="button" data-src="drive" onclick="fwSheet.list('drive')"><i class="fa-brands fa-google"></i>Drive</button>
+                </div>
+            </div>
+            <div id="fw-sheet-body" class="p-4 overflow-y-auto space-y-2.5 text-xs"></div>
         </div>
     </div>
 
@@ -526,11 +615,18 @@
                     </div>
                     <div id="drive-sync-actions" class="hidden grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                         <button onclick="syncUploadToDrive()" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Salva su Drive</button>
-                        <button onclick="syncDownloadFromDrive()" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Carica da Drive</button>
+                        <button onclick="fwSheet.open('drive')" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Carica da Drive</button>
                         <button onclick="openDriveBackupFolder()" class="col-span-2 h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition"><i class="fa-solid fa-folder-open mr-1.5"></i>Apri cartella backup su Drive</button>
                     </div>
                     <p id="drive-backup-time" class="text-[10px] text-slate-500 dark:text-slate-400"></p>
                     <p id="drive-folder-label" class="text-[10px] text-slate-500 dark:text-slate-400"></p>
+                    <div id="fw-drive-list-wrap" class="hidden pt-3 border-t border-slate-200 dark:border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <h5 class="fw-bk-h"><i class="fa-solid fa-cloud text-indigo-500 mr-1.5"></i>Backup su Drive</h5>
+                            <button type="button" onclick="fwDriveRefreshList(true)" class="fw-bk-btn" aria-label="Aggiorna elenco Drive"><i class="fa-solid fa-rotate"></i></button>
+                        </div>
+                        <div id="fw-drive-list" class="space-y-2"></div>
+                    </div>
                 </div>
 
                 <!-- Cartella backup sul telefono (v12.7) -->
@@ -560,6 +656,10 @@
                         </label>
                     </div>
                     <p id="fw-bk-note" class="text-[10px] text-slate-400 leading-snug"></p>
+                    <div class="pt-3 border-t border-slate-200 dark:border-slate-800">
+                        <h5 class="fw-bk-h mb-2"><i class="fa-solid fa-mobile-screen-button text-indigo-500 mr-1.5"></i>Backup sul telefono</h5>
+                        <div id="fw-bk-list" class="space-y-2"></div>
+                    </div>
                 </div>
 
                 <div class="space-y-2">
@@ -579,7 +679,7 @@
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
                     <img src="./icons/icon-96.png" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">12.9</span></p>
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.0</span></p>
                     <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
                     <p class="text-[10px] mt-1"><a href="./privacy.html" target="_blank" rel="noopener" class="underline text-indigo-500">Informativa sulla privacy</a></p>
                 </div>
@@ -595,7 +695,7 @@
                     <img src="./icons/icon-96.png" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 12.9</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.0</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -648,6 +748,7 @@
                         <li><b>Condivisione:</b> genera un QR della carta che un familiare può inquadrare per importarla.</li>
                         <li><b>Backup:</b> esporta/importa un file JSON o sincronizza con Google Drive (<i>Impostazioni</i>).</li>
                         <li><b>Cartella backup sul telefono:</b> in <i>Impostazioni</i> scegli una cartella (dove il browser lo permette): l'app ci crea &quot;Fidelity Wallet Backup&quot;, salva i backup in automatico e tiene solo gli ultimi N (3–20), sovrascrivendo i più vecchi. Puoi cambiare cartella quando vuoi; &quot;Salva una copia in…&quot; ti fa scegliere dove salvare un file anche su iPhone.</li>
+                        <li><b>Elenco dei backup (v13.0):</b> in <i>Impostazioni</i> trovi i backup sul telefono e su Drive. Per ognuno puoi <i>Ripristinare</i> (vedi un'anteprima prima di confermare, e l'app salva una copia di sicurezza), <i>Rinominare</i> con un'etichetta (i backup con etichetta non vengono cancellati dalla rotazione automatica) o <i>Eliminare</i> (su Drive va nel cestino).</li>
                     </ul>
                 </details>
 
@@ -670,7 +771,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v12.9 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.0 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
             </div>
         </div>
     </div>
@@ -1640,7 +1741,10 @@
         function fwGetPosition() {
             return new Promise((resolve, reject) => {
                 if (!navigator.geolocation) return reject(new Error('Geolocalizzazione non supportata'));
-                navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 });
+                // prima una posizione recente e veloce; solo se manca, quella precisa
+                navigator.geolocation.getCurrentPosition(resolve, () => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, maximumAge: 5000, timeout: 12000 });
+                }, { enableHighAccuracy: false, maximumAge: 120000, timeout: 6000 });
             });
         }
         function fwSetFormPlace(lat, lng, address, note) {
@@ -1988,7 +2092,7 @@
            Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
            (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
            4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
-        const FW_VERSION = '12.9';
+        const FW_VERSION = '13.0';
         let fwEnrichBusy = false;
 
         function fwCleanDomain(u) {
@@ -2122,6 +2226,7 @@
         }
 
         // Cuore della ricerca. need = { domain, place, logo }. Restituisce solo ciò che ha trovato.
+        // v13.0: prima dominio e logo (veloci, senza GPS), poi il negozio più vicino.
         async function fwEnrichCore(name, curDomain, need, status) {
             const say = status || (() => {});
             const out = { domain: '', logo: null, color: null, place: null, storeSite: '' };
@@ -2131,8 +2236,14 @@
 
             let domain = curDomain || (brand && brand.domain) || '';
 
-            // 1) negozio più vicino (indirizzo, coordinate, eventuale sito ufficiale)
-            if (need.place || (!domain && need.domain)) {
+            // 1) dominio ufficiale (database interno -> Wikidata -> tentativo sul nome)
+            if (!domain && need.domain) {
+                say('Cerco il dominio ufficiale…');
+                domain = await fwWikidataDomain(name) || await fwGuessDomain(name);
+            }
+
+            // 2) negozio più vicino (indirizzo, coordinate, eventuale sito ufficiale)
+            if (need.place) {
                 say('Cerco il negozio più vicino…');
                 try {
                     const pos = await fwGetPosition();
@@ -2149,12 +2260,7 @@
                         out.storeSite = fwCleanDomain(s.site);
                     }
                 } catch (e) {}
-            }
-
-            // 2) dominio
-            if (!domain && need.domain) {
-                say('Cerco il dominio ufficiale…');
-                domain = out.storeSite || await fwWikidataDomain(name) || await fwGuessDomain(name);
+                if (!domain && need.domain && out.storeSite) domain = out.storeSite;
             }
             out.domain = domain || '';
 
@@ -2168,35 +2274,79 @@
         }
 
         // --- Applicazione al modulo carta ---
+        // v13.0: parte da sola appena si scrive il nome (dopo una breve pausa). Se il nome cambia mentre la ricerca
+        // è in corso, il risultato vecchio viene scartato e la ricerca riparte col nome nuovo.
+        let fwAutoToken = 0, fwAutoTimer = null;
+        function fwAutoSoon() {
+            clearTimeout(fwAutoTimer);
+            const el = document.getElementById('store-name');
+            if (el && fwNorm(el.value).length >= 3) {
+                const st = document.getElementById('fw-enrich-status');
+                if (st) st.textContent = 'Cerco i dati di «' + el.value.trim() + '»…';
+            }
+            fwAutoTimer = setTimeout(() => fwAutoFromForm(false), 650);
+        }
+
         async function fwAutoFromForm(force) {
-            if (fwEnrichBusy) return;
+            clearTimeout(fwAutoTimer);
             const g = id => document.getElementById(id);
             const st = g('fw-enrich-status');
             const name = g('store-name').value.trim();
-            if (fwNorm(name).length < 3 || fwNorm(name) === 'nuova carta') {
+            const nn = fwNorm(name);
+            if (nn.length < 3 || nn === 'nuova carta') {
                 if (force) st.textContent = 'Scrivi il nome del negozio, poi premi "Auto".';
+                else if (nn.length < 3) st.textContent = '';
                 return;
             }
-            const domainEl = g('store-domain'), logoEl = g('store-logo');
-            const hasPlace = g('gps-lat').value && g('gps-lng').value && g('map-address-input').value.trim();
+            const domainEl = g('store-domain'), logoEl = g('store-logo'), latEl = g('gps-lat'), lngEl = g('gps-lng'), addrEl = g('map-address-input');
+            const formId = g('edit-card-id').value;
+            const my = ++fwAutoToken;
+            const alive = () => my === fwAutoToken && fwNorm(g('store-name').value.trim()) === nn && !g('add-modal').classList.contains('hidden');
+
+            // dati compilati in automatico per un nome precedente (e non toccati a mano): si rifà la ricerca
+            if (domainEl.dataset.autoFor && domainEl.dataset.autoFor !== nn && domainEl.value === domainEl.dataset.autoVal) {
+                domainEl.value = ''; logoEl.value = ''; logoEl.dataset.domain = '';
+            }
+            if (latEl.dataset.autoFor && latEl.dataset.autoFor !== nn && latEl.value === latEl.dataset.autoVal) {
+                latEl.value = ''; lngEl.value = ''; addrEl.value = '';
+                g('gps-coords-display').textContent = 'Nessuna coordinata registrata';
+            }
+
+            const hasPlace = latEl.value && lngEl.value && addrEl.value.trim();
             const need = {
                 domain: !domainEl.value.trim(),
                 place: !!force || !hasPlace,
                 logo: !logoEl.value || logoEl.dataset.domain !== domainEl.value.trim()
             };
-            if (!need.domain && !need.place && !need.logo) return;
-            fwEnrichBusy = true;
-            const formId = g('edit-card-id').value;
+            if (!need.domain && !need.place && !need.logo) { st.textContent = ''; return; }
+            const done = [];
             try {
-                const res = await fwEnrichCore(name, domainEl.value.trim(), need, t => { st.textContent = t; });
-                const done = [];
-                if (res.domain && need.domain) { domainEl.value = res.domain; done.push('dominio ' + res.domain); }
-                if (res.color && (need.domain || !formId)) { g('store-color').value = res.color; }
-                const dom = domainEl.value.trim();
-                if (res.logo && dom) { logoEl.value = res.logo; logoEl.dataset.domain = dom; done.push('logo'); }
-                if (res.place && need.place) {
-                    fwSetFormPlace(res.place.lat, res.place.lng, res.place.address, res.place.label);
-                    done.push('negozio più vicino' + (res.place.address ? ' (' + res.place.address + ')' : ''));
+                // 1) dominio + logo: niente GPS, risposta rapida
+                if (need.domain || need.logo) {
+                    st.textContent = 'Cerco dominio e logo…';
+                    const r1 = await fwEnrichCore(name, domainEl.value.trim(), { domain: need.domain, place: false, logo: need.logo }, t => { if (alive()) st.textContent = t; });
+                    if (!alive()) return;
+                    if (r1.domain && need.domain) { domainEl.value = r1.domain; domainEl.dataset.autoFor = nn; domainEl.dataset.autoVal = r1.domain; done.push('dominio ' + r1.domain); }
+                    if (r1.color && (need.domain || !formId)) g('store-color').value = r1.color;
+                    const dom = domainEl.value.trim();
+                    if (r1.logo && dom) { logoEl.value = r1.logo; logoEl.dataset.domain = dom; done.push('logo'); }
+                }
+                // 2) negozio più vicino (ha bisogno del GPS: può richiedere qualche secondo)
+                if (need.place) {
+                    const dom0 = domainEl.value.trim();
+                    st.textContent = (done.length ? 'Compilato: ' + done.join(', ') + '. ' : '') + 'Cerco il negozio più vicino…';
+                    const r2 = await fwEnrichCore(name, dom0, { domain: !dom0, place: true, logo: !dom0 }, () => {});
+                    if (!alive()) return;
+                    if (!dom0 && r2.domain) {
+                        domainEl.value = r2.domain; domainEl.dataset.autoFor = nn; domainEl.dataset.autoVal = r2.domain; done.push('dominio ' + r2.domain);
+                        if (r2.logo) { logoEl.value = r2.logo; logoEl.dataset.domain = r2.domain; done.push('logo'); }
+                        if (r2.color && !formId) g('store-color').value = r2.color;
+                    }
+                    if (r2.place) {
+                        fwSetFormPlace(r2.place.lat, r2.place.lng, r2.place.address, r2.place.label);
+                        latEl.dataset.autoFor = nn; latEl.dataset.autoVal = latEl.value;
+                        done.push('negozio più vicino' + (r2.place.address ? ' (' + r2.place.address + ')' : ''));
+                    }
                 }
                 st.textContent = done.length ? 'Compilato: ' + done.join(', ') + '.' : 'Nessun dato trovato: controlla il nome o compila a mano.';
                 // memorizza subito anche se la carta esiste già (es. appena scansionata)
@@ -2206,14 +2356,14 @@
                         card.domain = domainEl.value.trim();
                         card.color = g('store-color').value;
                         card.logo = (logoEl.value && logoEl.dataset.domain === card.domain) ? logoEl.value : (card.logo || null);
-                        if (g('gps-lat').value) { card.lat = parseFloat(g('gps-lat').value); card.lng = parseFloat(g('gps-lng').value); }
-                        card.address = g('map-address-input').value.trim().slice(0, 200) || card.address || null;
+                        if (latEl.value) { card.lat = parseFloat(latEl.value); card.lng = parseFloat(lngEl.value); }
+                        card.address = addrEl.value.trim().slice(0, 200) || card.address || null;
                         saveToStorage(); renderCards();
                     }
                 }
             } catch (e) {
-                st.textContent = 'Ricerca automatica non riuscita: controlla connessione e permesso di posizione.';
-            } finally { fwEnrichBusy = false; }
+                if (alive()) st.textContent = 'Ricerca automatica non riuscita: controlla connessione e permesso di posizione.';
+            }
         }
 
         // --- Carta già salvata (salvataggio manuale senza dati, o logo da scaricare) ---
@@ -2639,7 +2789,7 @@
                     try { localStorage.setItem('fw_drive_connected', '1'); } catch (e) {}
                     updateDriveUIState();
                     if (pending) pending.resolve(driveToken.access_token);
-                    getDriveBackupFolder().catch(err => alert('Collegato a Drive, ma non sono riuscito a creare la cartella "' + DRIVE_FOLDER_NAME + '": ' + (err && err.message || err)));
+                    getDriveBackupFolder().catch(err => alert('Collegato a Drive, ma non sono riuscito a creare la cartella "' + DRIVE_FOLDER_NAME + '": ' + (err && err.message || err))).then(() => { try { fwDriveRefreshList(false); } catch (e) {} });
                     if (uploadAfterConnect) { uploadAfterConnect = false; syncUploadToDrive(); }
                 },
                 error_callback: (err) => {
@@ -2795,7 +2945,7 @@
                 });
                 const up = await upRes.json();
                 const inFolder = Array.isArray(up.parents) && up.parents.indexOf(folder.id) !== -1;
-                recordBackup('drive');
+                recordBackup('drive'); try { fwDriveRefreshList(false); } catch (e) {}
                 alert('Backup salvato su Google Drive!\n' + (inFolder ? 'Cartella: ' : 'ATTENZIONE, file non nella cartella: ') + DRIVE_FOLDER_NAME + '\n' + name + '\n' + formatDateTimeIT(now));
             } catch (err) {
                 alert('Errore durante il salvataggio su Drive: ' + (err && err.message || err));
@@ -2844,6 +2994,15 @@
         'use strict';
         const FOLDER_NAME = 'Fidelity Wallet Backup';
         const FILE_RE = /^wallet_fedelta_backup_.*\.json$/;
+        // un backup con etichetta (es. ..._prima-del-cambio.json) è "tenuto": la rotazione automatica non lo cancella
+        const isLabeled = n => /^wallet_fedelta_backup_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_.+\.json$/.test(n);
+        function cleanLabel(x) { return String(x || '').normalize('NFC').replace(/[^\p{L}\p{N} -]/gu, '').trim().replace(/\s+/g, '-').slice(0, 30); }
+        function makeName(old, label) {
+            const m = /^(wallet_fedelta_backup_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})/.exec(old);
+            const base = m ? m[1] : String(old).replace(/\.json$/i, '');
+            const l = cleanLabel(label);
+            return base + (l ? '_' + l : '') + '.json';
+        }
         const K_MAX = 'fw_bk_max', K_AUTO = 'fw_bk_auto', K_HASH = 'fw_bk_hash', K_LAST = 'fw_bk_last_ts', K_WHERE = 'fw_bk_where';
         const hasPicker = typeof window.showDirectoryPicker === 'function';
         let timer = null, busy = false;
@@ -2902,6 +3061,23 @@
         }
 
         /* ---- Salvataggio con rotazione ---- */
+        // Copia nella cartella scelta i backup rimasti nella memoria interna (quando l'accesso mancava), poi li toglie da lì.
+        async function migrateInternal(dir) {
+            let recs = [];
+            try { recs = await bkList(); } catch (e) {}
+            for (const r of recs) {
+                try {
+                    let exists = true;
+                    try { await dir.getFileHandle(r.name); } catch (e) { exists = false; }
+                    if (!exists) {
+                        const fh = await dir.getFileHandle(r.name, { create: true });
+                        const w = await fh.createWritable(); await w.write(r.json); await w.close();
+                    }
+                    await bkDel(r.name);
+                } catch (e) {}
+            }
+        }
+
         async function doBackup(opts) {
             opts = opts || {};
             if (busy) return null;
@@ -2909,29 +3085,36 @@
             busy = true;
             try {
                 const json = JSON.stringify(cards, null, 2);
-                const name = backupFileName();
+                const label = opts.label ? cleanLabel(opts.label) : '';
+                const name = backupFileName().replace(/\.json$/, (label ? '_' + label : '') + '.json');
                 const max = getMax();
                 let where = 'internal', note = '';
                 const root = await getRoot();
                 const dir = root ? await getFolderDir(!!opts.interactive).catch(() => null) : null;
                 if (dir) {
+                    await migrateInternal(dir);
                     const fh = await dir.getFileHandle(name, { create: true });
                     const w = await fh.createWritable();
                     await w.write(json); await w.close();
                     const names = await folderFiles(dir);
-                    for (let i = 0; i < names.length - max; i++) { try { await dir.removeEntry(names[i]); } catch (e) {} }
-                    try { await bkClear(); } catch (e) {}   // le copie interne di riserva non servono più
+                    if (label) for (const n of names) if (n !== name && n.endsWith('_' + label + '.json')) { try { await dir.removeEntry(n); } catch (e) {} }
+                    const plain = names.filter(n => !isLabeled(n));
+                    for (let i = 0; i < plain.length - max; i++) { try { await dir.removeEntry(plain[i]); } catch (e) {} }
                     where = 'folder';
                 } else {
                     if (root) note = 'noperm';
                     await bkPut({ name, savedAt: Date.now(), json });
                     const all = (await bkList()).map(r => r.name).sort();
-                    for (let i = 0; i < all.length - max; i++) await bkDel(all[i]);
+                    if (label) for (const n of all) if (n !== name && n.endsWith('_' + label + '.json')) await bkDel(n);
+                    const plain = all.filter(n => !isLabeled(n));
+                    for (let i = 0; i < plain.length - max; i++) await bkDel(plain[i]);
                 }
-                localStorage.setItem(K_HASH, hash(json));
-                localStorage.setItem(K_LAST, String(Date.now()));
-                localStorage.setItem(K_WHERE, where + (note ? ':' + note : ''));
-                recordBackup('local');
+                if (!label) {
+                    localStorage.setItem(K_HASH, hash(json));
+                    localStorage.setItem(K_LAST, String(Date.now()));
+                    localStorage.setItem(K_WHERE, where + (note ? ':' + note : ''));
+                    recordBackup('local');
+                }
                 refreshUI();
                 return { name, where, note };
             } catch (e) {
@@ -2959,6 +3142,27 @@
         document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') setTimeout(autoRun, 1500); else if (timer) { clearTimeout(timer); autoRun(); } });
         window.addEventListener('load', () => { setTimeout(autoRun, 5000); try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {} });
 
+        /* ---- Accesso alla cartella: la richiesta compare da sola al primo tocco, una volta per apertura ----
+           Il browser azzera spesso il permesso a ogni apertura. Un permesso si può chiedere solo dopo un tocco dell'utente:
+           lo facciamo al primo tocco; con \"Consenti a ogni visita\" (dove il browser lo offre) la domanda non torna più.
+           Nel frattempo i backup non si perdono: restano nella memoria interna e vengono copiati nella cartella appena possibile. */
+        let askedOnce = false;
+        document.addEventListener('click', async () => {
+            if (askedOnce || !hasPicker) return;
+            askedOnce = true;
+            try {
+                const root = await getRoot();
+                if (!root) return;
+                const o = { mode: 'readwrite' };
+                if ((await root.queryPermission(o)) !== 'prompt') return;
+                if ((await root.requestPermission(o)) === 'granted') {
+                    const dir = await getFolderDir(false);
+                    if (dir) await migrateInternal(dir);
+                    refreshUI();
+                }
+            } catch (e) {}
+        }, true);
+
         /* ---- Azioni dei pulsanti ---- */
         window.fwBkChoose = async function () {
             if (!hasPicker) return;
@@ -2976,7 +3180,7 @@
         };
         window.fwBkReauth = async function () {
             const root = await getRoot();
-            if (root && await hasPerm(root, true)) { await doBackup({ interactive: true }); }
+            if (root && await hasPerm(root, true)) { const d = await getFolderDir(false).catch(() => null); if (d) await migrateInternal(d); refreshUI(); }
             refreshUI();
         };
         window.fwBkNow = async function () {
@@ -3010,36 +3214,67 @@
             const m = /(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/.exec(n);
             return m ? m[3] + '/' + m[2] + '/' + m[1] + ' ' + m[4] + ':' + m[5] + ':' + m[6] : n;
         }
-        window.fwBkRestore = async function () {
-            try {
-                let items = [];   // { name, read: () => Promise<string> }
-                const root = await getRoot();
-                const dir = root ? await getFolderDir(true).catch(() => null) : null;
-                if (dir) {
-                    for (const n of (await folderFiles(dir)).reverse()) items.push({ name: n, read: async () => (await (await dir.getFileHandle(n)).getFile()).text() });
-                } else {
-                    for (const r of (await bkList()).sort((a, b) => b.name.localeCompare(a.name))) items.push({ name: r.name, read: async () => r.json });
+        // ---- elenco dei backup (per la schermata \"Recupera backup\" e per le Impostazioni) ----
+        async function localItems() {
+            const out = [];
+            const root = await getRoot();
+            let dir = null;
+            if (root) dir = await getFolderDir(false).catch(() => null);
+            if (dir) {
+                for await (const [name, h] of dir.entries()) {
+                    if (h.kind !== 'file' || !FILE_RE.test(name)) continue;
+                    let f = null; try { f = await h.getFile(); } catch (e) { continue; }
+                    out.push({
+                        id: 'f:' + name, name, where: 'Cartella «' + root.name + '»', modified: f.lastModified, size: f.size,
+                        read: async () => (await (await dir.getFileHandle(name)).getFile()).text(),
+                        rename: async (label) => {
+                            const nn = makeName(name, label);
+                            if (nn === name) return;
+                            let exists = true; try { await dir.getFileHandle(nn); } catch (e) { exists = false; }
+                            if (exists) throw new Error('Esiste già un backup con questo nome.');
+                            const txt = await (await (await dir.getFileHandle(name)).getFile()).text();
+                            const fh = await dir.getFileHandle(nn, { create: true });
+                            const w = await fh.createWritable(); await w.write(txt); await w.close();
+                            await dir.removeEntry(name);
+                        },
+                        remove: async () => { await dir.removeEntry(name); }
+                    });
                 }
-                if (!items.length) { alert('Nessun backup trovato nella cartella.' + (root && !dir ? '\nRiattiva prima l\'accesso alla cartella.' : '')); return; }
-                let pick = items[0];
-                if (items.length > 1) {
-                    const list = items.map((it, i) => (i + 1) + ') ' + niceName(it.name)).join('\n');
-                    const ans = prompt('Quale backup vuoi ripristinare? Scrivi il numero.\n\n' + list, '1');
-                    if (ans === null) return;
-                    pick = items[parseInt(ans, 10) - 1];
-                    if (!pick) { alert('Numero non valido.'); return; }
-                }
-                if (!confirm('Ripristinare il backup del ' + niceName(pick.name) + '?\nLe carte attuali verranno sostituite.')) return;
-                const data = JSON.parse(await pick.read());
-                if (!Array.isArray(data)) { alert('Il file non è un backup valido.'); return; }
-                localStorage.setItem(K_HASH, hash(JSON.stringify(data, null, 2)));
-                cards = data;
-                saveToStorage();
-                renderCards();
-                closeSettingsModal();
-                alert('Carte ripristinate dal backup del ' + niceName(pick.name) + '.');
-            } catch (e) { alert('Ripristino non riuscito: ' + (e && e.message || e)); }
+            }
+            for (const r of await bkList()) {
+                out.push({
+                    id: 'i:' + r.name, name: r.name, where: 'Memoria interna dell\'app', modified: r.savedAt, size: (r.json || '').length,
+                    read: async () => r.json,
+                    rename: async (label) => {
+                        const nn = makeName(r.name, label);
+                        if (nn === r.name) return;
+                        await bkPut({ name: nn, savedAt: r.savedAt, json: r.json });
+                        await bkDel(r.name);
+                    },
+                    remove: async () => { await bkDel(r.name); }
+                });
+            }
+            out.sort((a, b) => b.name.localeCompare(a.name));
+            out.info = { root: root ? root.name : '', granted: !!dir, picker: hasPicker };
+            return out;
+        }
+        window.fwBkItems = localItems;
+
+        // Applica un backup: prima salva una copia di sicurezza delle carte attuali
+        window.fwBkApply = async function (text) {
+            const data = JSON.parse(text);
+            if (!Array.isArray(data)) throw new Error('Il file non è un backup valido.');
+            if (Array.isArray(cards) && cards.length) { try { await doBackup({ interactive: false, label: 'prima del ripristino' }); } catch (e) {} }
+            localStorage.setItem(K_HASH, hash(JSON.stringify(data, null, 2)));
+            cards = data;
+            saveToStorage();
+            renderCards();
+            try { closeSettingsModal(); } catch (e) {}
+            refreshUI();
+            return data.length;
         };
+
+        window.fwBkRestore = function () { if (window.fwSheet) window.fwSheet.open('local'); };
 
         /* ---- Interfaccia ---- */
         async function refreshUI() {
@@ -3063,16 +3298,323 @@
             $('fw-bk-status').innerText = (last ? 'Ultimo backup: ' + formatDateTimeIT(last) + ' · ' : 'Nessun backup ancora · ') + 'presenti ' + count + ' su ' + getMax();
             let f, n;
             if (root && granted) { f = 'Cartella scelta: «' + root.name + '» › ' + FOLDER_NAME; n = 'Il telefono non mostra il percorso completo: il nome indicato è quello della cartella che hai scelto. Quando i backup superano il limite, l\'app elimina i più vecchi.'; }
-            else if (root) { f = 'Cartella scelta: «' + root.name + '» (accesso da riattivare). Nel frattempo i backup vanno nella cartella interna.'; n = 'Il browser chiede di riconfermare l\'accesso alla cartella ogni tanto: tocca "Riattiva".'; }
+            else if (root) { f = 'Cartella scelta: «' + root.name + '» (accesso da riattivare). Nel frattempo i backup vanno nella cartella interna.'; n = 'Il browser chiede di riconfermare l\'accesso a ogni apertura: al primo tocco compare la richiesta. Scegli "Consenti a ogni visita" (se lo offre) per non riceverla più. Nel frattempo nulla si perde: i backup restano nella memoria interna e passano nella cartella appena l\'accesso torna attivo.'; }
             else if (hasPicker) { f = 'Nessuna cartella scelta: i backup stanno nella cartella interna dell\'app.'; n = 'Premi "Scegli cartella": l\'app creerà dentro "' + FOLDER_NAME + '" e potrai cambiarla quando vuoi.'; }
             else { f = 'Cartella interna dell\'app "' + FOLDER_NAME + '" (non visibile in Gestione file).'; n = 'Questo browser (es. Safari su iPhone) non permette di scegliere una cartella. Usa "Salva una copia in…" per mandare un file dove vuoi (File, Drive, ecc.).'; }
             $('fw-bk-folder').innerText = f;
             $('fw-bk-note').innerText = n;
+            try {
+                if (window.fwBkUI && $('fw-bk-list')) {
+                    window.fwBkUI.renderInto($('fw-bk-list'), await localItems(), refreshUI, { empty: 'Ancora nessun backup sul telefono. Premi "Salva ora".' });
+                }
+            } catch (e) {}
         }
         const origOpen = window.openSettingsModal;
         window.openSettingsModal = function () { const r = origOpen.apply(this, arguments); refreshUI(); return r; };
         document.addEventListener('DOMContentLoaded', refreshUI);
         window.fwBkRefresh = refreshUI;
+    })();
+    </script>
+    <script>
+    /* ===== Fidelity Wallet v13.0 – gestione backup: elenco, ripristino con anteprima, rinomina, elimina =====
+       Una sola schermata (\"Recupera backup\") e gli stessi elenchi nelle Impostazioni, per telefono e Google Drive. */
+    (function () {
+        'use strict';
+        const $ = id => document.getElementById(id);
+        const RE = /^wallet_fedelta_backup_(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})(?:_(.+?))?\.json$/;
+        const h = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+        const icon = cls => { const i = document.createElement('i'); i.className = cls; return i; };
+        const toast = m => { try { fwToast(m); } catch (e) { alert(m); } };
+
+        function cleanLabel(x) { return String(x || '').normalize('NFC').replace(/[^\p{L}\p{N} -]/gu, '').trim().replace(/\s+/g, '-').slice(0, 30); }
+        function makeName(old, label) {
+            const m = /^(wallet_fedelta_backup_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})/.exec(old);
+            const base = m ? m[1] : String(old).replace(/\.json$/i, '');
+            const l = cleanLabel(label);
+            return base + (l ? '_' + l : '') + '.json';
+        }
+        function parse(name) {
+            const m = RE.exec(name || '');
+            if (!m) return { stamp: null, label: '' };
+            return { stamp: new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]), label: (m[7] || '').replace(/-/g, ' ') };
+        }
+        function fmtWhen(d) {
+            return d.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) + ' · ' + d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+        }
+        function rel(d) {
+            const a = new Date(); a.setHours(0, 0, 0, 0);
+            const b = new Date(d); b.setHours(0, 0, 0, 0);
+            const n = Math.round((a - b) / 864e5);
+            if (n <= 0) return 'oggi';
+            if (n === 1) return 'ieri';
+            if (n < 30) return n + ' giorni fa';
+            if (n < 365) return Math.round(n / 30) + (Math.round(n / 30) === 1 ? ' mese fa' : ' mesi fa');
+            return Math.round(n / 365) + (Math.round(n / 365) === 1 ? ' anno fa' : ' anni fa');
+        }
+        const fmtSize = n => n < 1024 ? n + ' B' : (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+        function btn(cls, ic, text, aria) {
+            const b = h('button', cls); b.type = 'button';
+            if (ic) b.appendChild(icon(ic));
+            if (text) b.appendChild(document.createTextNode(text));
+            if (aria) { b.setAttribute('aria-label', aria); b.title = aria; }
+            return b;
+        }
+
+        function row(it, refresh) {
+            const p = parse(it.name);
+            const when = p.stamp || new Date(it.modified || Date.now());
+            const label = p.label;
+            const r = h('div', 'fw-bk-row');
+
+            const view = h('div', 'fw-bk-view'); view.style.cssText = 'display:flex;flex-direction:column;gap:.6rem';
+            const top = h('div', 'fw-bk-top');
+            const ico = h('div', 'fw-bk-ico'); ico.appendChild(icon('fa-solid ' + (it.cloud ? 'fa-cloud' : 'fa-mobile-screen-button')));
+            const main = h('div', 'fw-bk-main');
+            main.appendChild(h('div', 'fw-bk-t', fmtWhen(when)));
+            const sub = h('div', 'fw-bk-s');
+            if (label) { const c = h('span', 'fw-chip pin'); c.appendChild(icon('fa-solid fa-thumbtack')); c.appendChild(document.createTextNode(label)); sub.appendChild(c); }
+            sub.appendChild(h('span', null, rel(when) + (it.size ? ' · ' + fmtSize(it.size) : '')));
+            main.appendChild(sub);
+            main.appendChild(h('div', 'fw-bk-w', it.where || ''));
+            top.append(ico, main);
+
+            const act = h('div', 'fw-bk-act');
+            const bR = btn('fw-bk-btn pri grow', 'fa-solid fa-rotate-left', 'Ripristina', 'Ripristina questo backup');
+            const bE = btn('fw-bk-btn', 'fa-solid fa-pen', null, 'Rinomina (etichetta)');
+            const bD = btn('fw-bk-btn', 'fa-solid fa-trash-can', null, 'Elimina');
+            act.append(bR, bE, bD);
+            view.append(top, act);
+
+            const edit = h('div', 'fw-bk-edit'); edit.style.display = 'none';
+            const inp = h('input', 'fw-bk-input'); inp.type = 'text'; inp.maxLength = 30; inp.value = label;
+            inp.placeholder = 'Etichetta, es. Prima del cambio telefono';
+            inp.setAttribute('aria-label', 'Etichetta del backup'); inp.autocomplete = 'off';
+            const hint = h('p', 'fw-bk-hint', 'I backup con etichetta restano: la rotazione automatica non li cancella. Lascia vuoto per togliere l\'etichetta.');
+            const eAct = h('div', 'fw-bk-act');
+            const bS = btn('fw-bk-btn pri grow', 'fa-solid fa-check', 'Salva', 'Salva etichetta');
+            const bC = btn('fw-bk-btn', 'fa-solid fa-xmark', 'Annulla', 'Annulla');
+            eAct.append(bS, bC);
+            edit.append(inp, hint, eAct);
+            r.append(view, edit);
+
+            bR.onclick = () => sheet.detail(it, refresh);
+            bE.onclick = () => { view.style.display = 'none'; edit.style.display = ''; inp.focus(); inp.select(); };
+            bC.onclick = () => { edit.style.display = 'none'; view.style.display = 'flex'; inp.value = label; };
+            bS.onclick = async () => {
+                bS.disabled = true;
+                try { await it.rename(inp.value); toast('Backup rinominato'); await refresh(); }
+                catch (e) { toast('Non riuscito: ' + (e && e.message || e)); bS.disabled = false; }
+            };
+            inp.onkeydown = e => { if (e.key === 'Enter') bS.onclick(); else if (e.key === 'Escape') bC.onclick(); };
+
+            let armed = null;
+            const resetD = () => { armed = null; bD.className = 'fw-bk-btn'; bD.textContent = ''; bD.appendChild(icon('fa-solid fa-trash-can')); };
+            bD.onclick = async () => {
+                if (!armed) {
+                    armed = setTimeout(resetD, 3500);
+                    bD.className = 'fw-bk-btn danger'; bD.textContent = '';
+                    bD.appendChild(icon('fa-solid fa-trash-can')); bD.appendChild(document.createTextNode('Elimina?'));
+                    return;
+                }
+                clearTimeout(armed); armed = null; bD.disabled = true;
+                try { await it.remove(); toast('Backup eliminato'); await refresh(); }
+                catch (e) { toast('Eliminazione non riuscita: ' + (e && e.message || e)); bD.disabled = false; resetD(); }
+            };
+            return r;
+        }
+
+        function renderInto(el, items, refresh, opts) {
+            opts = opts || {};
+            el.textContent = '';
+            if (!items.length) {
+                const e = h('div', 'fw-empty'); e.appendChild(icon('fa-solid fa-box-open'));
+                e.appendChild(h('p', null, opts.empty || 'Nessun backup trovato.'));
+                el.appendChild(e); return;
+            }
+            items.forEach(it => el.appendChild(row(it, refresh)));
+        }
+
+        function loading(t) { const d = h('div', 'fw-load'); d.appendChild(icon('fa-solid fa-circle-notch fa-spin')); d.appendChild(h('span', null, t)); return d; }
+        function errBox(msg, retryTxt, retry) {
+            const d = h('div', 'fw-err');
+            const p = h('div'); p.appendChild(icon('fa-solid fa-triangle-exclamation')); p.appendChild(document.createTextNode(' ' + msg)); d.appendChild(p);
+            if (retry) { const b = btn('fw-bk-btn pri', 'fa-solid fa-rotate', retryTxt || 'Riprova'); b.onclick = retry; d.appendChild(b); }
+            return d;
+        }
+
+        const sheet = {
+            src: 'local', tok: 0,
+            open(src) { $('fw-sheet').classList.remove('hidden'); document.documentElement.style.overflow = 'hidden'; this.list(src || 'local'); },
+            close() { $('fw-sheet').classList.add('hidden'); document.documentElement.style.overflow = ''; this.tok++; },
+            back() { this.list(this.src); },
+            head(title, sub, back) {
+                $('fw-sheet-title').textContent = title;
+                $('fw-sheet-sub').textContent = sub || '';
+                $('fw-sheet-back').style.display = back ? '' : 'none';
+                $('fw-sheet-tabs').style.display = back ? 'none' : '';
+            },
+            async list(src) {
+                this.src = src;
+                this.head('Recupera backup', 'Scegli un backup e ripristina le tue carte', false);
+                document.querySelectorAll('#fw-sheet-tabs button').forEach(b => b.classList.toggle('on', b.dataset.src === src));
+                const body = $('fw-sheet-body'); body.textContent = '';
+                body.appendChild(loading(src === 'drive' ? 'Leggo i backup su Drive…' : 'Cerco i backup sul telefono…'));
+                const my = ++this.tok;
+                const refresh = () => this.list(this.src);
+                try {
+                    let items;
+                    if (src === 'drive') {
+                        if (typeof googleDriveConnected === 'undefined' || !googleDriveConnected) {
+                            body.textContent = '';
+                            const e = h('div', 'fw-empty'); e.appendChild(icon('fa-brands fa-google'));
+                            e.appendChild(h('p', null, 'Google Drive non è collegato. Collegalo da Impostazioni › Google Drive Sync per vedere qui i backup nel cloud.'));
+                            body.appendChild(e); return;
+                        }
+                        items = await window.fwDriveItems();
+                    } else { items = await window.fwBkItems(); }
+                    if (my !== this.tok) return;
+                    body.textContent = '';
+                    if (src === 'local' && items.info && items.info.root && !items.info.granted) {
+                        const w = h('div', 'fw-warn'); w.appendChild(icon('fa-solid fa-lock'));
+                        const t = h('div'); t.appendChild(h('div', null, 'L\'accesso alla cartella «' + items.info.root + '» è da riattivare: qui vedi solo i backup della memoria interna.'));
+                        const b = btn('fw-bk-btn pri', 'fa-solid fa-unlock', 'Riattiva accesso');
+                        b.style.marginTop = '.5rem';
+                        b.onclick = async () => { await window.fwBkReauth(); this.list('local'); };
+                        t.appendChild(b); w.appendChild(t); body.appendChild(w);
+                    }
+                    const box = h('div'); box.style.cssText = 'display:flex;flex-direction:column;gap:.6rem'; body.appendChild(box);
+                    renderInto(box, items, refresh, { empty: src === 'drive' ? 'Nessun backup su Drive. Usa \"Salva su Drive\" nelle Impostazioni.' : 'Nessun backup sul telefono. Usa \"Salva ora\" nelle Impostazioni.' });
+                } catch (e) {
+                    if (my !== this.tok) return;
+                    body.textContent = '';
+                    body.appendChild(errBox('Non riesco a leggere i backup: ' + (e && e.message || e), 'Riprova', () => this.list(src)));
+                }
+            },
+            async detail(it, refresh) {
+                const p = parse(it.name);
+                const when = p.stamp || new Date(it.modified || Date.now());
+                this.head('Ripristina backup', it.where || '', true);
+                const body = $('fw-sheet-body'); body.textContent = '';
+                body.appendChild(loading('Leggo il contenuto del backup…'));
+                const my = ++this.tok;
+                try {
+                    const text = await it.read();
+                    if (my !== this.tok) return;
+                    let data;
+                    try { data = JSON.parse(text); } catch (e) { throw new Error('Il file non è un JSON valido.'); }
+                    if (!Array.isArray(data)) throw new Error('Il file non è un backup valido di Fidelity Wallet.');
+                    const cur = Array.isArray(cards) ? cards.length : 0;
+                    body.textContent = '';
+                    const det = h('div', 'fw-det');
+
+                    const hero = h('div', 'fw-hero');
+                    const big = h('div', 'big'); big.appendChild(icon('fa-solid fa-clock-rotate-left'));
+                    hero.appendChild(big);
+                    hero.appendChild(h('div', 't', fmtWhen(when)));
+                    const hs = h('div', 's');
+                    hs.appendChild(h('span', null, rel(when) + (it.size ? ' · ' + fmtSize(it.size) : '')));
+                    if (p.label) { const c = h('span', 'fw-chip pin'); c.appendChild(icon('fa-solid fa-thumbtack')); c.appendChild(document.createTextNode(p.label)); hs.appendChild(c); }
+                    hero.appendChild(hs);
+                    det.appendChild(hero);
+
+                    const stats = h('div', 'fw-stats');
+                    const s1 = h('div', 'fw-stat'); s1.appendChild(h('b', null, String(data.length))); s1.appendChild(h('span', null, 'Carte nel backup'));
+                    const s2 = h('div', 'fw-stat'); s2.appendChild(h('b', null, String(cur))); s2.appendChild(h('span', null, 'Carte attuali'));
+                    stats.append(s1, s2); det.appendChild(stats);
+
+                    const names = data.map(c => c && c.name).filter(Boolean);
+                    if (names.length) {
+                        const wrap = h('div'); wrap.appendChild(h('div', 'fw-prev-h', 'Anteprima carte'));
+                        const pv = h('div', 'fw-prev');
+                        names.slice(0, 16).forEach(n => pv.appendChild(h('span', 'fw-chip src', String(n).slice(0, 24))));
+                        if (names.length > 16) pv.appendChild(h('span', 'fw-chip', '+' + (names.length - 16) + ' altre'));
+                        wrap.appendChild(pv); det.appendChild(wrap);
+                    }
+
+                    if (cur) {
+                        const w = h('div', 'fw-warn'); w.appendChild(icon('fa-solid fa-circle-info'));
+                        w.appendChild(h('div', null, 'Le ' + cur + ' carte attuali verranno sostituite. Prima l\'app salva una copia di sicurezza chiamata «prima del ripristino», così puoi tornare indietro.'));
+                        det.appendChild(w);
+                    }
+
+                    const ok = btn('fw-big pri', 'fa-solid fa-rotate-left', 'Ripristina questo backup');
+                    const no = btn('fw-big', 'fa-solid fa-chevron-left', 'Indietro');
+                    ok.onclick = async () => {
+                        ok.disabled = true; no.disabled = true;
+                        ok.textContent = ''; ok.appendChild(icon('fa-solid fa-circle-notch fa-spin')); ok.appendChild(document.createTextNode('Ripristino in corso…'));
+                        try {
+                            const n = await window.fwBkApply(text, it);
+                            this.close();
+                            toast('Ripristinate ' + n + ' carte dal backup del ' + fmtWhen(when));
+                        } catch (e) {
+                            toast('Ripristino non riuscito: ' + (e && e.message || e));
+                            ok.disabled = false; no.disabled = false;
+                            ok.textContent = ''; ok.appendChild(icon('fa-solid fa-rotate-left')); ok.appendChild(document.createTextNode('Riprova'));
+                        }
+                    };
+                    no.onclick = () => this.list(this.src);
+                    det.append(ok, no);
+                    body.appendChild(det);
+                } catch (e) {
+                    if (my !== this.tok) return;
+                    body.textContent = '';
+                    body.appendChild(errBox(e && e.message || String(e), 'Torna all\'elenco', () => this.list(this.src)));
+                }
+            }
+        };
+        window.fwSheet = sheet;
+        window.fwBkUI = { renderInto, parse, makeName, cleanLabel };
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('fw-sheet') && !$('fw-sheet').classList.contains('hidden')) sheet.close(); });
+
+        /* ---- Google Drive: elenco con rinomina / elimina (cestino) ---- */
+        window.fwDriveItems = async function () {
+            const folder = await getDriveBackupFolder();
+            const q = encodeURIComponent("('" + folder.id + "' in parents or appProperties has { key='fidelityWalletBackup' and value='1' } or name contains '" + DRIVE_BACKUP_PREFIX + "') and trashed=false and mimeType!='" + DRIVE_FOLDER_MIME + "'");
+            const res = await driveFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&orderBy=modifiedTime%20desc&pageSize=50&fields=files(id,name,modifiedTime,size)');
+            const files = (await res.json()).files || [];
+            const base = 'https://www.googleapis.com/drive/v3/files/';
+            return files.map(f => ({
+                id: 'd:' + f.id, name: f.name, cloud: true, where: 'Google Drive › ' + DRIVE_FOLDER_NAME,
+                modified: Date.parse(f.modifiedTime), size: Number(f.size) || 0,
+                read: async () => (await driveFetch(base + f.id + '?alt=media')).text(),
+                rename: async (label) => {
+                    const nn = makeName(f.name, label);
+                    if (nn === f.name) return;
+                    await driveFetch(base + f.id + '?fields=id,name', { method: 'PATCH', headers: { 'Content-Type': 'application/json; charset=UTF-8' }, body: JSON.stringify({ name: nn }) });
+                },
+                remove: async () => { await driveFetch(base + f.id + '?fields=id', { method: 'PATCH', headers: { 'Content-Type': 'application/json; charset=UTF-8' }, body: JSON.stringify({ trashed: true }) }); }
+            }));
+        };
+
+        window.fwDriveRefreshList = async function (user) {
+            const wrap = $('fw-drive-list-wrap'), box = $('fw-drive-list');
+            if (!wrap || !box) return;
+            if (typeof googleDriveConnected === 'undefined' || !googleDriveConnected) { wrap.classList.add('hidden'); return; }
+            wrap.classList.remove('hidden');
+            const tokenOk = typeof driveToken !== 'undefined' && driveToken && Date.now() < driveToken.expires_at;
+            if (!tokenOk && !user) {
+                box.textContent = '';
+                const e = h('div', 'fw-empty'); e.appendChild(icon('fa-solid fa-cloud-arrow-down'));
+                e.appendChild(h('p', null, 'Tocca l\'icona di aggiornamento per vedere i backup su Drive.'));
+                box.appendChild(e); return;
+            }
+            box.textContent = ''; box.appendChild(loading('Leggo i backup su Drive…'));
+            try {
+                const items = await window.fwDriveItems();
+                renderInto(box, items, () => window.fwDriveRefreshList(true), { empty: 'Nessun backup su Drive. Premi \"Salva su Drive\".' });
+            } catch (e) {
+                box.textContent = '';
+                box.appendChild(errBox('Non riesco a leggere Drive: ' + (e && e.message || e), 'Riprova', () => window.fwDriveRefreshList(true)));
+            }
+        };
+
+        const oOpen = window.openSettingsModal;
+        window.openSettingsModal = function () {
+            const r = oOpen.apply(this, arguments);
+            try { window.fwDriveRefreshList(false); } catch (e) {}
+            try { if (window.fwBkRefresh) window.fwBkRefresh(); } catch (e) {}
+            return r;
+        };
     })();
     </script>
 </body>

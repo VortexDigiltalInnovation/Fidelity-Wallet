@@ -1,4 +1,13 @@
-# Fidelity Wallet — PWA v12.9 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v13.0 (ex Wallet Fedeltà)
+
+## Novità v13.0 — ricerca automatica mentre scrivi, gestione backup
+- Ricerca automatica: appena scrivi il nome del negozio (dopo una breve pausa) l'app cerca da sola dominio, logo e negozio più vicino. Dominio e logo arrivano subito (senza GPS); il negozio più vicino si aggiunge dopo. Se cambi il nome, i dati compilati in automatico per il nome precedente vengono rifatti; quelli scritti a mano non vengono toccati.
+- Nuova schermata "Recupera backup": schede con data, ora, dimensione e provenienza, scelta Telefono / Drive, anteprima con numero e nomi delle carte, conferma chiara.
+- Prima di ogni ripristino l'app salva una copia di sicurezza «prima del ripristino».
+- Impostazioni: elenco dei backup sul telefono e su Google Drive. Per ognuno: Ripristina, Rinomina (etichetta) ed Elimina (su Drive va nel cestino). I backup con etichetta non vengono cancellati dalla rotazione automatica.
+- Cartella sul telefono: la richiesta di accesso compare da sola al primo tocco dopo l'apertura; scegliendo «Consenti a ogni visita» (dove il browser lo offre) non viene più richiesta. Se l'accesso manca nulla si perde: i backup restano nella memoria interna e passano nella cartella appena l'accesso torna attivo.
+- Posizione più rapida: prima una posizione recente, poi quella precisa solo se serve.
+- Service worker v13.0: apri l'app online una volta per ricevere l'aggiornamento.
 
 ## Novità v12.9 — condivisione di una carta con le app del telefono
 - Su ogni carta c'è il pulsante di condivisione: si aprono le opzioni di sistema (WhatsApp, Messaggi, Email…) con un link che aggiunge la carta al Wallet di chi lo apre.
