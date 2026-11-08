@@ -679,7 +679,7 @@
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
                     <img src="./icons/icon-96.png" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.0</span></p>
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.1</span></p>
                     <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
                     <p class="text-[10px] mt-1"><a href="./privacy.html" target="_blank" rel="noopener" class="underline text-indigo-500">Informativa sulla privacy</a></p>
                 </div>
@@ -695,7 +695,7 @@
                     <img src="./icons/icon-96.png" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.0</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.1</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -771,7 +771,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.0 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.1 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">PDF della guida originale (v11.0, vecchio nome)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
             </div>
         </div>
     </div>
@@ -2092,7 +2092,7 @@
            Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
            (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
            4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
-        const FW_VERSION = '13.0';
+        const FW_VERSION = '13.1';
         let fwEnrichBusy = false;
 
         function fwCleanDomain(u) {
@@ -3142,26 +3142,10 @@
         document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') setTimeout(autoRun, 1500); else if (timer) { clearTimeout(timer); autoRun(); } });
         window.addEventListener('load', () => { setTimeout(autoRun, 5000); try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {} });
 
-        /* ---- Accesso alla cartella: la richiesta compare da sola al primo tocco, una volta per apertura ----
-           Il browser azzera spesso il permesso a ogni apertura. Un permesso si può chiedere solo dopo un tocco dell'utente:
-           lo facciamo al primo tocco; con \"Consenti a ogni visita\" (dove il browser lo offre) la domanda non torna più.
-           Nel frattempo i backup non si perdono: restano nella memoria interna e vengono copiati nella cartella appena possibile. */
-        let askedOnce = false;
-        document.addEventListener('click', async () => {
-            if (askedOnce || !hasPicker) return;
-            askedOnce = true;
-            try {
-                const root = await getRoot();
-                if (!root) return;
-                const o = { mode: 'readwrite' };
-                if ((await root.queryPermission(o)) !== 'prompt') return;
-                if ((await root.requestPermission(o)) === 'granted') {
-                    const dir = await getFolderDir(false);
-                    if (dir) await migrateInternal(dir);
-                    refreshUI();
-                }
-            } catch (e) {}
-        }, true);
+        /* ---- Accesso alla cartella ----
+           v13.1: l'app NON chiede più il permesso da sola (compariva toccando qualunque cosa, ad esempio aprendo le Impostazioni).
+           La richiesta del browser compare solo se premi tu "Salva ora" o "Riattiva l'accesso". Nel frattempo i backup
+           automatici vanno nella memoria interna e passano nella cartella scelta appena l'accesso è attivo. */
 
         /* ---- Azioni dei pulsanti ---- */
         window.fwBkChoose = async function () {
@@ -3298,7 +3282,7 @@
             $('fw-bk-status').innerText = (last ? 'Ultimo backup: ' + formatDateTimeIT(last) + ' · ' : 'Nessun backup ancora · ') + 'presenti ' + count + ' su ' + getMax();
             let f, n;
             if (root && granted) { f = 'Cartella scelta: «' + root.name + '» › ' + FOLDER_NAME; n = 'Il telefono non mostra il percorso completo: il nome indicato è quello della cartella che hai scelto. Quando i backup superano il limite, l\'app elimina i più vecchi.'; }
-            else if (root) { f = 'Cartella scelta: «' + root.name + '» (accesso da riattivare). Nel frattempo i backup vanno nella cartella interna.'; n = 'Il browser chiede di riconfermare l\'accesso a ogni apertura: al primo tocco compare la richiesta. Scegli "Consenti a ogni visita" (se lo offre) per non riceverla più. Nel frattempo nulla si perde: i backup restano nella memoria interna e passano nella cartella appena l\'accesso torna attivo.'; }
+            else if (root) { f = 'Cartella scelta: «' + root.name + '» (accesso da riattivare). Nel frattempo i backup vanno nella cartella interna.'; n = 'Il browser fa scadere l\'accesso alla cartella quando chiudi le schede dell\'app, e questa versione del browser non offre di ricordarlo. L\'app non lo richiede più da sola: i backup automatici restano al sicuro nella memoria interna e passano nella cartella quando premi "Riattiva l\'accesso" o "Salva ora".'; }
             else if (hasPicker) { f = 'Nessuna cartella scelta: i backup stanno nella cartella interna dell\'app.'; n = 'Premi "Scegli cartella": l\'app creerà dentro "' + FOLDER_NAME + '" e potrai cambiarla quando vuoi.'; }
             else { f = 'Cartella interna dell\'app "' + FOLDER_NAME + '" (non visibile in Gestione file).'; n = 'Questo browser (es. Safari su iPhone) non permette di scegliere una cartella. Usa "Salva una copia in…" per mandare un file dove vuoi (File, Drive, ecc.).'; }
             $('fw-bk-folder').innerText = f;
