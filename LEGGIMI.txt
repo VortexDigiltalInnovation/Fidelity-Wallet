@@ -1,4 +1,10 @@
-# Fidelity Wallet — PWA v12.8 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v12.9 (ex Wallet Fedeltà)
+
+## Novità v12.9 — condivisione di una carta con le app del telefono
+- Su ogni carta c'è il pulsante di condivisione: si aprono le opzioni di sistema (WhatsApp, Messaggi, Email…) con un link che aggiunge la carta al Wallet di chi lo apre.
+- Il pulsante di condivisione è presente anche nella vista a icone.
+- Lo stesso pulsante "Condividi con…" è nella finestra del QR. Se il dispositivo non supporta la condivisione, testo e link vengono copiati.
+- Corretto: i link di condivisione ora funzionano anche quando il codice contiene i caratteri + o /.
 
 ## Novità v12.8 — assistente vocale offline
 - Nuovo assistente integrato nella barra inferiore: risponde su carte salvate, preferite, ricerca e funzioni dell’app usando i dati locali, senza chiamare servizi IA o inviare le carte.
