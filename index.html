@@ -17,9 +17,9 @@
     
     <!-- Dynamic Manifest -->
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.2">
-    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.2">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.2">
+    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.3">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.3">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.3">
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -192,10 +192,10 @@
     <!-- HEADER MINIMAL MOBILE-OPTIMIZED -->
     <header class="bg-cardLight/80 dark:bg-cardDark/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 sticky top-0 z-40 px-4 h-14 flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-2.5 min-w-0 flex-1">
-            <img src="./icons/icon-96.png?v=13.2" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
+            <img src="./icons/icon-96.png?v=13.3" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
             <div class="min-w-0">
                 <h1 class="font-black text-xs tracking-tight text-slate-900 dark:text-white flex items-center">
-                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.2</span>
+                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.3</span>
                 </h1>
                 <p class="text-[10px] text-slate-500 dark:text-slate-400 block truncate" id="gps-status-text">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block align-middle mr-1 animate-pulse"></span>In attesa del GPS…
@@ -210,6 +210,10 @@
                 <span>Installa</span>
             </button>
             
+            <!-- Guida -->
+            <button onclick="openGuideModal()" aria-label="Guida" title="Guida" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 flex items-center justify-center active:scale-95 transition">
+                <i class="fa-solid fa-book-open text-xs text-amber-500"></i>
+            </button>
             <!-- Switch Tema integrato compatto -->
             <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-200 flex items-center justify-center active:scale-95 transition">
                 <i id="theme-icon" class="fa-solid fa-moon text-xs"></i>
@@ -268,16 +272,12 @@
 
     <!-- BOTTOM NAVIGATION BAR MOBILE-FIRST (THUMB ZONE OPTIMIZED) -->
     <nav class="fixed bottom-0 left-0 right-0 z-40 bg-cardLight/95 dark:bg-cardDark/95 backdrop-blur-xl border-t border-slate-200/80 dark:border-slate-800 px-3 py-2 flex items-center justify-around max-w-md mx-auto shadow-2xl">
+
         <button onclick="openScannerModal()" class="flex-1 flex flex-col items-center justify-center py-1.5 min-h-[52px] rounded-2xl text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition active:scale-95">
             <div class="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-sm mb-0.5">
                 <i class="fa-solid fa-camera text-sm"></i>
             </div>
             <span class="text-[10px] font-bold tracking-tight">Scanner</span>
-        </button>
-
-        <button onclick="openAddModal()" aria-label="Aggiungi una carta" class="fw-add flex-1 flex flex-col items-center justify-center transition">
-            <span class="fw-add-fab"><i class="fa-solid fa-plus"></i></span>
-            <span class="fw-add-label">Aggiungi</span>
         </button>
 
         <button onclick="toggleGpsMode()" id="nav-gps-btn" class="flex-1 flex flex-col items-center justify-center py-1.5 min-h-[52px] rounded-2xl text-emerald-600 dark:text-emerald-400 transition active:scale-95">
@@ -287,11 +287,9 @@
             <span class="text-[10px] font-bold tracking-tight" id="nav-gps-label">GPS On</span>
         </button>
 
-        <button onclick="openGuideModal()" class="flex-1 flex flex-col items-center justify-center py-1.5 min-h-[52px] rounded-2xl text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition active:scale-95">
-            <div class="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800/50 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-sm mb-0.5">
-                <i class="fa-solid fa-book-open text-sm"></i>
-            </div>
-            <span class="text-[10px] font-bold tracking-tight">Guida</span>
+        <button onclick="openAddModal()" aria-label="Aggiungi una carta" class="fw-add flex-1 flex flex-col items-center justify-center transition">
+            <span class="fw-add-fab"><i class="fa-solid fa-plus"></i></span>
+            <span class="fw-add-label">Aggiungi</span>
         </button>
 
         <button onclick="openWalletAssistant()" id="wallet-assistant-nav" class="flex-1 flex flex-col items-center justify-center py-1.5 min-h-[52px] rounded-2xl text-indigo-600 dark:text-indigo-400 hover:text-violet-600 dark:hover:text-violet-400 transition active:scale-95" aria-label="Apri assistente vocale">
@@ -587,6 +585,18 @@
                     </div>
                 </div>
 
+                <!-- Sezione Feedback aptico -->
+                <div class="bg-slate-100/70 dark:bg-darkBg/60 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl space-y-2">
+                    <label class="flex items-center justify-between gap-3 text-xs text-slate-700 dark:text-slate-300">
+                        <span class="min-w-0">
+                            <span class="block font-semibold text-slate-800 dark:text-slate-200 text-xs"><i class="fa-solid fa-hand-pointer text-violet-500 mr-1.5"></i> Feedback aptico (vibrazione)</span>
+                            <span class="block text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Una breve vibrazione quando apri una carta, salvi, scansioni, elimini o arriva un avviso di prossimità.</span>
+                        </span>
+                        <input type="checkbox" id="fw-haptic" onchange="fwHapticChanged()" class="w-5 h-5 accent-indigo-600 shrink-0">
+                    </label>
+                    <p id="fw-haptic-note" class="text-[10px] text-amber-600 dark:text-amber-400 leading-snug hidden">Questo dispositivo o browser non supporta la vibrazione (ad esempio iPhone con Safari).</p>
+                </div>
+
                 <!-- Sezione Rilevamento negozi -->
                 <div class="bg-slate-100/70 dark:bg-darkBg/60 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl space-y-3">
                     <div>
@@ -688,8 +698,8 @@
                     </div>
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                    <img src="./icons/icon-96.png?v=13.2" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.2</span></p>
+                    <img src="./icons/icon-96.png?v=13.3" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.3</span></p>
                     <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
                     <p class="text-[10px] mt-1"><a href="./privacy.html" target="_blank" rel="noopener" class="underline text-indigo-500">Informativa sulla privacy</a></p>
                 </div>
@@ -702,10 +712,10 @@
         <div class="bg-cardLight dark:bg-cardDark text-slate-900 dark:text-slate-100 w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[94dvh] sm:h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-800">
             <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 shrink-0">
                 <div class="flex items-center gap-2 min-w-0">
-                    <img src="./icons/icon-96.png?v=13.2" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
+                    <img src="./icons/icon-96.png?v=13.3" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.2</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.3</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -721,8 +731,8 @@
                     <summary class="font-bold text-sm text-slate-900 dark:text-white cursor-pointer">Avvio rapido</summary>
                     <ol class="mt-2 space-y-2 list-decimal pl-5">
                         <li><b>Installa l'app.</b> Premi <i>Installa</i> in alto. Su iPhone: Safari → Condividi → Aggiungi alla schermata Home.</li>
-                        <li><b>Aggiungi una carta.</b> Con l'icona <i>Scanner</i> inquadra il codice a barre oppure importa una foto dalla galleria. Puoi anche usare <i>Aggiungi</i> e scegliere un preset.</li>
-                        <li><b>Compilazione automatica.</b> Appena inizi a scrivere il nome del negozio (o scansioni la carta), l'app cerca da sola il dominio ufficiale e il logo del negozio, trova il punto vendita più vicino (indirizzo e coordinate) e salva tutto nella carta. Puoi rilanciarla con il pulsante <i>Auto</i>. Vengono inviati a Wikidata/OpenStreetMap/servizi di icone solo il nome del brand e un'area approssimativa (~1 km).</li>
+                        <li><b>Aggiungi una carta.</b> Tocca il pulsante viola in rilievo <i>Aggiungi</i>, al centro della barra in basso, e scegli un preset o inserisci i dati a mano. Con <i>Scanner</i> inquadri il codice a barre o importi una foto dalla galleria.</li>
+                        <li><b>Compilazione automatica.</b> Appena inizi a scrivere il nome del negozio (o scansioni la carta), l'app cerca da sola il dominio ufficiale e il logo del negozio, trova il punto vendita più vicino (indirizzo e coordinate) e salva tutto nella carta. Tra i siti possibili preferisce sempre quello italiano (.it). Puoi rilanciarla con il pulsante <i>Auto</i>. Vengono inviati a Wikidata/OpenStreetMap/servizi di icone solo il nome del brand e un'area approssimativa (~1 km).</li>
                         <li><b>Controlla il riconoscimento.</b> L'IA locale riconosce brand, logo e colori (Esselunga, Coop, Conad, Decathlon…). Correggi codice e titolare se serve.</li>
                         <li><b>Consenti posizione e notifiche.</b> Consenti la posizione quando il browser lo chiede e premi <i>Attiva</i> in <i>Impostazioni → Notifiche Push</i>.</li>
                         <li><b>Alla cassa</b> tocca la carta: lo schermo resta acceso. Se la cassa fatica a leggere il codice alza la luminosità del telefono e tienilo a 10–15 cm dallo scanner.</li>
@@ -756,7 +766,9 @@
                         <li><b>Schermo acceso in cassa:</b> finché una carta è aperta lo schermo non si spegne (le app web non possono alzare la luminosità da sole: fallo dal telefono).</li>
                         <li><b>Cassa rapida e preferiti:</b> segna le carte più usate con la stella per averle nella barra in alto; cerca per nome o categoria.</li>
                         <li><b>Condivisione:</b> tocca l'icona di condivisione sulla carta, oppure apri la carta e premi <i>Condividi</i>: puoi inviarla con le app del telefono (WhatsApp, messaggi, e-mail…) oppure mostrare un QR che un familiare può inquadrare per importarla.</li>
-                        <li><b>Pulsante Aggiungi:</b> è il pulsante viola in rilievo nella barra in basso. Ti fa scegliere un preset oppure inserire a mano nome, codice e titolare.</li>
+                        <li><b>Vibrazione (feedback aptico):</b> una breve vibrazione quando apri una carta, salvi, scansioni, elimini, completi un backup o arriva un avviso di prossimità. Si disattiva in <i>Impostazioni → Feedback aptico</i>. Non funziona su iPhone con Safari: il browser non la supporta.</li>
+                        <li><b>Dov'è la guida:</b> il pulsante con il libro in alto, accanto al tema, oppure <i>Impostazioni</i>.</li>
+                        <li><b>Pulsante Aggiungi:</b> è il pulsante viola in rilievo al centro della barra in basso. Ti fa scegliere un preset oppure inserire a mano nome, codice e titolare.</li>
                         <li><b>Backup:</b> esporta/importa un file JSON o sincronizza con Google Drive (<i>Impostazioni</i>).</li>
                         <li><b>Cartella backup sul telefono:</b> in <i>Impostazioni</i> scegli una cartella (dove il browser lo permette): l'app ci crea &quot;Fidelity Wallet Backup&quot;, salva i backup in automatico e tiene solo gli ultimi N (3–20), sovrascrivendo i più vecchi. Puoi cambiare cartella quando vuoi; &quot;Salva una copia in…&quot; ti fa scegliere dove salvare un file anche su iPhone.</li>
                         <li><b>Recupera backup:</b> il pulsante <i>Ripristina</i> apre una schermata con i backup del telefono e di Drive; scegline uno, guarda l'anteprima e conferma. <b>Elenco dei backup:</b> in <i>Impostazioni</i> trovi i backup sul telefono e su Drive. Per ognuno puoi <i>Ripristinare</i> (vedi un'anteprima prima di confermare, e l'app salva una copia di sicurezza), <i>Rinominare</i> con un'etichetta (i backup con etichetta non vengono cancellati dalla rotazione automatica) o <i>Eliminare</i> (su Drive va nel cestino).</li>
@@ -779,12 +791,13 @@
                         <div><b>Le notifiche non compaiono.</b> Premi <i>Prova notifica</i> in <i>Impostazioni</i>. Su iPhone le notifiche funzionano solo dopo aver aggiunto l'app alla schermata Home.</div>
                         <div><b>Il browser chiede di consentire la modifica dei file.</b> Succede solo se premi <i>Salva ora</i> o <i>Riattiva l'accesso</i> per la cartella di backup: il permesso scade quando chiudi le schede dell'app. I backup automatici intanto restano nella memoria interna e passano nella cartella dopo il consenso.</div>
                         <div><b>La versione sembra vecchia.</b> Guarda la versione accanto al logo e in fondo alle Impostazioni. Se è vecchia apri l'app con la connessione attiva e chiudila e riaprila una o due volte; se l'hai pubblicata tu, controlla di aver sostituito anche <i>service-worker.js</i>. L'icona sulla schermata Home si aggiorna dal browser anche dopo qualche giorno.</div>
+                        <div><b>Non sento la vibrazione.</b> Controlla che <i>Feedback aptico</i> sia attivo in Impostazioni e che il telefono non sia in modalità silenziosa o risparmio energetico. Su iPhone con Safari non è disponibile.</div>
                         <div><b>Il pulsante Installa non compare.</b> Apri l'app da un indirizzo HTTPS con Chrome, Edge o Safari.</div>
                         <div><b>Il negozio non viene trovato.</b> Su OpenStreetMap il punto vendita potrebbe avere un nome diverso o mancare: salva le coordinate dal modulo della carta con <i>GPS Attuale</i>.</div>
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.2 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.2)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.3 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.3)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
             </div>
         </div>
     </div>
@@ -859,7 +872,7 @@
             { name: 'Carrefour', domain: 'carrefour.it', color: '#2563eb', prefixes: ['210', '211', '212', '213'], keywords: ['carrefour', 'payback', 'spesa', 'supermercato'] },
             { name: 'Decathlon', domain: 'decathlon.it', color: '#0284c7', prefixes: ['209', '208'], keywords: ['decathlon', 'sport', 'abbigliamento', 'scarpe'] },
             { name: 'Lidl', domain: 'lidl.it', color: '#2563eb', prefixes: ['205', '998'], keywords: ['lidl', 'lidlplus', 'spesa', 'supermercato'] },
-            { name: 'IKEA', domain: 'ikea.com', color: '#ca8a04', prefixes: ['19', '29', '99'], keywords: ['ikea', 'family', 'casa', 'mobile', 'arredamento'] },
+            { name: 'IKEA', domain: 'ikea.it', color: '#ca8a04', prefixes: ['19', '29', '99'], keywords: ['ikea', 'family', 'casa', 'mobile', 'arredamento'] },
             { name: 'Eurospin', domain: 'eurospin.it', color: '#1e40af', prefixes: ['800'], keywords: ['eurospin', 'spesa', 'discount'] },
             { name: 'Tigotà', domain: 'tigota.it', color: '#0d9488', prefixes: ['980'], keywords: ['tigota', 'tigotà', 'pulizia', 'profumo', 'casa'] },
             { name: 'Sephora', domain: 'sephora.it', color: '#000000', prefixes: ['376'], keywords: ['sephora', 'trucco', 'profumo', 'cosmetici'] },
@@ -1165,6 +1178,7 @@
             if (!card) return;
             if (confirm(`Sei sicuro di voler eliminare la carta "${card.name}"?`)) {
                 cards = cards.filter(c => c.id !== id);
+                fwHaptic('warn');
                 saveToStorage();
                 renderCards();
                 if (activeCardForModal && activeCardForModal.id === id) {
@@ -1225,7 +1239,7 @@
             document.getElementById('barcode-modal').classList.remove('hidden');
 
             fwBarcodeWake(true);
-            if (navigator.vibrate) navigator.vibrate(15);
+            fwHaptic('tap');
         }
 
         function closeBarcodeModal() {
@@ -1237,6 +1251,7 @@
         function toggleFavoriteFromModal() {
             if (!activeCardForModal) return;
             activeCardForModal.favorite = !activeCardForModal.favorite;
+            fwHaptic('tap');
             saveToStorage();
             renderCards();
             openBarcodeModal(activeCardForModal.id);
@@ -1350,6 +1365,7 @@
             saveToStorage();
             renderCards();
             closeAddModal();
+            fwHaptic('success');
             if (savedCard) setTimeout(() => fwEnrichCard(savedCard), 100);
         }
 
@@ -1383,7 +1399,7 @@
         const FW_COVER_M = 400;      // raggio dell'area scaricata
         const FW_REQUERY_M = 250;    // ricerca nuova quando ci si allontana tanto dal centro dell'area
 
-        let fwSettings = Object.assign({ auto: true, radius: 20, wake: false }, (() => { try { return JSON.parse(localStorage.getItem(FW_SETTINGS_KEY) || '{}'); } catch (e) { return {}; } })());
+        let fwSettings = Object.assign({ auto: true, radius: 20, wake: false, haptic: true }, (() => { try { return JSON.parse(localStorage.getItem(FW_SETTINGS_KEY) || '{}'); } catch (e) { return {}; } })());
         let fwLast = (() => { try { return JSON.parse(localStorage.getItem(FW_LAST_KEY) || '{}'); } catch (e) { return {}; } })();
         let fwPos = null;
         let fwStores = [];
@@ -1397,6 +1413,20 @@
         const fwNorm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/&/g, ' e ').replace(/[^a-z0-9]+/g, ' ').trim();
         const fwEsc = s => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+        // Feedback aptico (vibrazione). Disattivabile da Impostazioni. Su iPhone/Safari il browser non lo supporta.
+        const FW_HAPTIC = { select: 8, tap: 14, success: [16, 50, 16], warn: [35, 60, 35], error: [70, 50, 70, 50, 70], alert: [200, 100, 200] };
+        function fwHaptic(kind) {
+            try {
+                if (!fwSettings.haptic || !navigator.vibrate) return false;
+                return navigator.vibrate(FW_HAPTIC[kind] || FW_HAPTIC.tap);
+            } catch (e) { return false; }
+        }
+        function fwHapticChanged() {
+            const el = document.getElementById('fw-haptic');
+            fwSettings.haptic = !!(el && el.checked);
+            fwSaveSettings();
+            fwHaptic('success');
+        }
         function fwSaveSettings() { try { localStorage.setItem(FW_SETTINGS_KEY, JSON.stringify(fwSettings)); } catch (e) {} }
 
         function fwNameMatches(cardName, tags) {
@@ -1593,6 +1623,7 @@
             if (!card) return;
             if (Date.now() - (fwLast[card.id] || 0) < FW_COOLDOWN_MS) return;
             fwLast[card.id] = Date.now();
+            fwHaptic('alert');
             try { localStorage.setItem(FW_LAST_KEY, JSON.stringify(fwLast)); } catch (e) {}
             card._lastTriggered = Date.now();
             saveToStorage();
@@ -1610,8 +1641,8 @@
             if (!('Notification' in window) || Notification.permission !== 'granted') return;
             const options = {
                 body: (address ? address + '\n' : '') + 'Tocca per aprire la carta.',
-                icon: './icons/icon-192.png?v=13.2',
-                badge: './icons/icon-96.png?v=13.2',
+                icon: './icons/icon-192.png?v=13.3',
+                badge: './icons/icon-96.png?v=13.3',
                 tag: 'fw-' + card.id,
                 data: { cardId: card.id },
                 actions: [{ action: 'open', title: 'Apri carta' }],
@@ -1720,6 +1751,9 @@
             if (a) a.checked = !!fwSettings.auto;
             if (r) r.value = String(fwSettings.radius);
             if (w) w.checked = !!fwSettings.wake;
+            const hp = document.getElementById('fw-haptic'), hn = document.getElementById('fw-haptic-note');
+            if (hp) { hp.checked = !!fwSettings.haptic; hp.disabled = !navigator.vibrate; }
+            if (hn) hn.classList.toggle('hidden', !!navigator.vibrate);
         }
 
         function fwSettingChanged() {
@@ -2105,7 +2139,7 @@
            Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
            (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
            4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
-        const FW_VERSION = '13.2';
+        const FW_VERSION = '13.3';
         let fwEnrichBusy = false;
 
         function fwCleanDomain(u) {
@@ -2217,14 +2251,36 @@
                     const e = (g.entities || {})[f.id];
                     const cl = e && e.claims && e.claims.P856;
                     if (!cl || !cl.length) continue;
-                    const pref = cl.find(c => c.rank === 'preferred') || cl[0];
-                    const dom = fwCleanDomain(pref.mainsnak && pref.mainsnak.datavalue && pref.mainsnak.datavalue.value);
+                    // v13.3: tra i siti ufficiali si sceglie prima quello .it, poi quello in lingua italiana, poi il preferito
+                    const opts = cl.filter(c => c.rank !== 'deprecated').map(c => ({
+                        c, d: fwCleanDomain(c.mainsnak && c.mainsnak.datavalue && c.mainsnak.datavalue.value),
+                        itLang: !!(c.qualifiers && c.qualifiers.P407 && c.qualifiers.P407.some(q => q.datavalue && q.datavalue.value && q.datavalue.value.id === 'Q652'))
+                    })).filter(o => o.d);
+                    const pref = opts.find(o => /\.it$/.test(o.d)) || opts.find(o => o.itLang) || opts.find(o => o.c.rank === 'preferred') || opts[0];
+                    const dom = pref ? pref.d : '';
                     if (!dom) continue;
                     const desc = ((e.descriptions || {}).it || (e.descriptions || {}).en || {}).value || '';
                     if (retail.test(desc) || fwNorm(f.label) === nn) return dom;
                 }
             } catch (e) {}
             return '';
+        }
+
+        // v13.3: se il sito trovato è internazionale (.com, .net, .eu…) e esiste la versione italiana con lo stesso nome (.it), si usa quella.
+        const fwItCache = {};
+        async function fwPreferItalian(domain) {
+            const d = fwCleanDomain(domain);
+            if (!d || /\.it$/.test(d) || !/\.(com|net|org|eu|info|biz|co|io|shop|store)$/.test(d)) return d;
+            const parts = d.split('.');
+            const label = parts[parts.length - 2];
+            if (!label || label.length < 3) return d;
+            const cand = label + '.it';
+            if (fwItCache[cand] === undefined) {
+                // Google restituisce un'icona di 16 px per i domini che non esistono: sopra i 32 px il sito c'è davvero
+                const im = await fwLoadImg('https://www.google.com/s2/favicons?domain=' + cand + '&sz=128', 32, false);
+                fwItCache[cand] = !!im;
+            }
+            return fwItCache[cand] ? cand : d;
         }
 
         async function fwGuessDomain(name) {
@@ -2275,6 +2331,8 @@
                 } catch (e) {}
                 if (!domain && need.domain && out.storeSite) domain = out.storeSite;
             }
+            // 2b) sito italiano in via preferenziale (solo per i domini trovati ora, non per quelli scelti da te o dal database)
+            if (domain && need.domain && !curDomain && !(brand && brand.domain === domain)) domain = await fwPreferItalian(domain);
             out.domain = domain || '';
 
             // 3) logo + colore
@@ -2361,6 +2419,7 @@
                         done.push('negozio più vicino' + (r2.place.address ? ' (' + r2.place.address + ')' : ''));
                     }
                 }
+                if (done.length) fwHaptic('select');
                 st.textContent = done.length ? 'Compilato: ' + done.join(', ') + '.' : 'Nessun dato trovato: controlla il nome o compila a mano.';
                 // memorizza subito anche se la carta esiste già (es. appena scansionata)
                 if (formId && done.length) {
@@ -2539,6 +2598,7 @@
         }
 
         function handleScannedOrImportedCode(cleanText, detectedOcrText = '') {
+            fwHaptic('success');
             stopScanner();
             document.getElementById('scanner-modal').classList.add('hidden');
             
@@ -2672,7 +2732,7 @@
             const url = fwCardShareUrl(card);
             const text = 'Ti condivido la carta fedeltà ' + card.name + ' (codice ' + card.code + '). Aprendo il link la aggiungi al tuo Fidelity Wallet.';
             if (navigator.share) {
-                try { await navigator.share({ title: 'Carta ' + card.name, text: text, url: url }); return; }
+                try { await navigator.share({ title: 'Carta ' + card.name, text: text, url: url }); fwHaptic('success'); return; }
                 catch (e) { if (e && e.name === 'AbortError') return; }
             }
             try { await navigator.clipboard.writeText(text + '\n' + url); say('Condivisione non disponibile su questo dispositivo: testo e link copiati, incollali dove vuoi.'); }
@@ -3136,10 +3196,11 @@
                     recordBackup('local');
                 }
                 refreshUI();
+                if (opts.interactive && window.fwHaptic) fwHaptic('success');
                 return { name, where, note };
             } catch (e) {
                 console.warn('Backup non riuscito', e);
-                if (opts.interactive) alert('Backup non riuscito: ' + (e && e.message || e));
+                if (opts.interactive) { if (window.fwHaptic) fwHaptic('error'); alert('Backup non riuscito: ' + (e && e.message || e)); }
                 return null;
             } finally { busy = false; }
         }
@@ -3416,12 +3477,13 @@
             bD.onclick = async () => {
                 if (!armed) {
                     armed = setTimeout(resetD, 3500);
+                    if (window.fwHaptic) fwHaptic('warn');
                     bD.className = 'fw-bk-btn danger'; bD.textContent = '';
                     bD.appendChild(icon('fa-solid fa-trash-can')); bD.appendChild(document.createTextNode('Elimina?'));
                     return;
                 }
                 clearTimeout(armed); armed = null; bD.disabled = true;
-                try { await it.remove(); toast('Backup eliminato'); await refresh(); }
+                try { await it.remove(); if (window.fwHaptic) fwHaptic('tap'); toast('Backup eliminato'); await refresh(); }
                 catch (e) { toast('Eliminazione non riuscita: ' + (e && e.message || e)); bD.disabled = false; resetD(); }
             };
             return r;
@@ -3549,8 +3611,10 @@
                         try {
                             const n = await window.fwBkApply(text, it);
                             this.close();
+                            if (window.fwHaptic) fwHaptic('success');
                             toast('Ripristinate ' + n + ' carte dal backup del ' + fmtWhen(when));
                         } catch (e) {
+                            if (window.fwHaptic) fwHaptic('error');
                             toast('Ripristino non riuscito: ' + (e && e.message || e));
                             ok.disabled = false; no.disabled = false;
                             ok.textContent = ''; ok.appendChild(icon('fa-solid fa-rotate-left')); ok.appendChild(document.createTextNode('Riprova'));
@@ -3620,6 +3684,13 @@
             return r;
         };
     })();
+    </script>
+    <script>
+    /* v13.3: un breve tocco aptico sui pulsanti della barra in basso e dell'intestazione (Aggiungi un po' più marcato) */
+    document.addEventListener('click', function (e) {
+        var b = e.target && e.target.closest && e.target.closest('nav button, header button');
+        if (b) fwHaptic(b.classList.contains('fw-add') ? 'tap' : 'select');
+    }, true);
     </script>
     <script>
     /* v13.2: la versione mostrata (accanto al logo e nelle Impostazioni) arriva sempre da FW_VERSION */

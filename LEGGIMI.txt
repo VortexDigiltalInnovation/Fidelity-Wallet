@@ -1,4 +1,10 @@
-# Fidelity Wallet — PWA v13.2 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v13.3 (ex Wallet Fedeltà)
+
+## Novità v13.3 — Aggiungi al centro, feedback aptico, siti .it
+- Il pulsante Aggiungi è ora al centro della barra in basso (Scanner, GPS, Aggiungi, Assistente, Opzioni). La Guida si apre dal pulsante con il libro in alto, accanto al tema, e da Impostazioni.
+- Feedback aptico (vibrazione) disattivabile in Impostazioni → Feedback aptico: aprendo una carta, salvando, scansionando, eliminando, completando un backup o un ripristino, condividendo, quando la ricerca automatica trova dei dati e negli avvisi di prossimità; un leggero tocco anche sui pulsanti delle barre. Non è disponibile su iPhone con Safari (il browser non lo supporta).
+- Ricerca dei siti web: si preferisce sempre la versione italiana (.it). Tra i siti ufficiali di Wikidata si sceglie prima il .it; se il sito trovato è .com/.eu/ecc. e esiste lo stesso nome in .it, si usa il .it. I domini scritti a mano non vengono mai cambiati. IKEA nel database interno ora è ikea.it.
+- Guida nell'app e PDF (3 pagine) aggiornati.
 
 ## Novità v13.2 — condivisione, pulsante Aggiungi, icone e guida
 - Condivisione: il pulsante «Condividi» nella carta aperta non faceva nulla perché la carta veniva chiusa prima di condividerla. Ora funziona sia dalla carta aperta (QR + «Condividi con altre app») sia dall'icona sulla carta in elenco.
