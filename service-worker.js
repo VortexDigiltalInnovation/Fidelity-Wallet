@@ -1,5 +1,5 @@
-/* Fidelity Wallet – Service Worker v13.1 */
-const VERSION = 'v13-1';
+/* Fidelity Wallet – Service Worker v13.2 */
+const VERSION = 'v13-2';
 const SHELL_CACHE = 'fidelity-wallet-shell-' + VERSION;
 const RUNTIME_CACHE = 'fidelity-wallet-runtime-' + VERSION;
 const RUNTIME_MAX_ENTRIES = 150;
@@ -12,18 +12,18 @@ const APP_SHELL = [
   './manifest.webmanifest',
   './privacy.html',
   './Guida%20Utente%20Wallet%20Fedelta.pdf',
-  './icons/favicon-64.png',
-  './icons/icon-72.png',
-  './icons/icon-96.png',
-  './icons/icon-128.png',
-  './icons/icon-144.png',
-  './icons/icon-152.png',
-  './icons/icon-192.png',
-  './icons/icon-384.png',
-  './icons/icon-512.png',
-  './icons/icon-maskable-192.png',
-  './icons/icon-maskable-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/favicon-64.png?v=13.2',
+  './icons/icon-72.png?v=13.2',
+  './icons/icon-96.png?v=13.2',
+  './icons/icon-128.png?v=13.2',
+  './icons/icon-144.png?v=13.2',
+  './icons/icon-152.png?v=13.2',
+  './icons/icon-192.png?v=13.2',
+  './icons/icon-384.png?v=13.2',
+  './icons/icon-512.png?v=13.2',
+  './icons/icon-maskable-192.png?v=13.2',
+  './icons/icon-maskable-512.png?v=13.2',
+  './icons/apple-touch-icon.png?v=13.2'
 ];
 
 // Librerie esterne (versioni fisse): precache "best effort", senza bloccare l'installazione.
@@ -54,7 +54,12 @@ const CACHEABLE_HOSTS = [
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const shell = await caches.open(SHELL_CACHE);
-    await shell.addAll(APP_SHELL);
+    // v13.2: i file dell'app si scaricano sempre dalla rete (cache: 'reload'), mai dalla copia HTTP vecchia
+    await Promise.all(APP_SHELL.map(async u => {
+      const res = await fetch(new Request(u, { cache: 'reload' }));
+      if (!res.ok) throw new Error('Precache fallito: ' + u);
+      await shell.put(u, res);
+    }));
     const runtime = await caches.open(RUNTIME_CACHE);
     await Promise.allSettled(CDN_PRECACHE.map(async url => {
       const res = await fetch(new Request(url, { mode: 'no-cors', credentials: 'omit' }));

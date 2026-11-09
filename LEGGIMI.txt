@@ -1,4 +1,10 @@
-# Fidelity Wallet — PWA v13.1 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v13.2 (ex Wallet Fedeltà)
+
+## Novità v13.2 — condivisione, pulsante Aggiungi, icone e guida
+- Condivisione: il pulsante «Condividi» nella carta aperta non faceva nulla perché la carta veniva chiusa prima di condividerla. Ora funziona sia dalla carta aperta (QR + «Condividi con altre app») sia dall'icona sulla carta in elenco.
+- Pulsante Aggiungi in evidenza: pulsante viola in rilievo nella barra in basso, con una leggera animazione (disattivata se il telefono ha il movimento ridotto).
+- Versione e icona: l'etichetta della versione accanto al logo era scritta a mano e restava «v12.9»; ora arriva sempre dalla versione reale dell'app. Le icone hanno un indirizzo con versione (?v=13.2) e il service worker scarica i file sempre dalla rete: l'icona accanto al logo e la favicon si aggiornano subito. L'icona sulla schermata Home la aggiorna il browser, anche dopo qualche giorno.
+- Guida: aggiornata la guida nell'app, il PDF «Guida Utente Wallet Fedelta.pdf» (ora v13.2, 3 pagine) e questo file.
 
 ## Novità v13.1 — niente più richiesta di accesso ai file da sola
 - Il messaggio «Consentire a questo sito di modificare i file?» non compare più aprendo le Impostazioni o toccando altro: l'app non chiede più il permesso da sola. Compare solo se premi "Salva ora" o "Riattiva l'accesso".
