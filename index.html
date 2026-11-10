@@ -17,9 +17,9 @@
     
     <!-- Dynamic Manifest -->
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.3">
-    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.3">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.3">
+    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.4">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.4">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.4">
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -168,6 +168,7 @@
         .fw-bk-h{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#475569}
         html.dark .fw-bk-h{color:#cbd5e1}
 
+        @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}
         /* ===== v13.2 – pulsante Aggiungi in evidenza ===== */
         .fw-add{position:relative;min-height:52px;padding:0;background:none;border:0}
         .fw-add-fab{position:relative;width:3.5rem;height:3.5rem;margin-top:-1.5rem;border-radius:1.3rem;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.4rem;
@@ -192,10 +193,10 @@
     <!-- HEADER MINIMAL MOBILE-OPTIMIZED -->
     <header class="bg-cardLight/80 dark:bg-cardDark/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 sticky top-0 z-40 px-4 h-14 flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-2.5 min-w-0 flex-1">
-            <img src="./icons/icon-96.png?v=13.3" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
+            <img src="./icons/icon-96.png?v=13.4" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
             <div class="min-w-0">
                 <h1 class="font-black text-xs tracking-tight text-slate-900 dark:text-white flex items-center">
-                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.3</span>
+                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.4</span>
                 </h1>
                 <p class="text-[10px] text-slate-500 dark:text-slate-400 block truncate" id="gps-status-text">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block align-middle mr-1 animate-pulse"></span>In attesa del GPS…
@@ -215,7 +216,7 @@
                 <i class="fa-solid fa-book-open text-xs text-amber-500"></i>
             </button>
             <!-- Switch Tema integrato compatto -->
-            <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-200 flex items-center justify-center active:scale-95 transition">
+            <button aria-label="Cambia tema chiaro o scuro" onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-200 flex items-center justify-center active:scale-95 transition">
                 <i id="theme-icon" class="fa-solid fa-moon text-xs"></i>
             </button>
         </div>
@@ -240,7 +241,7 @@
                 <button onclick="startVoiceSearch()" id="voice-search-btn" type="button" aria-label="Ricerca vocale" title="Ricerca vocale" class="absolute right-9 text-slate-400 hover:text-indigo-500 hidden w-8 h-8 flex items-center justify-center rounded-full transition">
                     <i class="fa-solid fa-microphone text-xs"></i>
                 </button>
-                <button onclick="clearSearch()" id="clear-search-btn" class="absolute right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hidden w-8 h-8 flex items-center justify-center">
+                <button aria-label="Cancella la ricerca" onclick="clearSearch()" id="clear-search-btn" class="absolute right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hidden w-8 h-8 flex items-center justify-center">
                     <i class="fa-solid fa-xmark text-xs"></i>
                 </button>
             </div>
@@ -250,7 +251,7 @@
                 <span class="text-xs font-semibold hidden sm:inline">Preferite</span>
             </button>
 
-            <button onclick="toggleViewMode()" id="view-mode-btn" class="h-11 w-11 rounded-2xl bg-cardLight dark:bg-cardDark border border-slate-200 dark:border-slate-700/70 text-slate-600 dark:text-slate-300 flex items-center justify-center shadow-sm active:scale-95 transition shrink-0">
+            <button aria-label="Cambia vista: elenco o icone" onclick="toggleViewMode()" id="view-mode-btn" class="h-11 w-11 rounded-2xl bg-cardLight dark:bg-cardDark border border-slate-200 dark:border-slate-700/70 text-slate-600 dark:text-slate-300 flex items-center justify-center shadow-sm active:scale-95 transition shrink-0">
                 <i id="view-mode-icon" class="fa-solid fa-grip text-indigo-500 text-xs"></i>
             </button>
         </div>
@@ -310,7 +311,7 @@
     <!-- MODALE BARCODE (LUMINOSITÀ MASSIMA) -->
     <div id="barcode-modal" class="fixed inset-0 z-50 bg-black/98 backdrop-blur-md hidden flex flex-col items-center justify-center p-4">
         <div id="barcode-modal-card" class="bg-white text-slate-900 w-full max-w-sm rounded-3xl p-5 shadow-2xl flex flex-col items-center relative border-t-8 transition-colors">
-            <button onclick="closeBarcodeModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 w-11 h-11 flex items-center justify-center rounded-full bg-slate-100 transition active:scale-95">
+            <button aria-label="Chiudi" onclick="closeBarcodeModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 w-11 h-11 flex items-center justify-center rounded-full bg-slate-100 transition active:scale-95">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="flex items-center space-x-3 mb-4 mt-1 w-full">
@@ -348,7 +349,7 @@
             
             <div class="px-5 py-2 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-cardLight dark:bg-cardDark sticky top-0 z-10">
                 <h3 id="modal-title" class="font-bold text-base text-slate-900 dark:text-white">Aggiungi Carta Fedeltà</h3>
-                <button onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-full active:bg-slate-100 dark:active:bg-slate-800">
+                <button aria-label="Chiudi" onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-full active:bg-slate-100 dark:active:bg-slate-800">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
@@ -432,7 +433,7 @@
                         <button type="submit" class="flex-1 h-12 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold rounded-2xl shadow-lg shadow-indigo-600/25 transition text-xs active:scale-95">
                             Salva Carta Fedeltà
                         </button>
-                        <button type="button" id="btn-delete-card-modal" onclick="deleteCurrentEditingCard()" class="hidden w-12 h-12 bg-rose-500/10 active:bg-rose-500/20 text-rose-500 border border-rose-500/30 font-semibold rounded-2xl transition text-xs flex items-center justify-center">
+                        <button aria-label="Elimina carta" type="button" id="btn-delete-card-modal" onclick="deleteCurrentEditingCard()" class="hidden w-12 h-12 bg-rose-500/10 active:bg-rose-500/20 text-rose-500 border border-rose-500/30 font-semibold rounded-2xl transition text-xs flex items-center justify-center">
                             <i class="fa-solid fa-trash-can text-sm"></i>
                         </button>
                     </div>
@@ -447,7 +448,7 @@
             <h3 class="font-bold text-sm text-white flex items-center">
                 <i class="fa-solid fa-brain text-indigo-400 mr-2"></i> Scanner IA Locale
             </h3>
-            <button onclick="closeScannerModal()" class="bg-slate-800 text-white w-11 h-11 rounded-full flex items-center justify-center text-base border border-slate-700 active:scale-95">
+            <button aria-label="Chiudi scanner" onclick="closeScannerModal()" class="bg-slate-800 text-white w-11 h-11 rounded-full flex items-center justify-center text-base border border-slate-700 active:scale-95">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -502,7 +503,7 @@
     <!-- MODALE CONDIVISIONE QR -->
     <div id="share-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex flex-col items-center justify-center p-4">
         <div class="bg-white text-slate-900 w-full max-w-sm rounded-3xl p-5 shadow-2xl flex flex-col items-center relative">
-            <button onclick="closeShareModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 w-11 h-11 flex items-center justify-center rounded-full bg-slate-100 active:scale-95">
+            <button aria-label="Chiudi" onclick="closeShareModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 w-11 h-11 flex items-center justify-center rounded-full bg-slate-100 active:scale-95">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <h3 class="font-bold text-base text-slate-900 mb-1">Condividi Carta</h3>
@@ -558,7 +559,7 @@
             
             <div class="px-5 py-2 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between sticky top-0 z-10 bg-cardLight dark:bg-cardDark">
                 <h3 class="font-bold text-base text-slate-900 dark:text-white"><i class="fa-solid fa-gear text-indigo-500 mr-2"></i> Impostazioni & Notifiche</h3>
-                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-full active:bg-slate-100 dark:active:bg-slate-800">
+                <button aria-label="Chiudi impostazioni" onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-full active:bg-slate-100 dark:active:bg-slate-800">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
@@ -595,6 +596,22 @@
                         <input type="checkbox" id="fw-haptic" onchange="fwHapticChanged()" class="w-5 h-5 accent-indigo-600 shrink-0">
                     </label>
                     <p id="fw-haptic-note" class="text-[10px] text-amber-600 dark:text-amber-400 leading-snug hidden">Questo dispositivo o browser non supporta la vibrazione (ad esempio iPhone con Safari).</p>
+                </div>
+
+                <!-- Sezione Ordine delle carte -->
+                <div class="bg-slate-100/70 dark:bg-darkBg/60 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl">
+                    <label class="flex items-center justify-between gap-3 text-xs text-slate-700 dark:text-slate-300">
+                        <span class="min-w-0">
+                            <span class="block font-semibold text-slate-800 dark:text-slate-200 text-xs"><i class="fa-solid fa-arrow-down-wide-short text-violet-500 mr-1.5"></i> Ordine delle carte</span>
+                            <span class="block text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Come mostrare l'elenco nella schermata principale.</span>
+                        </span>
+                        <select id="fw-sort" onchange="fwSortChanged()" class="h-11 shrink-0 bg-white dark:bg-darkBg border border-slate-200 dark:border-slate-700 rounded-xl px-2 text-xs text-slate-800 dark:text-slate-200">
+                            <option value="recent">Usate di recente</option>
+                            <option value="count">Più usate</option>
+                            <option value="added">Come aggiunte</option>
+                            <option value="az">A–Z</option>
+                        </select>
+                    </label>
                 </div>
 
                 <!-- Sezione Rilevamento negozi -->
@@ -698,8 +715,8 @@
                     </div>
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                    <img src="./icons/icon-96.png?v=13.3" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.3</span></p>
+                    <img src="./icons/icon-96.png?v=13.4" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.4</span></p>
                     <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
                     <p class="text-[10px] mt-1"><a href="./privacy.html" target="_blank" rel="noopener" class="underline text-indigo-500">Informativa sulla privacy</a></p>
                 </div>
@@ -712,10 +729,10 @@
         <div class="bg-cardLight dark:bg-cardDark text-slate-900 dark:text-slate-100 w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[94dvh] sm:h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-800">
             <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 shrink-0">
                 <div class="flex items-center gap-2 min-w-0">
-                    <img src="./icons/icon-96.png?v=13.3" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
+                    <img src="./icons/icon-96.png?v=13.4" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.3</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.4</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -767,6 +784,8 @@
                         <li><b>Cassa rapida e preferiti:</b> segna le carte più usate con la stella per averle nella barra in alto; cerca per nome o categoria.</li>
                         <li><b>Condivisione:</b> tocca l'icona di condivisione sulla carta, oppure apri la carta e premi <i>Condividi</i>: puoi inviarla con le app del telefono (WhatsApp, messaggi, e-mail…) oppure mostrare un QR che un familiare può inquadrare per importarla.</li>
                         <li><b>Vibrazione (feedback aptico):</b> una breve vibrazione quando apri una carta, salvi, scansioni, elimini, completi un backup o arriva un avviso di prossimità. Si disattiva in <i>Impostazioni → Feedback aptico</i>. Non funziona su iPhone con Safari: il browser non la supporta.</li>
+                        <li><b>Ordine delle carte:</b> in <i>Impostazioni → Ordine delle carte</i> scegli tra <i>Usate di recente</i> (predefinito), <i>Più usate</i>, <i>Come aggiunte</i> e <i>A–Z</i>. Le carte del negozio in cui ti trovi restano comunque in cima.</li>
+                        <li><b>Controlli prima di salvare:</b> l'app ti avvisa se la cifra di controllo di un EAN-13 non torna (di solito è un errore di battitura), se il formato non è adatto o se esiste già una carta con lo stesso codice.</li>
                         <li><b>Dov'è la guida:</b> il pulsante con il libro in alto, accanto al tema, oppure <i>Impostazioni</i>.</li>
                         <li><b>Pulsante Aggiungi:</b> è il pulsante viola in rilievo al centro della barra in basso. Ti fa scegliere un preset oppure inserire a mano nome, codice e titolare.</li>
                         <li><b>Backup:</b> esporta/importa un file JSON o sincronizza con Google Drive (<i>Impostazioni</i>).</li>
@@ -797,7 +816,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.3 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.3)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.4 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.4)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
             </div>
         </div>
     </div>
@@ -1005,7 +1024,20 @@
                 filtered = filtered.filter(c => c.favorite);
             }
 
-            filtered.sort((a, b) => (b._lastTriggered || 0) - (a._lastTriggered || 0));
+            // v13.4: si ordina una copia (prima si riordinava l'elenco vero e proprio). Le carte appena "risvegliate"
+            // dal negozio vicino restano in cima; poi vale l'ordine scelto in Impostazioni.
+            filtered = filtered.slice();
+            let sortMode = 'recent';
+            try { sortMode = fwSettings.sort || 'recent'; } catch (e) {}
+            const use = c => (typeof fwUsage !== 'undefined' && fwUsage[c.id]) || { n: 0, t: 0 };
+            filtered.sort((a, b) => {
+                const trig = (b._lastTriggered || 0) - (a._lastTriggered || 0);
+                if (trig) return trig;
+                if (sortMode === 'recent') return use(b).t - use(a).t;
+                if (sortMode === 'count') return (use(b).n - use(a).n) || (use(b).t - use(a).t);
+                if (sortMode === 'az') return String(a.name).localeCompare(String(b.name), 'it', { sensitivity: 'base' });
+                return 0;
+            });
 
             if (filtered.length === 0) {
                 emptyState.classList.remove('hidden');
@@ -1025,7 +1057,7 @@
                     item.onclick = () => openBarcodeModal(card.id);
 
                     const logoHtml = card.domain 
-                        ? `<img src="${fwLogoSrc(card)}" class="w-full h-full object-contain p-1 rounded-xl bg-white/90 shadow-sm" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-sm\\' style=\\'color:${brandColor}\\'>${safeName.charAt(0)}</span>';">`
+                        ? `<img alt="" src="${fwLogoSrc(card)}" class="w-full h-full object-contain p-1 rounded-xl bg-white/90 shadow-sm" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-sm\\' style=\\'color:${brandColor}\\'>${safeName.charAt(0)}</span>';">`
                         : `<span class="font-bold text-sm" style="color:${brandColor}">${safeName.charAt(0)}</span>`;
 
                     item.innerHTML = `
@@ -1057,7 +1089,7 @@
                 const safeHolder = card.holder ? sanitizeHTML(card.holder) : '';
 
                 const logoHtml = card.domain 
-                    ? `<img src="${fwLogoSrc(card)}" class="w-full h-full object-contain rounded-xl bg-white/90 p-1" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-sm text-slate-800\\'>${safeName.charAt(0)}</span>';">`
+                    ? `<img alt="" src="${fwLogoSrc(card)}" class="w-full h-full object-contain rounded-xl bg-white/90 p-1" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-sm text-slate-800\\'>${safeName.charAt(0)}</span>';">`
                     : `<span class="font-bold text-sm text-white">${safeName.charAt(0)}</span>`;
 
                 cardEl.innerHTML = `
@@ -1137,7 +1169,7 @@
 
                 const safeName = sanitizeHTML(card.name);
                 const logoHtml = card.domain 
-                    ? `<img src="${fwLogoSrc(card)}" class="w-full h-full object-contain rounded-xl" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-xs\\' style=\\'color:${brandColor}\\'>${safeName.charAt(0)}</span>';">`
+                    ? `<img alt="" src="${fwLogoSrc(card)}" class="w-full h-full object-contain rounded-xl" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-xs\\' style=\\'color:${brandColor}\\'>${safeName.charAt(0)}</span>';">`
                     : `<span class="font-bold text-xs text-white">${safeName.charAt(0)}</span>`;
 
                 item.innerHTML = `
@@ -1195,9 +1227,10 @@
             }
         }
 
-        function openBarcodeModal(id) {
+        function openBarcodeModal(id, silent) {
             const card = cards.find(c => c.id === id);
             if (!card) return;
+            if (!silent) { fwTouchUsage(id); }
             activeCardForModal = card;
             const brandColor = card.color || '#6366f1';
 
@@ -1212,7 +1245,7 @@
             logoContainer.style.backgroundColor = brandColor;
             logoContainer.style.color = '#ffffff';
             if (card.domain) {
-                logoContainer.innerHTML = `<img src="${fwLogoSrc(card)}" class="w-full h-full object-contain p-1 bg-white/90 rounded-xl" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-base text-white\\'>${sanitizeHTML(card.name).charAt(0)}</span>';">`;
+                logoContainer.innerHTML = `<img alt="" src="${fwLogoSrc(card)}" class="w-full h-full object-contain p-1 bg-white/90 rounded-xl" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'font-bold text-base text-white\\'>${sanitizeHTML(card.name).charAt(0)}</span>';">`;
             } else {
                 logoContainer.innerHTML = `<span class="font-bold text-base text-white">${sanitizeHTML(card.name).charAt(0)}</span>`;
             }
@@ -1254,7 +1287,7 @@
             fwHaptic('tap');
             saveToStorage();
             renderCards();
-            openBarcodeModal(activeCardForModal.id);
+            openBarcodeModal(activeCardForModal.id, true);
         }
 
         function toggleFavorite(id) {
@@ -1321,6 +1354,27 @@
             if (name && name !== 'Altro') setTimeout(() => fwAutoFromForm(false), 150);
         }
 
+        // Cifra di controllo EAN-13: se non torna, quasi sempre c'è un errore di battitura e il codice non verrebbe letto.
+        function fwEanOk(code) {
+            if (!/^\d{13}$/.test(code)) return false;
+            let sum = 0;
+            for (let i = 0; i < 12; i++) sum += Number(code[i]) * (i % 2 ? 3 : 1);
+            return (10 - (sum % 10)) % 10 === Number(code[12]);
+        }
+        function fwCheckBeforeSave(id, code, type) {
+            const clean = String(code || '').trim();
+            if (type === 'EAN13') {
+                if (/^\d{13}$/.test(clean)) {
+                    if (!fwEanOk(clean) && !confirm('La cifra di controllo di questo codice EAN-13 non torna: forse c\'è un errore di battitura e la cassa non lo leggerebbe. Salvare comunque?')) { fwHaptic('warn'); return false; }
+                } else if (!/^\d{12}$/.test(clean)) {
+                    if (!confirm('Il formato EAN-13 richiede 13 cifre. Con questo codice l\'app userà CODE-128. Salvare comunque?')) { fwHaptic('warn'); return false; }
+                }
+            }
+            const dup = cards.find(c => c.id !== id && String(c.code || '').trim() === clean);
+            if (dup && !confirm('Hai già una carta con questo codice: «' + dup.name + '». Salvarla comunque?')) { fwHaptic('warn'); return false; }
+            return true;
+        }
+
         function saveCard(e) {
             e.preventDefault();
             const id = document.getElementById('edit-card-id').value;
@@ -1335,6 +1389,7 @@
             const address = document.getElementById('map-address-input').value.trim().slice(0, 200) || null;
             const logoEl = document.getElementById('store-logo');
             const logo = (logoEl.value && logoEl.dataset.domain === domain) ? logoEl.value : null;
+            if (!fwCheckBeforeSave(id, code, type)) return;
             let savedCard = null;
 
             if (id) {
@@ -1399,7 +1454,7 @@
         const FW_COVER_M = 400;      // raggio dell'area scaricata
         const FW_REQUERY_M = 250;    // ricerca nuova quando ci si allontana tanto dal centro dell'area
 
-        let fwSettings = Object.assign({ auto: true, radius: 20, wake: false, haptic: true }, (() => { try { return JSON.parse(localStorage.getItem(FW_SETTINGS_KEY) || '{}'); } catch (e) { return {}; } })());
+        let fwSettings = Object.assign({ auto: true, radius: 20, wake: false, haptic: true, sort: 'recent' }, (() => { try { return JSON.parse(localStorage.getItem(FW_SETTINGS_KEY) || '{}'); } catch (e) { return {}; } })());
         let fwLast = (() => { try { return JSON.parse(localStorage.getItem(FW_LAST_KEY) || '{}'); } catch (e) { return {}; } })();
         let fwPos = null;
         let fwStores = [];
@@ -1420,6 +1475,22 @@
                 if (!fwSettings.haptic || !navigator.vibrate) return false;
                 return navigator.vibrate(FW_HAPTIC[kind] || FW_HAPTIC.tap);
             } catch (e) { return false; }
+        }
+        // Statistiche d'uso (quante volte e quando apri ogni carta). Stanno in una chiave a parte: non entrano nei backup
+        // e quindi aprire una carta non genera nuovi backup.
+        const FW_USAGE_KEY = 'fw_usage';
+        let fwUsage = {};
+        try { fwUsage = JSON.parse(localStorage.getItem(FW_USAGE_KEY) || '{}') || {}; } catch (e) { fwUsage = {}; }
+        function fwTouchUsage(id) {
+            const u = fwUsage[id] || { n: 0, t: 0 };
+            u.n++; u.t = Date.now(); fwUsage[id] = u;
+            try { localStorage.setItem(FW_USAGE_KEY, JSON.stringify(fwUsage)); } catch (e) {}
+        }
+        function fwSortChanged() {
+            const el = document.getElementById('fw-sort');
+            fwSettings.sort = el ? el.value : 'recent';
+            fwSaveSettings();
+            renderCards();
         }
         function fwHapticChanged() {
             const el = document.getElementById('fw-haptic');
@@ -1641,8 +1712,8 @@
             if (!('Notification' in window) || Notification.permission !== 'granted') return;
             const options = {
                 body: (address ? address + '\n' : '') + 'Tocca per aprire la carta.',
-                icon: './icons/icon-192.png?v=13.3',
-                badge: './icons/icon-96.png?v=13.3',
+                icon: './icons/icon-192.png?v=13.4',
+                badge: './icons/icon-96.png?v=13.4',
                 tag: 'fw-' + card.id,
                 data: { cardId: card.id },
                 actions: [{ action: 'open', title: 'Apri carta' }],
@@ -1754,6 +1825,7 @@
             const hp = document.getElementById('fw-haptic'), hn = document.getElementById('fw-haptic-note');
             if (hp) { hp.checked = !!fwSettings.haptic; hp.disabled = !navigator.vibrate; }
             if (hn) hn.classList.toggle('hidden', !!navigator.vibrate);
+            const so = document.getElementById('fw-sort'); if (so) so.value = fwSettings.sort || 'recent';
         }
 
         function fwSettingChanged() {
@@ -2139,7 +2211,7 @@
            Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
            (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
            4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
-        const FW_VERSION = '13.3';
+        const FW_VERSION = '13.4';
         let fwEnrichBusy = false;
 
         function fwCleanDomain(u) {

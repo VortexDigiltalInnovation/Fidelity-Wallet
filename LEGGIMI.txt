@@ -1,4 +1,10 @@
-# Fidelity Wallet — PWA v13.3 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v13.4 (ex Wallet Fedeltà)
+
+## Novità v13.4 — ordine delle carte, controlli sul codice, accessibilità
+- Ordine delle carte: in Impostazioni scegli Usate di recente (predefinito), Più usate, Come aggiunte o A–Z. Le carte del negozio vicino restano in cima. Le statistiche d'uso stanno in una chiave a parte, quindi non entrano nei backup e non ne generano di nuovi. Prima l'elenco venne riordinato "in place" anche nei dati salvati: ora si ordina solo la vista.
+- Controlli prima di salvare: avviso se la cifra di controllo di un EAN-13 non torna, se il formato non è adatto (l'app userebbe CODE-128) o se esiste già una carta con lo stesso codice. Si può sempre salvare comunque.
+- Accessibilità: etichette per i pulsanti con sola icona (tema, chiudi, cancella ricerca, vista, elimina), descrizioni vuote sui loghi decorativi e animazioni ridotte quando il telefono lo chiede.
+- Guida nell'app e PDF aggiornati.
 
 ## Novità v13.3 — Aggiungi al centro, feedback aptico, siti .it
 - Il pulsante Aggiungi è ora al centro della barra in basso (Scanner, GPS, Aggiungi, Assistente, Opzioni). La Guida si apre dal pulsante con il libro in alto, accanto al tema, e da Impostazioni.
