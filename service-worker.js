@@ -1,5 +1,5 @@
-/* Fidelity Wallet – Service Worker v13.4 */
-const VERSION = 'v13-4';
+/* Fidelity Wallet – Service Worker v13.5 */
+const VERSION = 'v13-5';
 const SHELL_CACHE = 'fidelity-wallet-shell-' + VERSION;
 const RUNTIME_CACHE = 'fidelity-wallet-runtime-' + VERSION;
 const RUNTIME_MAX_ENTRIES = 150;
@@ -12,18 +12,18 @@ const APP_SHELL = [
   './manifest.webmanifest',
   './privacy.html',
   './Guida%20Utente%20Wallet%20Fedelta.pdf',
-  './icons/favicon-64.png?v=13.4',
-  './icons/icon-72.png?v=13.4',
-  './icons/icon-96.png?v=13.4',
-  './icons/icon-128.png?v=13.4',
-  './icons/icon-144.png?v=13.4',
-  './icons/icon-152.png?v=13.4',
-  './icons/icon-192.png?v=13.4',
-  './icons/icon-384.png?v=13.4',
-  './icons/icon-512.png?v=13.4',
-  './icons/icon-maskable-192.png?v=13.4',
-  './icons/icon-maskable-512.png?v=13.4',
-  './icons/apple-touch-icon.png?v=13.4'
+  './icons/favicon-64.png?v=13.5',
+  './icons/icon-72.png?v=13.5',
+  './icons/icon-96.png?v=13.5',
+  './icons/icon-128.png?v=13.5',
+  './icons/icon-144.png?v=13.5',
+  './icons/icon-152.png?v=13.5',
+  './icons/icon-192.png?v=13.5',
+  './icons/icon-384.png?v=13.5',
+  './icons/icon-512.png?v=13.5',
+  './icons/icon-maskable-192.png?v=13.5',
+  './icons/icon-maskable-512.png?v=13.5',
+  './icons/apple-touch-icon.png?v=13.5'
 ];
 
 // Librerie esterne (versioni fisse): precache "best effort", senza bloccare l'installazione.
@@ -54,7 +54,7 @@ const CACHEABLE_HOSTS = [
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const shell = await caches.open(SHELL_CACHE);
-    // v13.4: i file dell'app si scaricano sempre dalla rete (cache: 'reload'), mai dalla copia HTTP vecchia
+    // v13.5: i file dell'app si scaricano sempre dalla rete (cache: 'reload'), mai dalla copia HTTP vecchia
     await Promise.all(APP_SHELL.map(async u => {
       const res = await fetch(new Request(u, { cache: 'reload' }));
       if (!res.ok) throw new Error('Precache fallito: ' + u);

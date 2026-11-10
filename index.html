@@ -17,9 +17,9 @@
     
     <!-- Dynamic Manifest -->
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.4">
-    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.4">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.4">
+    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.5">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.5">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.5">
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -193,10 +193,10 @@
     <!-- HEADER MINIMAL MOBILE-OPTIMIZED -->
     <header class="bg-cardLight/80 dark:bg-cardDark/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 sticky top-0 z-40 px-4 h-14 flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-2.5 min-w-0 flex-1">
-            <img src="./icons/icon-96.png?v=13.4" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
+            <img src="./icons/icon-96.png?v=13.5" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
             <div class="min-w-0">
                 <h1 class="font-black text-xs tracking-tight text-slate-900 dark:text-white flex items-center">
-                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.4</span>
+                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.5</span>
                 </h1>
                 <p class="text-[10px] text-slate-500 dark:text-slate-400 block truncate" id="gps-status-text">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block align-middle mr-1 animate-pulse"></span>In attesa del GPS…
@@ -654,6 +654,13 @@
                         <button onclick="syncUploadToDrive()" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Salva su Drive</button>
                         <button onclick="fwSheet.open('drive')" class="h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition">Carica da Drive</button>
                         <button onclick="openDriveBackupFolder()" class="col-span-2 h-11 bg-slate-200 dark:bg-slate-800 active:bg-slate-300 dark:active:bg-slate-700 text-xs font-semibold rounded-xl text-indigo-600 dark:text-indigo-400 transition"><i class="fa-solid fa-folder-open mr-1.5"></i>Apri cartella backup su Drive</button>
+                    
+                        <label class="col-span-2 flex items-center justify-between gap-3 text-[10px] text-slate-500 dark:text-slate-400 pt-1">
+                            <span class="min-w-0">Backup da tenere su Drive<span class="block text-[10px] text-slate-400 leading-snug">Oltre il limite, a ogni nuovo backup il più vecchio viene sostituito. I backup con etichetta restano.</span></span>
+                            <select id="fw-drive-max" onchange="fwDriveMaxChanged()" class="h-10 w-20 shrink-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs px-2 text-slate-700 dark:text-slate-200">
+                                <option value="3">3</option><option value="5">5</option><option value="7">7</option><option value="10">10</option><option value="20">20</option>
+                            </select>
+                        </label>
                     </div>
                     <p id="drive-backup-time" class="text-[10px] text-slate-500 dark:text-slate-400"></p>
                     <p id="drive-folder-label" class="text-[10px] text-slate-500 dark:text-slate-400"></p>
@@ -662,6 +669,7 @@
                             <h5 class="fw-bk-h"><i class="fa-solid fa-cloud text-indigo-500 mr-1.5"></i>Backup su Drive</h5>
                             <button type="button" onclick="fwDriveRefreshList(true)" class="fw-bk-btn" aria-label="Aggiorna elenco Drive"><i class="fa-solid fa-rotate"></i></button>
                         </div>
+                        <p id="fw-drive-limit" class="text-[10px] text-slate-500 dark:text-slate-400 mb-2 leading-snug"></p>
                         <div id="fw-drive-list" class="space-y-2"></div>
                     </div>
                 </div>
@@ -715,8 +723,8 @@
                     </div>
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                    <img src="./icons/icon-96.png?v=13.4" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.4</span></p>
+                    <img src="./icons/icon-96.png?v=13.5" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.5</span></p>
                     <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
                     <p class="text-[10px] mt-1"><a href="./privacy.html" target="_blank" rel="noopener" class="underline text-indigo-500">Informativa sulla privacy</a></p>
                 </div>
@@ -729,10 +737,10 @@
         <div class="bg-cardLight dark:bg-cardDark text-slate-900 dark:text-slate-100 w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[94dvh] sm:h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-800">
             <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 shrink-0">
                 <div class="flex items-center gap-2 min-w-0">
-                    <img src="./icons/icon-96.png?v=13.4" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
+                    <img src="./icons/icon-96.png?v=13.5" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.4</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.5</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -790,6 +798,7 @@
                         <li><b>Pulsante Aggiungi:</b> è il pulsante viola in rilievo al centro della barra in basso. Ti fa scegliere un preset oppure inserire a mano nome, codice e titolare.</li>
                         <li><b>Backup:</b> esporta/importa un file JSON o sincronizza con Google Drive (<i>Impostazioni</i>).</li>
                         <li><b>Cartella backup sul telefono:</b> in <i>Impostazioni</i> scegli una cartella (dove il browser lo permette): l'app ci crea &quot;Fidelity Wallet Backup&quot;, salva i backup in automatico e tiene solo gli ultimi N (3–20), sovrascrivendo i più vecchi. Puoi cambiare cartella quando vuoi; &quot;Salva una copia in…&quot; ti fa scegliere dove salvare un file anche su iPhone.</li>
+                        <li><b>Limite dei backup su Drive:</b> in <i>Google Drive Sync</i> scegli quanti backup tenere (3, 5, 7, 10 o 20). Oltre il limite, a ogni nuovo salvataggio su Drive il più vecchio viene sostituito; i backup con etichetta non vengono toccati.</li>
                         <li><b>Recupera backup:</b> il pulsante <i>Ripristina</i> apre una schermata con i backup del telefono e di Drive; scegline uno, guarda l'anteprima e conferma. <b>Elenco dei backup:</b> in <i>Impostazioni</i> trovi i backup sul telefono e su Drive. Per ognuno puoi <i>Ripristinare</i> (vedi un'anteprima prima di confermare, e l'app salva una copia di sicurezza), <i>Rinominare</i> con un'etichetta (i backup con etichetta non vengono cancellati dalla rotazione automatica) o <i>Eliminare</i> (su Drive va nel cestino).</li>
                     </ul>
                 </details>
@@ -816,7 +825,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.4 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.4)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.5 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.5)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
             </div>
         </div>
     </div>
@@ -1712,8 +1721,8 @@
             if (!('Notification' in window) || Notification.permission !== 'granted') return;
             const options = {
                 body: (address ? address + '\n' : '') + 'Tocca per aprire la carta.',
-                icon: './icons/icon-192.png?v=13.4',
-                badge: './icons/icon-96.png?v=13.4',
+                icon: './icons/icon-192.png?v=13.5',
+                badge: './icons/icon-96.png?v=13.5',
                 tag: 'fw-' + card.id,
                 data: { cardId: card.id },
                 actions: [{ action: 'open', title: 'Apri carta' }],
@@ -2211,7 +2220,7 @@
            Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
            (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
            4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
-        const FW_VERSION = '13.4';
+        const FW_VERSION = '13.5';
         let fwEnrichBusy = false;
 
         function fwCleanDomain(u) {
@@ -3074,6 +3083,34 @@
             }
         }
 
+        // v13.5: limite ai backup su Drive. Si tengono gli ultimi N (impostabile); oltre il limite il più vecchio viene sostituito.
+        // I backup con etichetta (rinominati) non vengono mai toccati.
+        const DRIVE_MAX_KEY = 'fw_drive_max';
+        function getDriveMax() { const n = parseInt(localStorage.getItem(DRIVE_MAX_KEY), 10); return n > 0 ? n : 7; }
+        function fwDriveMaxChanged() {
+            const el = document.getElementById('fw-drive-max');
+            if (el) localStorage.setItem(DRIVE_MAX_KEY, el.value);
+            try { fwDriveLimitLabel(); } catch (e) {}
+        }
+        const driveIsLabeled = n => /^wallet_fedelta_backup_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_.+\.json$/.test(n);
+        async function driveRotate(folder, keepId) {
+            const q = encodeURIComponent("('" + folder.id + "' in parents or appProperties has { key='fidelityWalletBackup' and value='1' } or name contains '" + DRIVE_BACKUP_PREFIX + "') and trashed=false and mimeType!='" + DRIVE_FOLDER_MIME + "'");
+            const res = await driveFetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&orderBy=modifiedTime%20desc&pageSize=200&fields=files(id,name,modifiedTime)');
+            const files = ((await res.json()).files || []).filter(f => /^wallet_fedelta_backup_.*\.json$/.test(f.name || '') && !driveIsLabeled(f.name));
+            const when = f => {
+                const m = /(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/.exec(f.name);
+                return m ? new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]).getTime() : Date.parse(f.modifiedTime);
+            };
+            files.sort((a, b) => when(b) - when(a));
+            const max = Math.max(1, getDriveMax());
+            let removed = 0;
+            for (const f of files.slice(max)) {
+                if (f.id === keepId) continue;
+                try { await driveFetch('https://www.googleapis.com/drive/v3/files/' + f.id, { method: 'DELETE' }); removed++; } catch (e) {}
+            }
+            return { removed, kept: Math.min(files.length, max) };
+        }
+
         async function syncUploadToDrive() {
             try {
                 const folder = await getDriveBackupFolder();
@@ -3097,8 +3134,13 @@
                 });
                 const up = await upRes.json();
                 const inFolder = Array.isArray(up.parents) && up.parents.indexOf(folder.id) !== -1;
-                recordBackup('drive'); try { fwDriveRefreshList(false); } catch (e) {}
-                alert('Backup salvato su Google Drive!\n' + (inFolder ? 'Cartella: ' : 'ATTENZIONE, file non nella cartella: ') + DRIVE_FOLDER_NAME + '\n' + name + '\n' + formatDateTimeIT(now));
+                recordBackup('drive');
+                let rot = { removed: 0 };
+                try { rot = await driveRotate(folder, up.id); } catch (e) {}
+                try { fwDriveRefreshList(false); } catch (e) {}
+                if (typeof fwHaptic === 'function') fwHaptic('success');
+                alert('Backup salvato su Google Drive!\n' + (inFolder ? 'Cartella: ' : 'ATTENZIONE, file non nella cartella: ') + DRIVE_FOLDER_NAME + '\n' + name + '\n' + formatDateTimeIT(now) +
+                    (rot.removed ? '\n\nSostituiti ' + rot.removed + (rot.removed === 1 ? ' backup più vecchio' : ' backup più vecchi') + ' (limite: ' + getDriveMax() + ').' : ''));
             } catch (err) {
                 alert('Errore durante il salvataggio su Drive: ' + (err && err.message || err));
             }
@@ -3726,11 +3768,17 @@
             }));
         };
 
+        window.fwDriveLimitLabel = function () {
+            const el = $('fw-drive-limit');
+            if (el) el.textContent = 'Si tengono gli ultimi ' + getDriveMax() + ' backup: al nuovo, il più vecchio viene sostituito (quelli con etichetta restano).';
+            const dm = $('fw-drive-max'); if (dm) dm.value = String(getDriveMax());
+        };
         window.fwDriveRefreshList = async function (user) {
             const wrap = $('fw-drive-list-wrap'), box = $('fw-drive-list');
             if (!wrap || !box) return;
             if (typeof googleDriveConnected === 'undefined' || !googleDriveConnected) { wrap.classList.add('hidden'); return; }
             wrap.classList.remove('hidden');
+            window.fwDriveLimitLabel();
             const tokenOk = typeof driveToken !== 'undefined' && driveToken && Date.now() < driveToken.expires_at;
             if (!tokenOk && !user) {
                 box.textContent = '';
@@ -3751,6 +3799,7 @@
         const oOpen = window.openSettingsModal;
         window.openSettingsModal = function () {
             const r = oOpen.apply(this, arguments);
+            try { window.fwDriveLimitLabel(); } catch (e) {}
             try { window.fwDriveRefreshList(false); } catch (e) {}
             try { if (window.fwBkRefresh) window.fwBkRefresh(); } catch (e) {}
             return r;

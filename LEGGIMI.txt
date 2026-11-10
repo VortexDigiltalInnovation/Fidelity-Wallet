@@ -1,4 +1,10 @@
-# Fidelity Wallet — PWA v13.4 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v13.5 (ex Wallet Fedeltà)
+
+## Novità v13.5 — limite ai backup su Drive
+- Anche su Google Drive si tiene solo un certo numero di backup (3, 5, 7, 10 o 20; predefinito 7), impostabile in Impostazioni → Google Drive Sync → «Backup da tenere su Drive». Dopo ogni nuovo salvataggio su Drive, i backup in più (i più vecchi) vengono eliminati: è la stessa logica della cartella sul telefono.
+- I backup con etichetta (rinominati) non vengono mai eliminati dalla rotazione. Non vengono toccati nemmeno i file che non sono backup dell'app.
+- Se abbassi il limite non viene cancellato nulla subito: il taglio avviene al prossimo salvataggio su Drive. I file in più vengono eliminati definitivamente (non vanno nel cestino).
+- L'elenco dei backup su Drive mostra il limite attuale; dopo il salvataggio un messaggio dice quanti backup sono stati sostituiti.
 
 ## Novità v13.4 — ordine delle carte, controlli sul codice, accessibilità
 - Ordine delle carte: in Impostazioni scegli Usate di recente (predefinito), Più usate, Come aggiunte o A–Z. Le carte del negozio vicino restano in cima. Le statistiche d'uso stanno in una chiave a parte, quindi non entrano nei backup e non ne generano di nuovi. Prima l'elenco venne riordinato "in place" anche nei dati salvati: ora si ordina solo la vista.
