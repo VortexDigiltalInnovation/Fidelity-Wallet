@@ -1,4 +1,12 @@
-# Fidelity Wallet — PWA v13.5 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v13.6 (ex Wallet Fedeltà)
+
+## Novità v13.6 — Modifica ed Elimina funzionano su tutte le carte
+- Corretto alla radice: alcune carte importate, scansionate, condivise o ripristinate da un backup restavano visibili ma i pulsanti Modifica ed Elimina non le trovavano. Succedeva quando la carta aveva un identificativo mancante, duplicato, numerico, con caratteri speciali, oppure un formato di dati diverso.
+- Ora l'app controlla le carte a ogni apertura, salvataggio, importazione e ripristino (telefono e Drive): l'identificativo diventa sempre testo semplice e unico; se manca o non è valido ne viene creato uno nuovo. Nome, codice e tutti gli altri dati della carta restano invariati.
+- Le carte già presenti con il problema vengono sistemate da sole alla prima apertura della nuova versione.
+- I backup salvati nel formato { "cards": [...] } ora vengono riconosciuti e ripristinati.
+- I nuovi identificativi sono unici anche se si aggiungono più carte nello stesso istante.
+- Service worker v13.6: apri l'app online una volta per ricevere l'aggiornamento.
 
 ## Novità v13.5 — limite ai backup su Drive
 - Anche su Google Drive si tiene solo un certo numero di backup (3, 5, 7, 10 o 20; predefinito 7), impostabile in Impostazioni → Google Drive Sync → «Backup da tenere su Drive». Dopo ogni nuovo salvataggio su Drive, i backup in più (i più vecchi) vengono eliminati: è la stessa logica della cartella sul telefono.
