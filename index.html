@@ -1215,14 +1215,14 @@
         }
 
         function deleteCard(id) {
-            const card = cards.find(c => c.id === id);
+            const card = cards.find(c => String(c.id) === String(id));
             if (!card) return;
             if (confirm(`Sei sicuro di voler eliminare la carta "${card.name}"?`)) {
-                cards = cards.filter(c => c.id !== id);
+                cards = cards.filter(c => String(c.id) !== String(id));
                 fwHaptic('warn');
                 saveToStorage();
                 renderCards();
-                if (activeCardForModal && activeCardForModal.id === id) {
+                if (activeCardForModal && String(activeCardForModal.id) === String(id)) {
                     closeBarcodeModal();
                 }
             }
@@ -1237,7 +1237,7 @@
         }
 
         function openBarcodeModal(id, silent) {
-            const card = cards.find(c => c.id === id);
+            const card = cards.find(c => String(c.id) === String(id));
             if (!card) return;
             if (!silent) { fwTouchUsage(id); }
             activeCardForModal = card;
@@ -1300,7 +1300,7 @@
         }
 
         function toggleFavorite(id) {
-            const card = cards.find(c => c.id === id);
+            const card = cards.find(c => String(c.id) === String(id));
             if (card) {
                 card.favorite = !card.favorite;
                 saveToStorage();
@@ -1323,7 +1323,7 @@
         }
 
         function openEditModal(id) {
-            const card = cards.find(c => c.id === id);
+            const card = cards.find(c => String(c.id) === String(id));
             if (!card) return;
             document.getElementById('modal-title').innerText = 'Modifica Carta';
             document.getElementById('edit-card-id').value = card.id;
@@ -1402,7 +1402,7 @@
             let savedCard = null;
 
             if (id) {
-                const card = cards.find(c => c.id === id);
+                const card = cards.find(c => String(c.id) === String(id));
                 if (card) {
                     card.name = name;
                     card.domain = domain;
@@ -1657,7 +1657,7 @@
         function fwCandidates() {
             const list = [];
             fwStores.forEach(s => s.cardIds.forEach(id => {
-                if (cards.some(c => c.id === id)) list.push({ cardId: id, address: s.address, geom: s.geom, label: s.name });
+                if (cards.some(c => String(c.id) === String(id))) list.push({ cardId: id, address: s.address, geom: s.geom, label: s.name });
             }));
             cards.forEach(c => {
                 if (c.lat != null && c.lng != null) list.push({ cardId: c.id, address: c.address || null, geom: { kind: 'point', lat: c.lat, lng: c.lng }, label: c.name });
@@ -2806,7 +2806,7 @@
         // La carta che si sta condividendo: resta valida anche dopo la chiusura della scheda aperta.
         let fwShareCard = null;
         async function shareCardSystem(id) {
-            const card = id ? cards.find(c => c.id === id) : (fwShareCard || activeCardForModal);
+            const card = id ? cards.find(c => String(c.id) === String(id)) : (fwShareCard || activeCardForModal);
             if (!card) return;
             const note = document.getElementById('share-system-note');
             const say = t => { if (note && !document.getElementById('share-modal').classList.contains('hidden')) note.textContent = t; else alert(t); };
