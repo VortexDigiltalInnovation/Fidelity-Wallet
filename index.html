@@ -887,6 +887,39 @@
         }
 
         let cards = JSON.parse(localStorage.getItem('fidelity_cards') || '[]');
+        // Ripara gli identificativi delle carte legacy/importate: gli handler dei pulsanti
+        // usano l'ID. ID assenti, duplicati o con caratteri speciali rendono la carta
+        // visibile ma non raggiungibile dai comandi Modifica/Elimina.
+        function fwNormalizeCardIds(list) {
+            if (!Array.isArray(list)) return [];
+            const used = new Set();
+            let repaired = false;
+            list.forEach((card, index) => {
+                if (!card || typeof card !== 'object' || Array.isArray(card)) {
+                    list[index] = { name: 'Carta recuperata', code: '', type: 'CODE128' };
+                    card = list[index];
+                    repaired = true;
+                }
+                const id = card.id == null ? '' : String(card.id);
+                if (!/^card_[A-Za-z0-9_-]+$/.test(id) || used.has(id)) {
+                    let replacement;
+                    do { replacement = 'card_repaired_' + Date.now().toString(36) + '_' + index + '_' + Math.random().toString(36).slice(2, 8); }
+                    while (used.has(replacement));
+                    card.id = replacement;
+                    repaired = true;
+                } else if (card.id !== id) {
+                    card.id = id;
+                    repaired = true;
+                }
+                used.add(String(card.id));
+            });
+            if (repaired) {
+                try { localStorage.setItem('fidelity_cards', JSON.stringify(list)); }
+                catch (e) { console.warn('Riparazione ID carte non salvata:', e); }
+            }
+            return list;
+        }
+        cards = fwNormalizeCardIds(cards);
         let currentFilter = 'all';
         let isIconViewMode = localStorage.getItem('icon_view_mode') === 'true';
         let gpsEnabled = true;
@@ -2902,7 +2935,7 @@
                     try {
                         const imported = JSON.parse(e.target.result);
                         if (Array.isArray(imported)) {
-                            cards = imported;
+                            cards = fwNormalizeCardIds(imported);
                             saveToStorage();
                             renderCards();
                             closeSettingsModal();
@@ -3168,7 +3201,7 @@
                 const fileRes = await driveFetch('https://www.googleapis.com/drive/v3/files/' + f.id + '?alt=media');
                 const cloudCards = await fileRes.json();
                 if (!Array.isArray(cloudCards)) { alert('Il file su Drive non è un backup valido.'); return; }
-                cards = cloudCards;
+                cards = fwNormalizeCardIds(cloudCards);
                 saveToStorage();
                 renderCards();
                 alert('Carte ripristinate dal backup del ' + formatDateTimeIT(f.modifiedTime) + '.');
@@ -3445,7 +3478,7 @@
             if (!Array.isArray(data)) throw new Error('Il file non è un backup valido.');
             if (Array.isArray(cards) && cards.length) { try { await doBackup({ interactive: false, label: 'prima del ripristino' }); } catch (e) {} }
             localStorage.setItem(K_HASH, hash(JSON.stringify(data, null, 2)));
-            cards = data;
+            cards = fwNormalizeCardIds(data);
             saveToStorage();
             renderCards();
             try { closeSettingsModal(); } catch (e) {}
