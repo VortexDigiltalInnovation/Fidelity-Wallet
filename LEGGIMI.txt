@@ -1,4 +1,13 @@
-# Fidelity Wallet — PWA v13.6 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v13.7 (ex Wallet Fedeltà)
+
+## Novità v13.7 — Modifica ed Elimina sempre visibili (carte con QR code)
+- Causa vera del problema: nelle carte con un codice lungo (tipico dei QR, es. Eurospin «FID#005SW...») il testo del codice non veniva accorciato e spingeva fuori dalla carta i pulsanti a destra. Sul telefono il cestino (e sugli schermi più stretti anche la matita) finiva fuori dal bordo e non si poteva toccare. Ora il codice viene accorciato con «…» e i quattro pulsanti restano sempre visibili.
+- La carta aperta (quella con il codice grande) ha ora anche i pulsanti «Modifica» ed «Elimina». Servono anche in vista a icone, dove prima non c'era nessun modo di modificare o eliminare una carta.
+- Nella carta aperta i codici lunghi vanno a capo invece di uscire dal riquadro.
+- Riconoscimento dell'insegna da foto: prima conta il nome del negozio scritto nell'immagine. Prima una schermata Eurospin («Fai la spesa da Eurospin», «Family») veniva riconosciuta come Esselunga o IKEA per le parole «spesa» e «family».
+- Caricare una foto dopo aver già usato lo scanner non dà più «Errore durante l'elaborazione».
+- Service worker v13.7: apri l'app online una volta per ricevere l'aggiornamento.
+
 
 ## Novità v13.6 — Modifica ed Elimina funzionano su tutte le carte
 - Corretto alla radice: alcune carte importate, scansionate, condivise o ripristinate da un backup restavano visibili ma i pulsanti Modifica ed Elimina non le trovavano. Succedeva quando la carta aveva un identificativo mancante, duplicato, numerico, con caratteri speciali, oppure un formato di dati diverso.
