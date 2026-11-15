@@ -1,4 +1,11 @@
-# Fidelity Wallet — PWA v13.7 (ex Wallet Fedeltà)
+# Fidelity Wallet — PWA v13.8 (ex Wallet Fedeltà)
+
+## Novità v13.8 — lo 0 iniziale del codice non si perde più
+- Causa: quando un codice EAN-13 inizia con 0 (es. 0401234567893), lo scanner e la lettura da foto lo riconoscevano come UPC-A e restituivano solo 12 cifre, senza lo 0. La carta veniva salvata con il numero sbagliato e come CODE-128.
+- Ora l'app rimette lo 0 e salva la carta come EAN-13, con il numero esatto stampato sulla carta. Vale per la fotocamera e per il caricamento da foto.
+- Le carte già salvate senza lo 0 non vengono cambiate da sole: scansionale di nuovo, oppure in Modifica aggiungi lo 0 davanti e scegli EAN-13.
+- Service worker v13.8: apri l'app online una volta per ricevere l'aggiornamento.
+
 
 ## Novità v13.7 — Modifica ed Elimina sempre visibili (carte con QR code)
 - Causa vera del problema: nelle carte con un codice lungo (tipico dei QR, es. Eurospin «FID#005SW...») il testo del codice non veniva accorciato e spingeva fuori dalla carta i pulsanti a destra. Sul telefono il cestino (e sugli schermi più stretti anche la matita) finiva fuori dal bordo e non si poteva toccare. Ora il codice viene accorciato con «…» e i quattro pulsanti restano sempre visibili.
