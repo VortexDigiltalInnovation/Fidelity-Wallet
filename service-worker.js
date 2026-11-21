@@ -1,4 +1,4 @@
-/* Fidelity Wallet – Service Worker v13.9 */
+/* Fidelity Wallet – Service Worker v13.10 */
 const VERSION = 'v13-9';
 const SHELL_CACHE = 'fidelity-wallet-shell-' + VERSION;
 const RUNTIME_CACHE = 'fidelity-wallet-runtime-' + VERSION;
@@ -12,18 +12,18 @@ const APP_SHELL = [
   './manifest.webmanifest',
   './privacy.html',
   './Guida%20Utente%20Wallet%20Fedelta.pdf',
-  './icons/favicon-64.png?v=13.9',
-  './icons/icon-72.png?v=13.9',
-  './icons/icon-96.png?v=13.9',
-  './icons/icon-128.png?v=13.9',
-  './icons/icon-144.png?v=13.9',
-  './icons/icon-152.png?v=13.9',
-  './icons/icon-192.png?v=13.9',
-  './icons/icon-384.png?v=13.9',
-  './icons/icon-512.png?v=13.9',
-  './icons/icon-maskable-192.png?v=13.9',
-  './icons/icon-maskable-512.png?v=13.9',
-  './icons/apple-touch-icon.png?v=13.9'
+  './icons/favicon-64.png?v=13.10',
+  './icons/icon-72.png?v=13.10',
+  './icons/icon-96.png?v=13.10',
+  './icons/icon-128.png?v=13.10',
+  './icons/icon-144.png?v=13.10',
+  './icons/icon-152.png?v=13.10',
+  './icons/icon-192.png?v=13.10',
+  './icons/icon-384.png?v=13.10',
+  './icons/icon-512.png?v=13.10',
+  './icons/icon-maskable-192.png?v=13.10',
+  './icons/icon-maskable-512.png?v=13.10',
+  './icons/apple-touch-icon.png?v=13.10'
 ];
 
 // Librerie esterne (versioni fisse): precache "best effort", senza bloccare l'installazione.
