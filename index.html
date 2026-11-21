@@ -17,9 +17,9 @@
     
     <!-- Dynamic Manifest -->
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.8">
-    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.8">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.8">
+    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.9">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.9">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.9">
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -193,10 +193,10 @@
     <!-- HEADER MINIMAL MOBILE-OPTIMIZED -->
     <header class="bg-cardLight/80 dark:bg-cardDark/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 sticky top-0 z-40 px-4 h-14 flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-2.5 min-w-0 flex-1">
-            <img src="./icons/icon-96.png?v=13.8" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
+            <img src="./icons/icon-96.png?v=13.9" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
             <div class="min-w-0">
                 <h1 class="font-black text-xs tracking-tight text-slate-900 dark:text-white flex items-center">
-                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.8</span>
+                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.9</span>
                 </h1>
                 <p class="text-[10px] text-slate-500 dark:text-slate-400 block truncate" id="gps-status-text">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block align-middle mr-1 animate-pulse"></span>In attesa del GPS…
@@ -211,6 +211,10 @@
                 <span>Installa</span>
             </button>
             
+            <!-- Aiuto / configurazione guidata -->
+            <button onclick="fwTourOpen()" aria-label="Aiuto" title="Aiuto e configurazione guidata" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 flex items-center justify-center active:scale-95 transition">
+                <i class="fa-solid fa-circle-question text-sm text-amber-500"></i>
+            </button>
             <!-- Guida -->
             <button onclick="openGuideModal()" aria-label="Guida" title="Guida" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 flex items-center justify-center active:scale-95 transition">
                 <i class="fa-solid fa-book-open text-xs text-amber-500"></i>
@@ -731,8 +735,8 @@
                     </div>
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                    <img src="./icons/icon-96.png?v=13.8" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.8</span></p>
+                    <img src="./icons/icon-96.png?v=13.9" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.9</span></p>
                     <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
                     <p class="text-[10px] mt-1"><a href="./privacy.html" target="_blank" rel="noopener" class="underline text-indigo-500">Informativa sulla privacy</a></p>
                 </div>
@@ -745,15 +749,16 @@
         <div class="bg-cardLight dark:bg-cardDark text-slate-900 dark:text-slate-100 w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[94dvh] sm:h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-800">
             <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 shrink-0">
                 <div class="flex items-center gap-2 min-w-0">
-                    <img src="./icons/icon-96.png?v=13.8" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
+                    <img src="./icons/icon-96.png?v=13.9" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.8</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.9</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="flex-1 overflow-y-auto p-4 space-y-2.5 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                <button onclick="fwTourOpen()" class="w-full h-11 rounded-2xl bg-amber-600 text-white font-bold text-sm"><i class="fa-solid fa-circle-question mr-1.5"></i>Rivedi la configurazione guidata</button>
                 <details open class="rounded-2xl bg-slate-100/70 dark:bg-darkBg/60 border border-slate-200 dark:border-slate-800 p-3.5">
                     <summary class="font-bold text-sm text-slate-900 dark:text-white cursor-pointer">Cos'è Fidelity Wallet</summary>
                     <p class="mt-2">Fidelity Wallet è un'app (PWA) che raccoglie tutte le tue carte fedeltà, tessere socio e coupon sul telefono. Niente più tessere di plastica e meno attese alla cassa: la carta giusta si apre in un tocco e, con l'app aperta, ti avvisa quando sei arrivato al negozio.</p>
@@ -833,7 +838,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.8 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.5)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.9 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.5)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
             </div>
         </div>
     </div>
@@ -1795,8 +1800,8 @@
             if (!('Notification' in window) || Notification.permission !== 'granted') return;
             const options = {
                 body: (address ? address + '\n' : '') + 'Tocca per aprire la carta.',
-                icon: './icons/icon-192.png?v=13.8',
-                badge: './icons/icon-96.png?v=13.8',
+                icon: './icons/icon-192.png?v=13.9',
+                badge: './icons/icon-96.png?v=13.9',
                 tag: 'fw-' + card.id,
                 data: { cardId: card.id },
                 actions: [{ action: 'open', title: 'Apri carta' }],
@@ -2294,7 +2299,7 @@
            Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
            (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
            4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
-        const FW_VERSION = '13.8';
+        const FW_VERSION = '13.9';
         let fwEnrichBusy = false;
 
         function fwCleanDomain(u) {
@@ -3928,5 +3933,52 @@
         if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', put); else put();
     })();
     </script>
+<!-- v13.9 CONFIGURAZIONE GUIDATA -->
+<div id="fw-tour" class="hidden fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-3" role="dialog" aria-modal="true" aria-labelledby="fw-tour-title">
+  <div class="w-full max-w-md bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-3xl shadow-2xl p-5 relative">
+    <button onclick="fwTourClose()" aria-label="Chiudi guida" class="absolute top-3 right-3 w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+    <div id="fw-tour-body" class="min-h-[260px]"></div>
+    <div id="fw-tour-dots" class="flex justify-center gap-1.5 my-4"></div>
+    <div class="flex gap-2">
+      <button id="fw-tour-prev" onclick="fwTourGo(-1)" class="flex-1 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 font-bold text-sm">Indietro</button>
+      <button id="fw-tour-next" onclick="fwTourGo(1)" class="flex-[2] h-12 rounded-2xl bg-amber-600 text-white font-bold text-sm">Avanti</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const KEY='fw_tour_done_v1';
+  const btn=(fn,icon,label)=>`<button onclick="${fn}" class="w-full h-12 mt-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300 font-bold text-sm flex items-center justify-center gap-2"><i class="fa-solid ${icon}"></i>${label}</button>`;
+  const steps=[
+    {t:'Benvenuto in Fidelity Wallet',h:`<img src="./icons/icon-192.png?v=13.9" alt="Logo Fidelity Wallet" class="w-24 h-24 rounded-3xl mx-auto mb-3 shadow-lg"><p class="text-sm text-center">Tutte le tue carte fedeltà in un unico posto, sempre con te, anche senza internet. Ti aiuto a configurare l'app in pochi passi.</p>`},
+    {t:'Scegli il tema',h:`<p class="text-sm">Preferisci l'app chiara o scura? Puoi cambiarla quando vuoi con la luna in alto.</p>${btn("toggleTheme()","fa-circle-half-stroke","Cambia tema")}`},
+    {t:'Posizione (consigliata)',h:`<p class="text-sm">Con la posizione l'app ti mostra per prima la carta del negozio in cui ti trovi. La posizione resta sul telefono.</p>${btn("fwTourGps()","fa-location-dot","Attiva la posizione")}<p id="fw-tour-gps" class="text-xs mt-2 text-slate-500"></p>`},
+    {t:'Avvisi (facoltativo)',h:`<p class="text-sm">Ricevi un avviso quando sei vicino a un negozio di cui hai la carta.</p>${btn("requestNotificationPermission()","fa-bell","Attiva gli avvisi")}`},
+    {t:'Aggiungi la prima carta',h:`<p class="text-sm">Inquadra il codice a barre o il QR della carta con la fotocamera, oppure scegli una foto o uno screenshot. L'app riconosce negozio e numero da sola.</p>${btn("fwTourDo('openScannerModal')","fa-camera","Scansiona una carta")}${btn("fwTourDo('openAddModal')","fa-keyboard","Inserisci a mano")}`},
+    {t:'Metti al sicuro le carte',h:`<p class="text-sm">Dalle Opzioni puoi salvare una copia delle carte su Google Drive o in un file, così non le perdi se cambi telefono.</p>${btn("fwTourDo('openSettingsModal')","fa-shield-halved","Apri le Opzioni")}`},
+    {t:'Installa sulla schermata Home',h:`<p class="text-sm">Per aprirla come una vera app: su Android tocca <b>Installa</b> in alto o «Aggiungi a schermata Home» dal menu del browser; su iPhone tocca <b>Condividi</b> e poi «Aggiungi alla schermata Home».</p>`},
+    {t:'Tutto pronto!',h:`<p class="text-5xl text-center my-3">🎉</p><p class="text-sm text-center">Puoi rivedere questa guida quando vuoi toccando il pulsante <b><i class="fa-solid fa-circle-question text-amber-500"></i></b> in alto.</p>`}
+  ];
+  let i=0;
+  function render(){
+    const s=steps[i];
+    document.getElementById('fw-tour-body').innerHTML=`<p class="text-[11px] font-bold uppercase tracking-wider text-amber-600 mb-1">Passo ${i+1} di ${steps.length}</p><h2 id="fw-tour-title" class="text-lg font-black mb-3 pr-10">${s.t}</h2>${s.h}`;
+    document.getElementById('fw-tour-dots').innerHTML=steps.map((_,k)=>`<span class="h-1.5 rounded-full ${k===i?'w-6 bg-amber-500':'w-1.5 bg-slate-300 dark:bg-slate-700'}"></span>`).join('');
+    document.getElementById('fw-tour-prev').style.visibility=i?'visible':'hidden';
+    document.getElementById('fw-tour-next').textContent=i===steps.length-1?'Inizia a usare l\'app':(i===0?'Iniziamo':'Avanti');
+  }
+  window.fwTourOpen=function(){ try{closeGuideModal();}catch(e){} i=0; render(); document.getElementById('fw-tour').classList.remove('hidden'); };
+  window.fwTourClose=function(){ document.getElementById('fw-tour').classList.add('hidden'); try{localStorage.setItem(KEY,'1');}catch(e){} };
+  window.fwTourGo=function(d){ if(i+d>=steps.length) return fwTourClose(); i=Math.max(0,i+d); render(); };
+  window.fwTourDo=function(fn){ fwTourClose(); try{ window[fn](); }catch(e){} };
+  window.fwTourGps=function(){ const o=document.getElementById('fw-tour-gps');
+    if(!navigator.geolocation){o.textContent='Questo telefono non permette la posizione.';return;}
+    o.textContent='Attendo il permesso…';
+    navigator.geolocation.getCurrentPosition(()=>{o.textContent='✓ Posizione attiva.'; try{ if(typeof gpsEnabled!=='undefined' && !gpsEnabled) toggleGpsMode(); }catch(e){} },()=>{o.textContent='Permesso negato: puoi attivarlo dopo dalle impostazioni del telefono.';},{timeout:15000});
+  };
+  window.addEventListener('load',()=>{ let done=null; try{done=localStorage.getItem(KEY);}catch(e){} if(!done) setTimeout(fwTourOpen,600); });
+})();
+</script>
+
 </body>
 </html>
