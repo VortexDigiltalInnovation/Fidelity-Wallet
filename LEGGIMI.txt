@@ -1,3 +1,5 @@
+Sfondo animato: tema chiaro = sole con raggi, nuvole e colline; tema scuro = costellazioni nello spazio (v13.10b).
+
 # Fidelity Wallet — PWA v13.10
 
 ## Novità v13.10

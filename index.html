@@ -180,9 +180,11 @@
         html.dark .fw-add-label{color:#c4b5fd}
         @keyframes fwPulse{0%{transform:scale(.9);opacity:.9}70%,100%{transform:scale(1.2);opacity:0}}
         @media (prefers-reduced-motion:reduce){.fw-add-fab::after{animation:none}}
+            #fw-bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;display:block}
     </style>
 </head>
 <body class="bg-lightBg dark:bg-darkBg text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans select-none pb-28 transition-colors duration-300">
+    <canvas id="fw-bg" aria-hidden="true"></canvas>
 
     <!-- AVVISO HTTPS -->
     <div id="secure-warning" class="hidden bg-amber-500/10 border-b border-amber-500/30 px-4 py-2 text-[11px] text-amber-600 dark:text-amber-400 flex items-center justify-between">
@@ -3980,5 +3982,174 @@
 })();
 </script>
 
+<script>
+/* Sfondo animato a tema: chiaro = sole, raggi, nuvole, colline; scuro = costellazioni nello spazio */
+(function () {
+    const cv = document.getElementById('fw-bg');
+    if (!cv || !cv.getContext) return;
+    const ctx = cv.getContext('2d');
+    const root = document.documentElement;
+    const mqReduce = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+    let W = 0, H = 0, dpr = 1, raf = 0, last = 0, stars = [], clouds = [], shoot = null, nextShoot = 4;
+
+    function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+    // Costellazioni: punti (x,y) in unità relative e collegamenti
+    const CONS = [
+        { cx: .30, cy: .24, s: .20, p: [[-.9,-1],[.9,-.8],[-.35,.05],[0,.1],[.35,.15],[-.8,1.1],[.9,1.0]], e: [[0,2],[2,3],[3,4],[4,1],[2,5],[4,6],[0,1],[5,6]] },            // Orione
+        { cx: .76, cy: .13, s: .18, p: [[-1.2,.3],[-.6,-.3],[0,.2],[.6,-.4],[1.2,.2]], e: [[0,1],[1,2],[2,3],[3,4]] },                                                        // Cassiopea
+        { cx: .68, cy: .58, s: .22, p: [[-1.3,-.3],[-.7,-.1],[-.2,-.3],[.3,.0],[.5,.7],[1.2,.8],[1.3,.0]], e: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,3]] },                    // Grande Carro
+        { cx: .22, cy: .74, s: .17, p: [[0,-1.1],[0,1.1],[-.9,0],[.9,0],[.3,.4]], e: [[0,1],[2,3]] },                                                                        // Croce del Sud
+        { cx: .50, cy: .90, s: .14, p: [[-1,0],[-.3,.4],[.4,.1],[1,.5]], e: [[0,1],[1,2],[2,3]] }
+    ];
+
+    function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth; H = window.innerHeight;
+        cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const r = rng(7), n = Math.round(Math.min(220, W * H / 4200));
+        stars = [];
+        for (let i = 0; i < n; i++) stars.push({ x: r(), y: r(), r: .3 + r() * 1.1, ph: r() * 6.28, sp: .6 + r() * 1.8 });
+        clouds = [];
+        for (let i = 0; i < 6; i++) clouds.push({ x: r(), y: .06 + r() * .38, s: .55 + r() * .8, v: 6 + r() * 10 });
+        draw(performance.now() / 1000);
+    }
+
+    /* ---------- TEMA CHIARO ---------- */
+    function cloud(x, y, s, a) {
+        const u = 34 * s;
+        ctx.save(); ctx.translate(x, y);
+        ctx.fillStyle = 'rgba(255,255,255,' + a + ')';
+        ctx.beginPath();
+        ctx.arc(-u * 1.5, 0, u * .7, 0, 6.3); ctx.arc(-u * .6, -u * .55, u * .95, 0, 6.3);
+        ctx.arc(u * .5, -u * .4, u * .85, 0, 6.3); ctx.arc(u * 1.4, 0, u * .65, 0, 6.3);
+        ctx.rect(-u * 1.5, -u * .1, u * 2.9, u * .7);
+        ctx.fill();
+        ctx.restore();
+    }
+    function hill(base, amp, f1, f2, ph, c1, c2) {
+        const g = ctx.createLinearGradient(0, base - amp, 0, H);
+        g.addColorStop(0, c1); g.addColorStop(1, c2);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, H);
+        for (let x = 0; x <= W + 8; x += 8) {
+            const y = base + Math.sin(x * f1 + ph) * amp + Math.sin(x * f2 + ph * 1.7) * amp * .45;
+            ctx.lineTo(x, y);
+        }
+        ctx.lineTo(W, H); ctx.closePath(); ctx.fill();
+    }
+    function drawLight(t) {
+        const sky = ctx.createLinearGradient(0, 0, 0, H);
+        sky.addColorStop(0, '#8fd0f8'); sky.addColorStop(.55, '#d6f0fd'); sky.addColorStop(1, '#fff4d9');
+        ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+
+        const m = Math.min(W, H), sx = W * .8, sy = H * .13 + 14, sr = m * .075;
+        const glow = ctx.createRadialGradient(sx, sy, sr * .5, sx, sy, sr * 5);
+        glow.addColorStop(0, 'rgba(255,240,170,.75)'); glow.addColorStop(1, 'rgba(255,240,170,0)');
+        ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+
+        ctx.save(); ctx.translate(sx, sy); ctx.rotate(t * .06);
+        const N = 16;
+        for (let i = 0; i < N; i++) {
+            const len = sr * (2.4 + (i % 2 ? .9 : 1.9) + Math.sin(t * 1.3 + i) * .35);
+            const w = i % 2 ? .06 : .09;
+            const g = ctx.createLinearGradient(0, 0, len, 0);
+            g.addColorStop(0, 'rgba(255,226,120,.55)'); g.addColorStop(1, 'rgba(255,226,120,0)');
+            ctx.save(); ctx.rotate(i * 6.2832 / N);
+            ctx.fillStyle = g; ctx.beginPath();
+            ctx.moveTo(sr * .9, -sr * w); ctx.lineTo(sr + len, 0); ctx.lineTo(sr * .9, sr * w); ctx.closePath(); ctx.fill();
+            ctx.restore();
+        }
+        ctx.restore();
+        const sun = ctx.createRadialGradient(sx - sr * .25, sy - sr * .25, sr * .1, sx, sy, sr);
+        sun.addColorStop(0, '#fffbd0'); sun.addColorStop(.6, '#ffe066'); sun.addColorStop(1, '#ffb82e');
+        ctx.fillStyle = sun; ctx.beginPath(); ctx.arc(sx, sy, sr * (1 + Math.sin(t * 1.6) * .02), 0, 6.3); ctx.fill();
+
+        for (const c of clouds) {
+            const span = W + 300, x = ((c.x * span + t * c.v) % span) - 150;
+            cloud(x, c.y * H, c.s * (m / 700 + .4), .92);
+        }
+
+        const b = H * .8, sway = t * .05;
+        hill(b - H * .02, H * .035, .004, .009, sway,      '#b9e6a0', '#d6f2b8');
+        hill(b + H * .04, H * .04,  .006, .013, sway + 2,  '#8fd18a', '#b5e6a2');
+        hill(b + H * .10, H * .045, .005, .011, sway + 4.5,'#62bb73', '#8dd592');
+    }
+
+    /* ---------- TEMA SCURO ---------- */
+    function drawDark(t, dt) {
+        const g = ctx.createLinearGradient(0, 0, 0, H);
+        g.addColorStop(0, '#04060f'); g.addColorStop(.6, '#0a1230'); g.addColorStop(1, '#1a1347');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+        const neb = [[.2, .3, '90,70,200', .16], [.85, .65, '40,120,220', .13], [.5, .95, '170,60,190', .12]];
+        neb.forEach((n, i) => {
+            const x = W * (n[0] + Math.sin(t * .03 + i) * .04), y = H * (n[1] + Math.cos(t * .025 + i) * .03), r = Math.max(W, H) * .55;
+            const rg = ctx.createRadialGradient(x, y, 0, x, y, r);
+            rg.addColorStop(0, 'rgba(' + n[2] + ',' + n[3] + ')'); rg.addColorStop(1, 'rgba(' + n[2] + ',0)');
+            ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+        });
+
+        const dx = Math.sin(t * .04) * 10, dy = Math.cos(t * .035) * 8;
+        for (const s of stars) {
+            const a = .35 + .65 * (.5 + .5 * Math.sin(t * s.sp + s.ph));
+            ctx.fillStyle = 'rgba(220,230,255,' + a.toFixed(3) + ')';
+            ctx.beginPath(); ctx.arc(s.x * W + dx * s.r, s.y * H + dy * s.r, s.r, 0, 6.3); ctx.fill();
+        }
+
+        const m = Math.min(W, H) * 1.05;
+        CONS.forEach((c, ci) => {
+            const cyc = 14, ph = ((t + ci * 3.1) % cyc) / cyc;           // 0..1
+            const draw = Math.min(1, ph / .35), fade = ph > .8 ? 1 - (ph - .8) / .2 : 1;
+            const pts = c.p.map(p => [W * c.cx + p[0] * c.s * m + dx * 1.5, H * c.cy + p[1] * c.s * m + dy * 1.5]);
+            const total = c.e.length, upto = draw * total;
+            ctx.lineWidth = 1; ctx.lineCap = 'round';
+            c.e.forEach((e, i) => {
+                const k = Math.max(0, Math.min(1, upto - i)); if (!k) return;
+                const a = pts[e[0]], b = pts[e[1]];
+                ctx.strokeStyle = 'rgba(150,180,255,' + (.5 * fade).toFixed(3) + ')';
+                ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k); ctx.stroke();
+            });
+            pts.forEach((p, i) => {
+                const tw = .75 + .25 * Math.sin(t * 2 + i * 1.7 + ci);
+                const r = 5 + 2 * tw;
+                const gl = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], r * 2.2);
+                gl.addColorStop(0, 'rgba(190,210,255,' + (.7 * tw).toFixed(3) + ')'); gl.addColorStop(1, 'rgba(190,210,255,0)');
+                ctx.fillStyle = gl; ctx.fillRect(p[0] - r * 2.2, p[1] - r * 2.2, r * 4.4, r * 4.4);
+                ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(p[0], p[1], 1.6 + tw * .6, 0, 6.3); ctx.fill();
+            });
+        });
+
+        if (!mqReduce.matches) {
+            nextShoot -= dt;
+            if (!shoot && nextShoot <= 0) { shoot = { x: W * (.3 + Math.random() * .7), y: H * Math.random() * .35, life: 0 }; nextShoot = 7 + Math.random() * 8; }
+            if (shoot) {
+                shoot.life += dt; const k = shoot.life / 1.1;
+                const x = shoot.x - k * W * .35, y = shoot.y + k * H * .16;
+                const gr = ctx.createLinearGradient(x, y, x + 90, y - 36);
+                gr.addColorStop(0, 'rgba(255,255,255,' + (1 - k).toFixed(3) + ')'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.strokeStyle = gr; ctx.lineWidth = 1.6;
+                ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 90, y - 36); ctx.stroke();
+                if (k >= 1) shoot = null;
+            }
+        }
+    }
+
+    function draw(t, dt) { root.classList.contains('dark') ? drawDark(t, dt || 0) : drawLight(t); }
+
+    function loop(ts) {
+        raf = requestAnimationFrame(loop);
+        if (ts - last < 33) return;                 // ~30 fps: fluido e leggero sulla batteria
+        const dt = Math.min(.1, (ts - last) / 1000); last = ts;
+        draw(ts / 1000, dt);
+    }
+    function start() { cancelAnimationFrame(raf); if (mqReduce.matches || document.hidden) { draw(performance.now() / 1000 + 20); return; } raf = requestAnimationFrame(loop); }
+
+    window.addEventListener('resize', resize);
+    document.addEventListener('visibilitychange', start);
+    if (mqReduce.addEventListener) mqReduce.addEventListener('change', start);
+    new MutationObserver(() => { draw(performance.now() / 1000 + (mqReduce.matches ? 20 : 0)); }).observe(root, { attributes: true, attributeFilter: ['class'] });
+    resize(); start();
+})();
+</script>
 </body>
 </html>
