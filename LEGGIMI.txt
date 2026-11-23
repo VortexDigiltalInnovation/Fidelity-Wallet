@@ -1,4 +1,35 @@
-# Fidelity Wallet — PWA v13.5 (ex Wallet Fedeltà)
+Sfondo animato: tema chiaro = sole con raggi, nuvole e colline; tema scuro = costellazioni nello spazio (v13.10b).
+
+# Fidelity Wallet — PWA v13.10
+
+## Novità v13.10
+- Icone a tutta grandezza: il logo riempie ora tutta l'icona, senza bordi né margini (anche quelle per la schermata Home).
+- Service worker v13.10: apri l'app online una volta per ricevere l'aggiornamento.
+
+
+## Novità v13.9
+- Nuovo logo e nuove icone dell'app.
+- Configurazione guidata passo passo al primo avvio (tema, posizione, avvisi, prima carta, copia di sicurezza, installazione).
+- Pulsante Aiuto (?) in alto per rivedere la guida in qualsiasi momento; anche dentro la Guida Utente.
+- Service worker v13.9: apri l'app online una volta per ricevere l'aggiornamento.
+
+
+## Novità v13.7 — Modifica ed Elimina sempre visibili (carte con QR code)
+- Causa vera del problema: nelle carte con un codice lungo (tipico dei QR, es. Eurospin «FID#005SW...») il testo del codice non veniva accorciato e spingeva fuori dalla carta i pulsanti a destra. Sul telefono il cestino (e sugli schermi più stretti anche la matita) finiva fuori dal bordo e non si poteva toccare. Ora il codice viene accorciato con «…» e i quattro pulsanti restano sempre visibili.
+- La carta aperta (quella con il codice grande) ha ora anche i pulsanti «Modifica» ed «Elimina». Servono anche in vista a icone, dove prima non c'era nessun modo di modificare o eliminare una carta.
+- Nella carta aperta i codici lunghi vanno a capo invece di uscire dal riquadro.
+- Riconoscimento dell'insegna da foto: prima conta il nome del negozio scritto nell'immagine. Prima una schermata Eurospin («Fai la spesa da Eurospin», «Family») veniva riconosciuta come Esselunga o IKEA per le parole «spesa» e «family».
+- Caricare una foto dopo aver già usato lo scanner non dà più «Errore durante l'elaborazione».
+- Service worker v13.7: apri l'app online una volta per ricevere l'aggiornamento.
+
+
+## Novità v13.6 — Modifica ed Elimina funzionano su tutte le carte
+- Corretto alla radice: alcune carte importate, scansionate, condivise o ripristinate da un backup restavano visibili ma i pulsanti Modifica ed Elimina non le trovavano. Succedeva quando la carta aveva un identificativo mancante, duplicato, numerico, con caratteri speciali, oppure un formato di dati diverso.
+- Ora l'app controlla le carte a ogni apertura, salvataggio, importazione e ripristino (telefono e Drive): l'identificativo diventa sempre testo semplice e unico; se manca o non è valido ne viene creato uno nuovo. Nome, codice e tutti gli altri dati della carta restano invariati.
+- Le carte già presenti con il problema vengono sistemate da sole alla prima apertura della nuova versione.
+- I backup salvati nel formato { "cards": [...] } ora vengono riconosciuti e ripristinati.
+- I nuovi identificativi sono unici anche se si aggiungono più carte nello stesso istante.
+- Service worker v13.6: apri l'app online una volta per ricevere l'aggiornamento.
 
 ## Novità v13.5 — limite ai backup su Drive
 - Anche su Google Drive si tiene solo un certo numero di backup (3, 5, 7, 10 o 20; predefinito 7), impostabile in Impostazioni → Google Drive Sync → «Backup da tenere su Drive». Dopo ogni nuovo salvataggio su Drive, i backup in più (i più vecchi) vengono eliminati: è la stessa logica della cartella sul telefono.

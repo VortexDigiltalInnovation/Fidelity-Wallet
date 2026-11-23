@@ -17,9 +17,9 @@
     
     <!-- Dynamic Manifest -->
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.5">
-    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.5">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.5">
+    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.10">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.10">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.10">
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -180,9 +180,11 @@
         html.dark .fw-add-label{color:#c4b5fd}
         @keyframes fwPulse{0%{transform:scale(.9);opacity:.9}70%,100%{transform:scale(1.2);opacity:0}}
         @media (prefers-reduced-motion:reduce){.fw-add-fab::after{animation:none}}
+            #fw-bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;display:block}
     </style>
 </head>
 <body class="bg-lightBg dark:bg-darkBg text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans select-none pb-28 transition-colors duration-300">
+    <canvas id="fw-bg" aria-hidden="true"></canvas>
 
     <!-- AVVISO HTTPS -->
     <div id="secure-warning" class="hidden bg-amber-500/10 border-b border-amber-500/30 px-4 py-2 text-[11px] text-amber-600 dark:text-amber-400 flex items-center justify-between">
@@ -193,10 +195,10 @@
     <!-- HEADER MINIMAL MOBILE-OPTIMIZED -->
     <header class="bg-cardLight/80 dark:bg-cardDark/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 sticky top-0 z-40 px-4 h-14 flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-2.5 min-w-0 flex-1">
-            <img src="./icons/icon-96.png?v=13.5" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
+            <img src="./icons/icon-96.png?v=13.10" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
             <div class="min-w-0">
                 <h1 class="font-black text-xs tracking-tight text-slate-900 dark:text-white flex items-center">
-                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.5</span>
+                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.10</span>
                 </h1>
                 <p class="text-[10px] text-slate-500 dark:text-slate-400 block truncate" id="gps-status-text">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block align-middle mr-1 animate-pulse"></span>In attesa del GPS…
@@ -211,6 +213,10 @@
                 <span>Installa</span>
             </button>
             
+            <!-- Aiuto / configurazione guidata -->
+            <button onclick="fwTourOpen()" aria-label="Aiuto" title="Aiuto e configurazione guidata" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 flex items-center justify-center active:scale-95 transition">
+                <i class="fa-solid fa-circle-question text-sm text-amber-500"></i>
+            </button>
             <!-- Guida -->
             <button onclick="openGuideModal()" aria-label="Guida" title="Guida" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 flex items-center justify-center active:scale-95 transition">
                 <i class="fa-solid fa-book-open text-xs text-amber-500"></i>
@@ -325,7 +331,7 @@
             </div>
             <div class="bg-white border-2 border-slate-100 p-4 rounded-2xl w-full flex flex-col items-center justify-center shadow-inner min-h-[160px]">
                 <div id="barcode-target-container" class="w-full flex justify-center overflow-x-auto"></div>
-                <p id="modal-card-code" class="mt-3 font-mono font-bold text-base tracking-widest text-slate-800 bg-slate-100 px-4 py-2 rounded-xl select-all">---</p>
+                <p id="modal-card-code" class="mt-3 font-mono font-bold text-base tracking-widest text-slate-800 bg-slate-100 px-4 py-2 rounded-xl select-all max-w-full break-all text-center">---</p>
             </div>
             <div class="w-full grid grid-cols-2 gap-2 mt-4">
                 <button onclick="toggleFavoriteFromModal()" id="modal-fav-btn" class="h-12 rounded-2xl border border-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center space-x-1.5 active:bg-slate-100 transition">
@@ -335,6 +341,14 @@
                 <button onclick="openShareModalFromCurrent()" class="h-12 rounded-2xl bg-slate-900 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 active:bg-slate-800 transition shadow">
                     <i class="fa-solid fa-share-nodes"></i>
                     <span>Condividi</span>
+                </button>
+                <button onclick="editCardFromModal()" id="modal-edit-btn" class="h-12 rounded-2xl border border-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center space-x-1.5 active:bg-slate-100 transition">
+                    <i class="fa-solid fa-pen"></i>
+                    <span>Modifica</span>
+                </button>
+                <button onclick="deleteCardFromModal()" id="modal-delete-btn" class="h-12 rounded-2xl border border-rose-200 text-rose-600 text-xs font-semibold flex items-center justify-center space-x-1.5 active:bg-rose-50 transition">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span>Elimina</span>
                 </button>
             </div>
             <p class="text-[10px] text-slate-400 mt-3 text-center"><i class="fa-solid fa-bolt mr-1 text-amber-500"></i> Lo schermo resta acceso finché la carta è aperta.</p>
@@ -723,8 +737,8 @@
                     </div>
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                    <img src="./icons/icon-96.png?v=13.5" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.5</span></p>
+                    <img src="./icons/icon-96.png?v=13.10" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.10</span></p>
                     <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
                     <p class="text-[10px] mt-1"><a href="./privacy.html" target="_blank" rel="noopener" class="underline text-indigo-500">Informativa sulla privacy</a></p>
                 </div>
@@ -737,15 +751,16 @@
         <div class="bg-cardLight dark:bg-cardDark text-slate-900 dark:text-slate-100 w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[94dvh] sm:h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-800">
             <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 shrink-0">
                 <div class="flex items-center gap-2 min-w-0">
-                    <img src="./icons/icon-96.png?v=13.5" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
+                    <img src="./icons/icon-96.png?v=13.10" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.5</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.10</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="flex-1 overflow-y-auto p-4 space-y-2.5 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                <button onclick="fwTourOpen()" class="w-full h-11 rounded-2xl bg-amber-600 text-white font-bold text-sm"><i class="fa-solid fa-circle-question mr-1.5"></i>Rivedi la configurazione guidata</button>
                 <details open class="rounded-2xl bg-slate-100/70 dark:bg-darkBg/60 border border-slate-200 dark:border-slate-800 p-3.5">
                     <summary class="font-bold text-sm text-slate-900 dark:text-white cursor-pointer">Cos'è Fidelity Wallet</summary>
                     <p class="mt-2">Fidelity Wallet è un'app (PWA) che raccoglie tutte le tue carte fedeltà, tessere socio e coupon sul telefono. Niente più tessere di plastica e meno attese alla cassa: la carta giusta si apre in un tocco e, con l'app aperta, ti avvisa quando sei arrivato al negozio.</p>
@@ -825,7 +840,7 @@
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.5 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.5)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.10 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.5)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
             </div>
         </div>
     </div>
@@ -886,7 +901,58 @@
             alert('Per installare Fidelity Wallet: su iPhone/iPad usa Condividi > Aggiungi alla schermata Home; su Android/Chrome apri il menu ⋮ > Installa app o Aggiungi a schermata Home. È necessario aprire l’app tramite HTTPS.');
         }
 
-        let cards = JSON.parse(localStorage.getItem('fidelity_cards') || '[]');
+        // v13.6: ogni carta ha SEMPRE un identificativo valido e unico.
+        // Carte importate, scansionate, condivise o ripristinate da backup vecchi potevano avere un ID mancante,
+        // duplicato, numerico o con caratteri speciali: restavano visibili ma Modifica/Elimina non le trovavano più.
+        // Ora gli ID vengono controllati e, se serve, rigenerati a ogni caricamento, salvataggio e ripristino.
+        let fwCardsLoadFailed = false;
+        let cards = (() => {
+            try { return JSON.parse(localStorage.getItem('fidelity_cards') || '[]'); }
+            catch (e) { fwCardsLoadFailed = true; return []; }
+        })();
+        const FW_ID_RE = /^[A-Za-z0-9_-]{1,80}$/;
+        function fwNewCardId(taken) {
+            let id;
+            do { id = 'card_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10); }
+            while (taken && taken.has(id));
+            if (taken) taken.add(id);
+            return id;
+        }
+        function fwTakenIds() { return new Set((Array.isArray(cards) ? cards : []).map(c => c && c.id != null ? String(c.id) : '')); }
+        function fwSameId(a, b) { return a != null && b != null && a !== '' && b !== '' && String(a) === String(b); }
+        // Accetta sia un elenco di carte sia formati diversi ({ cards: [...] }, { carte: [...] }, ...)
+        function fwExtractCards(data) {
+            if (Array.isArray(data)) return data;
+            if (data && typeof data === 'object') {
+                for (const k of ['cards', 'carte', 'data', 'items', 'fidelity_cards']) if (Array.isArray(data[k])) return data[k];
+            }
+            return null;
+        }
+        // Sistema l'elenco: scarta le voci non valide, rende gli ID testuali, sicuri e unici. Gli oggetti restano gli stessi.
+        function fwNormalizeCards(list) {
+            const src = fwExtractCards(list) || [];
+            let changed = !Array.isArray(list);
+            const taken = new Set();
+            const out = [];
+            src.forEach(c => {
+                if (!c || typeof c !== 'object' || Array.isArray(c)) { changed = true; return; }
+                let id = c.id == null ? '' : String(c.id).trim();
+                if (!FW_ID_RE.test(id) || taken.has(id)) { id = fwNewCardId(taken); }
+                else taken.add(id);
+                if (c.id !== id) { c.id = id; changed = true; }
+                if (typeof c.name !== 'string' || !c.name.trim()) { c.name = (c.name != null && String(c.name).trim()) ? String(c.name) : 'Carta senza nome'; changed = true; }
+                if (typeof c.code !== 'string') { c.code = c.code == null ? '' : String(c.code); changed = true; }
+                if (typeof c.favorite !== 'boolean') { c.favorite = !!c.favorite; changed = true; }
+                out.push(c);
+            });
+            return { cards: out, changed };
+        }
+        function fwEnsureIds() {
+            const r = fwNormalizeCards(cards);
+            cards = r.cards;
+            return r.changed;
+        }
+        if (fwEnsureIds() && !fwCardsLoadFailed) { try { localStorage.setItem('fidelity_cards', JSON.stringify(cards)); } catch (e) {} }
         let currentFilter = 'all';
         let isIconViewMode = localStorage.getItem('icon_view_mode') === 'true';
         let gpsEnabled = true;
@@ -945,8 +1011,8 @@
             if (sharedData) {
                 try {
                     const parsed = fwDecodeSharedCard(sharedData);
-                    if (parsed && parsed.name && parsed.code) {
-                        parsed.id = 'card_' + Date.now();
+                    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && parsed.name && parsed.code) {
+                        parsed.id = fwNewCardId(fwTakenIds());
                         cards.push(parsed);
                         saveToStorage();
                         renderCards();
@@ -987,6 +1053,8 @@
         }
 
         function saveToStorage() {
+            fwEnsureIds();
+            fwCardsLoadFailed = false;
             localStorage.setItem('fidelity_cards', JSON.stringify(cards));
         }
 
@@ -1007,6 +1075,7 @@
         }
 
         function renderCards() {
+            if (fwEnsureIds() && !fwCardsLoadFailed) { try { localStorage.setItem('fidelity_cards', JSON.stringify(cards)); } catch (e) {} }
             renderQuickAccessBar();
             const container = document.getElementById('cards-container');
             const emptyState = document.getElementById('empty-state');
@@ -1102,28 +1171,28 @@
                     : `<span class="font-bold text-sm text-white">${safeName.charAt(0)}</span>`;
 
                 cardEl.innerHTML = `
-                    <div class="flex items-start justify-between mb-3 relative z-10">
-                        <div class="flex items-center space-x-3 cursor-pointer flex-1" onclick="openBarcodeModal('${card.id}')">
+                    <div class="flex items-start justify-between gap-1 mb-3 relative z-10">
+                        <div class="flex items-center space-x-3 cursor-pointer flex-1 min-w-0" onclick="openBarcodeModal('${card.id}')">
                             <div class="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                                 ${logoHtml}
                             </div>
-                            <div class="overflow-hidden pr-2">
+                            <div class="overflow-hidden min-w-0 pr-1">
                                 <h3 class="font-extrabold text-sm tracking-tight text-white truncate">${safeName}</h3>
                                 <p class="text-[11px] text-white/80 font-mono truncate mt-0.5">${safeCode}</p>
                                 ${safeHolder ? `<p class="text-[10px] font-semibold text-white/90 truncate mt-0.5"><i class="fa-regular fa-user mr-1"></i>${safeHolder}</p>` : ''}
                             </div>
                         </div>
-                        <div class="flex items-center space-x-1 shrink-0">
-                            <button onclick="toggleFavorite('${card.id}')" class="w-9 h-9 rounded-xl flex items-center justify-center text-white/80 hover:text-amber-300 transition active:scale-95" title="Preferita">
+                        <div class="flex items-center shrink-0 -mr-1">
+                            <button onclick="toggleFavorite('${card.id}')" class="w-9 h-9 shrink-0 rounded-xl flex items-center justify-center text-white/80 hover:text-amber-300 transition active:scale-95" title="Preferita">
                                 <i class="${card.favorite ? 'fa-solid text-amber-300' : 'fa-regular'} fa-star text-sm"></i>
                             </button>
-                            <button onclick="shareCardSystem('${card.id}')" class="w-9 h-9 rounded-xl flex items-center justify-center text-white/80 hover:text-white transition active:scale-95" title="Condividi carta" aria-label="Condividi carta">
+                            <button onclick="shareCardSystem('${card.id}')" class="w-9 h-9 shrink-0 rounded-xl flex items-center justify-center text-white/80 hover:text-white transition active:scale-95" title="Condividi carta" aria-label="Condividi carta">
                                 <i class="fa-solid fa-share-nodes text-sm"></i>
                             </button>
-                            <button onclick="openEditModal('${card.id}')" class="w-9 h-9 rounded-xl flex items-center justify-center text-white/80 hover:text-white transition active:scale-95" title="Modifica">
+                            <button onclick="openEditModal('${card.id}')" class="w-9 h-9 shrink-0 rounded-xl flex items-center justify-center text-white/80 hover:text-white transition active:scale-95" title="Modifica">
                                 <i class="fa-solid fa-pen text-sm"></i>
                             </button>
-                            <button onclick="deleteCard('${card.id}')" class="w-9 h-9 rounded-xl flex items-center justify-center text-white/80 hover:text-rose-300 transition active:scale-95" title="Elimina carta">
+                            <button onclick="deleteCard('${card.id}')" class="w-9 h-9 shrink-0 rounded-xl flex items-center justify-center text-white/80 hover:text-rose-300 transition active:scale-95" title="Elimina carta">
                                 <i class="fa-solid fa-trash-can text-sm"></i>
                             </button>
                         </div>
@@ -1215,14 +1284,14 @@
         }
 
         function deleteCard(id) {
-            const card = cards.find(c => c.id === id);
+            const card = cards.find(c => fwSameId(c.id, id));
             if (!card) return;
             if (confirm(`Sei sicuro di voler eliminare la carta "${card.name}"?`)) {
-                cards = cards.filter(c => c.id !== id);
+                cards = cards.filter(c => !fwSameId(c.id, id));
                 fwHaptic('warn');
                 saveToStorage();
                 renderCards();
-                if (activeCardForModal && activeCardForModal.id === id) {
+                if (activeCardForModal && fwSameId(activeCardForModal.id, id)) {
                     closeBarcodeModal();
                 }
             }
@@ -1237,7 +1306,7 @@
         }
 
         function openBarcodeModal(id, silent) {
-            const card = cards.find(c => c.id === id);
+            const card = cards.find(c => fwSameId(c.id, id));
             if (!card) return;
             if (!silent) { fwTouchUsage(id); }
             activeCardForModal = card;
@@ -1290,6 +1359,18 @@
             fwBarcodeWake(false);
         }
 
+        // v13.7: Modifica ed Elimina anche dalla scheda aperta (prima mancavano: in vista a icone non c'era modo di farlo)
+        function editCardFromModal() {
+            if (!activeCardForModal) return;
+            const id = activeCardForModal.id;
+            closeBarcodeModal();
+            openEditModal(id);
+        }
+        function deleteCardFromModal() {
+            if (!activeCardForModal) return;
+            deleteCard(activeCardForModal.id);
+        }
+
         function toggleFavoriteFromModal() {
             if (!activeCardForModal) return;
             activeCardForModal.favorite = !activeCardForModal.favorite;
@@ -1300,7 +1381,7 @@
         }
 
         function toggleFavorite(id) {
-            const card = cards.find(c => c.id === id);
+            const card = cards.find(c => fwSameId(c.id, id));
             if (card) {
                 card.favorite = !card.favorite;
                 saveToStorage();
@@ -1323,7 +1404,7 @@
         }
 
         function openEditModal(id) {
-            const card = cards.find(c => c.id === id);
+            const card = cards.find(c => fwSameId(c.id, id));
             if (!card) return;
             document.getElementById('modal-title').innerText = 'Modifica Carta';
             document.getElementById('edit-card-id').value = card.id;
@@ -1379,7 +1460,7 @@
                     if (!confirm('Il formato EAN-13 richiede 13 cifre. Con questo codice l\'app userà CODE-128. Salvare comunque?')) { fwHaptic('warn'); return false; }
                 }
             }
-            const dup = cards.find(c => c.id !== id && String(c.code || '').trim() === clean);
+            const dup = cards.find(c => !fwSameId(c.id, id) && String(c.code || '').trim() === clean);
             if (dup && !confirm('Hai già una carta con questo codice: «' + dup.name + '». Salvarla comunque?')) { fwHaptic('warn'); return false; }
             return true;
         }
@@ -1402,7 +1483,7 @@
             let savedCard = null;
 
             if (id) {
-                const card = cards.find(c => c.id === id);
+                const card = cards.find(c => fwSameId(c.id, id));
                 if (card) {
                     card.name = name;
                     card.domain = domain;
@@ -1418,7 +1499,7 @@
                 }
             } else {
                 const newCard = {
-                    id: 'card_' + Date.now(),
+                    id: fwNewCardId(fwTakenIds()),
                     name, domain, color, code, type, holder, lat, lng, address, logo,
                     favorite: false
                 };
@@ -1657,7 +1738,7 @@
         function fwCandidates() {
             const list = [];
             fwStores.forEach(s => s.cardIds.forEach(id => {
-                if (cards.some(c => c.id === id)) list.push({ cardId: id, address: s.address, geom: s.geom, label: s.name });
+                if (cards.some(c => fwSameId(c.id, id))) list.push({ cardId: id, address: s.address, geom: s.geom, label: s.name });
             }));
             cards.forEach(c => {
                 if (c.lat != null && c.lng != null) list.push({ cardId: c.id, address: c.address || null, geom: { kind: 'point', lat: c.lat, lng: c.lng }, label: c.name });
@@ -1699,7 +1780,7 @@
         }
 
         async function fwNotify(c) {
-            const card = cards.find(x => x.id === c.cardId);
+            const card = cards.find(x => fwSameId(x.id, c.cardId));
             if (!card) return;
             if (Date.now() - (fwLast[card.id] || 0) < FW_COOLDOWN_MS) return;
             fwLast[card.id] = Date.now();
@@ -1721,8 +1802,8 @@
             if (!('Notification' in window) || Notification.permission !== 'granted') return;
             const options = {
                 body: (address ? address + '\n' : '') + 'Tocca per aprire la carta.',
-                icon: './icons/icon-192.png?v=13.5',
-                badge: './icons/icon-96.png?v=13.5',
+                icon: './icons/icon-192.png?v=13.10',
+                badge: './icons/icon-96.png?v=13.10',
                 tag: 'fw-' + card.id,
                 data: { cardId: card.id },
                 actions: [{ action: 'open', title: 'Apri carta' }],
@@ -2220,7 +2301,7 @@
            Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
            (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
            4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
-        const FW_VERSION = '13.5';
+        const FW_VERSION = '13.10';
         let fwEnrichBusy = false;
 
         function fwCleanDomain(u) {
@@ -2504,7 +2585,7 @@
                 st.textContent = done.length ? 'Compilato: ' + done.join(', ') + '.' : 'Nessun dato trovato: controlla il nome o compila a mano.';
                 // memorizza subito anche se la carta esiste già (es. appena scansionata)
                 if (formId && done.length) {
-                    const card = cards.find(c => c.id === formId);
+                    const card = cards.find(c => fwSameId(c.id, formId));
                     if (card) {
                         card.domain = domainEl.value.trim();
                         card.color = g('store-color').value;
@@ -2638,8 +2719,23 @@
             const cleanCode = (codeText || '').trim();
             const fullText = (ocrText + ' ' + cleanCode).toLowerCase();
 
+            // v13.7: prima il nome dell'insegna (prima "Fai la spesa da Eurospin" diventava Esselunga per la parola "spesa")
+            const norm = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
+            const flat = norm(fullText);
+            let best = null, bestHits = 0;
             for (const b of BRAND_DATABASE) {
-                if (b.keywords.some(kw => fullText.includes(kw))) {
+                const key = norm(b.name.toLowerCase());
+                if (!key) continue;
+                const hits = flat.split(key).length - 1;
+                if (hits > bestHits) { best = b; bestHits = hits; }
+            }
+            if (best) return best;
+            // Poi solo parole che appartengono a una sola insegna (niente "spesa", "casa", "club"...)
+            const kwCount = {};
+            BRAND_DATABASE.forEach(b => b.keywords.forEach(kw => { kwCount[kw] = (kwCount[kw] || 0) + 1; }));
+            const GENERIC = ['family', 'insieme', 'club', 'sport', 'spesa', 'casa', 'discount', 'supermercato', 'pulizia', 'profumo', 'mobile', 'telefono', 'pc', 'giardino', 'tecnologia', 'elettronica', 'cosmetici', 'trucco', 'scarpe', 'abbigliamento', 'arredamento', 'bricolage', 'fai da te', 'acqua', 'sapone'];
+            for (const b of BRAND_DATABASE) {
+                if (b.keywords.some(kw => kwCount[kw] === 1 && !GENERIC.includes(kw) && new RegExp('\\b' + kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(fullText))) {
                     return b;
                 }
             }
@@ -2671,14 +2767,26 @@
             html5QrCode.start(
                 { facingMode: "environment" },
                 { fps: 10, qrbox: { width: 220, height: 140 } },
-                decodedText => {
-                    handleScannedOrImportedCode(decodedText);
+                (decodedText, decodedResult) => {
+                    let fmt = '';
+                    try { const f = decodedResult && decodedResult.result && decodedResult.result.format; fmt = f ? (f.formatName || f.format || '') : ''; } catch (e) {}
+                    handleScannedOrImportedCode(fwRestoreLeadingZero(decodedText, fmt));
                 },
                 errorMessage => {}
             ).catch(err => {});
         }
 
+        // Gli scanner leggono un EAN-13 che inizia con 0 come UPC-A e tolgono lo 0 iniziale (es. 0401234567893 -> 401234567893).
+        // Le barre sono identiche: rimettiamo lo 0 così il codice resta quello stampato sulla carta.
+        function fwRestoreLeadingZero(text, format) {
+            const t = String(text == null ? '' : text).trim();
+            const f = String(format == null ? '' : format).toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (/^\d{12}$/.test(t) && (f === 'UPCA' || (typeof ZXing !== 'undefined' && ZXing.BarcodeFormat && format === ZXing.BarcodeFormat.UPC_A))) return '0' + t;
+            return t;
+        }
+
         function handleScannedOrImportedCode(cleanText, detectedOcrText = '') {
+            cleanText = String(cleanText == null ? '' : cleanText).trim();
             fwHaptic('success');
             stopScanner();
             document.getElementById('scanner-modal').classList.add('hidden');
@@ -2702,7 +2810,7 @@
                 const brandColor = matchedBrand ? matchedBrand.color : '#6366f1';
 
                 const newCard = {
-                    id: 'card_' + Date.now(),
+                    id: fwNewCardId(fwTakenIds()),
                     name: brandName,
                     domain: brandDomain,
                     color: brandColor,
@@ -2735,7 +2843,9 @@
                     const codeReader = new ZXing.BrowserMultiFormatReader();
                     const result = await codeReader.decodeFromImageUrl(imageUrl);
                     if (result && result.getText()) {
-                        codeFound = result.getText();
+                        let fmt = '';
+                        try { fmt = result.getBarcodeFormat(); } catch (e) {}
+                        codeFound = fwRestoreLeadingZero(result.getText(), fmt);
                     }
                 } catch (e) {}
 
@@ -2783,7 +2893,7 @@
 
         function stopScanner() {
             if (html5QrCode) {
-                html5QrCode.stop().catch(err => {});
+                try { const r = html5QrCode.stop(); if (r && r.catch) r.catch(err => {}); } catch (err) {}
             }
         }
 
@@ -2806,7 +2916,7 @@
         // La carta che si sta condividendo: resta valida anche dopo la chiusura della scheda aperta.
         let fwShareCard = null;
         async function shareCardSystem(id) {
-            const card = id ? cards.find(c => c.id === id) : (fwShareCard || activeCardForModal);
+            const card = id ? cards.find(c => fwSameId(c.id, id)) : (fwShareCard || activeCardForModal);
             if (!card) return;
             const note = document.getElementById('share-system-note');
             const say = t => { if (note && !document.getElementById('share-modal').classList.contains('hidden')) note.textContent = t; else alert(t); };
@@ -2900,9 +3010,10 @@
                 fileReader.readAsText(event.target.files[0], "UTF-8");
                 fileReader.onload = e => {
                     try {
-                        const imported = JSON.parse(e.target.result);
-                        if (Array.isArray(imported)) {
-                            cards = imported;
+                        const imported = fwExtractCards(JSON.parse(e.target.result));
+                        if (!imported) { alert('File non valido.'); return; }
+                        {
+                            cards = fwNormalizeCards(imported).cards;
                             saveToStorage();
                             renderCards();
                             closeSettingsModal();
@@ -3166,9 +3277,9 @@
                 }
                 if (!confirm('Ripristinare il backup del ' + formatDateTimeIT(f.modifiedTime) + '?\n(' + f.name + ')\nLe carte attuali verranno sostituite.')) return;
                 const fileRes = await driveFetch('https://www.googleapis.com/drive/v3/files/' + f.id + '?alt=media');
-                const cloudCards = await fileRes.json();
+                const cloudCards = fwExtractCards(await fileRes.json());
                 if (!Array.isArray(cloudCards)) { alert('Il file su Drive non è un backup valido.'); return; }
-                cards = cloudCards;
+                cards = fwNormalizeCards(cloudCards).cards;
                 saveToStorage();
                 renderCards();
                 alert('Carte ripristinate dal backup del ' + formatDateTimeIT(f.modifiedTime) + '.');
@@ -3441,16 +3552,16 @@
 
         // Applica un backup: prima salva una copia di sicurezza delle carte attuali
         window.fwBkApply = async function (text) {
-            const data = JSON.parse(text);
-            if (!Array.isArray(data)) throw new Error('Il file non è un backup valido.');
+            const data = fwExtractCards(JSON.parse(text));
+            if (!data) throw new Error('Il file non è un backup valido.');
             if (Array.isArray(cards) && cards.length) { try { await doBackup({ interactive: false, label: 'prima del ripristino' }); } catch (e) {} }
-            localStorage.setItem(K_HASH, hash(JSON.stringify(data, null, 2)));
-            cards = data;
+            cards = fwNormalizeCards(data).cards;
+            localStorage.setItem(K_HASH, hash(JSON.stringify(cards, null, 2)));
             saveToStorage();
             renderCards();
             try { closeSettingsModal(); } catch (e) {}
             refreshUI();
-            return data.length;
+            return cards.length;
         };
 
         window.fwBkRestore = function () { if (window.fwSheet) window.fwSheet.open('local'); };
@@ -3681,8 +3792,8 @@
                     const text = await it.read();
                     if (my !== this.tok) return;
                     let data;
-                    try { data = JSON.parse(text); } catch (e) { throw new Error('Il file non è un JSON valido.'); }
-                    if (!Array.isArray(data)) throw new Error('Il file non è un backup valido di Fidelity Wallet.');
+                    try { data = fwExtractCards(JSON.parse(text)); } catch (e) { throw new Error('Il file non è un JSON valido.'); }
+                    if (!data) throw new Error('Il file non è un backup valido di Fidelity Wallet.');
                     const cur = Array.isArray(cards) ? cards.length : 0;
                     body.textContent = '';
                     const det = h('div', 'fw-det');
@@ -3824,5 +3935,221 @@
         if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', put); else put();
     })();
     </script>
+<!-- v13.10 CONFIGURAZIONE GUIDATA -->
+<div id="fw-tour" class="hidden fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-3" role="dialog" aria-modal="true" aria-labelledby="fw-tour-title">
+  <div class="w-full max-w-md bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-3xl shadow-2xl p-5 relative">
+    <button onclick="fwTourClose()" aria-label="Chiudi guida" class="absolute top-3 right-3 w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+    <div id="fw-tour-body" class="min-h-[260px]"></div>
+    <div id="fw-tour-dots" class="flex justify-center gap-1.5 my-4"></div>
+    <div class="flex gap-2">
+      <button id="fw-tour-prev" onclick="fwTourGo(-1)" class="flex-1 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 font-bold text-sm">Indietro</button>
+      <button id="fw-tour-next" onclick="fwTourGo(1)" class="flex-[2] h-12 rounded-2xl bg-amber-600 text-white font-bold text-sm">Avanti</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const KEY='fw_tour_done_v1';
+  const btn=(fn,icon,label)=>`<button onclick="${fn}" class="w-full h-12 mt-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300 font-bold text-sm flex items-center justify-center gap-2"><i class="fa-solid ${icon}"></i>${label}</button>`;
+  const steps=[
+    {t:'Benvenuto in Fidelity Wallet',h:`<img src="./icons/icon-192.png?v=13.10" alt="Logo Fidelity Wallet" class="w-24 h-24 rounded-3xl mx-auto mb-3 shadow-lg"><p class="text-sm text-center">Tutte le tue carte fedeltà in un unico posto, sempre con te, anche senza internet. Ti aiuto a configurare l'app in pochi passi.</p>`},
+    {t:'Scegli il tema',h:`<p class="text-sm">Preferisci l'app chiara o scura? Puoi cambiarla quando vuoi con la luna in alto.</p>${btn("toggleTheme()","fa-circle-half-stroke","Cambia tema")}`},
+    {t:'Posizione (consigliata)',h:`<p class="text-sm">Con la posizione l'app ti mostra per prima la carta del negozio in cui ti trovi. La posizione resta sul telefono.</p>${btn("fwTourGps()","fa-location-dot","Attiva la posizione")}<p id="fw-tour-gps" class="text-xs mt-2 text-slate-500"></p>`},
+    {t:'Avvisi (facoltativo)',h:`<p class="text-sm">Ricevi un avviso quando sei vicino a un negozio di cui hai la carta.</p>${btn("requestNotificationPermission()","fa-bell","Attiva gli avvisi")}`},
+    {t:'Aggiungi la prima carta',h:`<p class="text-sm">Inquadra il codice a barre o il QR della carta con la fotocamera, oppure scegli una foto o uno screenshot. L'app riconosce negozio e numero da sola.</p>${btn("fwTourDo('openScannerModal')","fa-camera","Scansiona una carta")}${btn("fwTourDo('openAddModal')","fa-keyboard","Inserisci a mano")}`},
+    {t:'Metti al sicuro le carte',h:`<p class="text-sm">Dalle Opzioni puoi salvare una copia delle carte su Google Drive o in un file, così non le perdi se cambi telefono.</p>${btn("fwTourDo('openSettingsModal')","fa-shield-halved","Apri le Opzioni")}`},
+    {t:'Installa sulla schermata Home',h:`<p class="text-sm">Per aprirla come una vera app: su Android tocca <b>Installa</b> in alto o «Aggiungi a schermata Home» dal menu del browser; su iPhone tocca <b>Condividi</b> e poi «Aggiungi alla schermata Home».</p>`},
+    {t:'Tutto pronto!',h:`<p class="text-5xl text-center my-3">🎉</p><p class="text-sm text-center">Puoi rivedere questa guida quando vuoi toccando il pulsante <b><i class="fa-solid fa-circle-question text-amber-500"></i></b> in alto.</p>`}
+  ];
+  let i=0;
+  function render(){
+    const s=steps[i];
+    document.getElementById('fw-tour-body').innerHTML=`<p class="text-[11px] font-bold uppercase tracking-wider text-amber-600 mb-1">Passo ${i+1} di ${steps.length}</p><h2 id="fw-tour-title" class="text-lg font-black mb-3 pr-10">${s.t}</h2>${s.h}`;
+    document.getElementById('fw-tour-dots').innerHTML=steps.map((_,k)=>`<span class="h-1.5 rounded-full ${k===i?'w-6 bg-amber-500':'w-1.5 bg-slate-300 dark:bg-slate-700'}"></span>`).join('');
+    document.getElementById('fw-tour-prev').style.visibility=i?'visible':'hidden';
+    document.getElementById('fw-tour-next').textContent=i===steps.length-1?'Inizia a usare l\'app':(i===0?'Iniziamo':'Avanti');
+  }
+  window.fwTourOpen=function(){ try{closeGuideModal();}catch(e){} i=0; render(); document.getElementById('fw-tour').classList.remove('hidden'); };
+  window.fwTourClose=function(){ document.getElementById('fw-tour').classList.add('hidden'); try{localStorage.setItem(KEY,'1');}catch(e){} };
+  window.fwTourGo=function(d){ if(i+d>=steps.length) return fwTourClose(); i=Math.max(0,i+d); render(); };
+  window.fwTourDo=function(fn){ fwTourClose(); try{ window[fn](); }catch(e){} };
+  window.fwTourGps=function(){ const o=document.getElementById('fw-tour-gps');
+    if(!navigator.geolocation){o.textContent='Questo telefono non permette la posizione.';return;}
+    o.textContent='Attendo il permesso…';
+    navigator.geolocation.getCurrentPosition(()=>{o.textContent='✓ Posizione attiva.'; try{ if(typeof gpsEnabled!=='undefined' && !gpsEnabled) toggleGpsMode(); }catch(e){} },()=>{o.textContent='Permesso negato: puoi attivarlo dopo dalle impostazioni del telefono.';},{timeout:15000});
+  };
+  window.addEventListener('load',()=>{ let done=null; try{done=localStorage.getItem(KEY);}catch(e){} if(!done) setTimeout(fwTourOpen,600); });
+})();
+</script>
+
+<script>
+/* Sfondo animato a tema: chiaro = sole, raggi, nuvole, colline; scuro = costellazioni nello spazio */
+(function () {
+    const cv = document.getElementById('fw-bg');
+    if (!cv || !cv.getContext) return;
+    const ctx = cv.getContext('2d');
+    const root = document.documentElement;
+    const mqReduce = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+    let W = 0, H = 0, dpr = 1, raf = 0, last = 0, stars = [], clouds = [], shoot = null, nextShoot = 4;
+
+    function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+    // Costellazioni: punti (x,y) in unità relative e collegamenti
+    const CONS = [
+        { cx: .30, cy: .24, s: .20, p: [[-.9,-1],[.9,-.8],[-.35,.05],[0,.1],[.35,.15],[-.8,1.1],[.9,1.0]], e: [[0,2],[2,3],[3,4],[4,1],[2,5],[4,6],[0,1],[5,6]] },            // Orione
+        { cx: .76, cy: .13, s: .18, p: [[-1.2,.3],[-.6,-.3],[0,.2],[.6,-.4],[1.2,.2]], e: [[0,1],[1,2],[2,3],[3,4]] },                                                        // Cassiopea
+        { cx: .68, cy: .58, s: .22, p: [[-1.3,-.3],[-.7,-.1],[-.2,-.3],[.3,.0],[.5,.7],[1.2,.8],[1.3,.0]], e: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,3]] },                    // Grande Carro
+        { cx: .22, cy: .74, s: .17, p: [[0,-1.1],[0,1.1],[-.9,0],[.9,0],[.3,.4]], e: [[0,1],[2,3]] },                                                                        // Croce del Sud
+        { cx: .50, cy: .90, s: .14, p: [[-1,0],[-.3,.4],[.4,.1],[1,.5]], e: [[0,1],[1,2],[2,3]] }
+    ];
+
+    function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth; H = window.innerHeight;
+        cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const r = rng(7), n = Math.round(Math.min(220, W * H / 4200));
+        stars = [];
+        for (let i = 0; i < n; i++) stars.push({ x: r(), y: r(), r: .3 + r() * 1.1, ph: r() * 6.28, sp: .6 + r() * 1.8 });
+        clouds = [];
+        for (let i = 0; i < 6; i++) clouds.push({ x: r(), y: .06 + r() * .38, s: .55 + r() * .8, v: 6 + r() * 10 });
+        draw(performance.now() / 1000);
+    }
+
+    /* ---------- TEMA CHIARO ---------- */
+    function cloud(x, y, s, a) {
+        const u = 34 * s;
+        ctx.save(); ctx.translate(x, y);
+        ctx.fillStyle = 'rgba(255,255,255,' + a + ')';
+        ctx.beginPath();
+        ctx.arc(-u * 1.5, 0, u * .7, 0, 6.3); ctx.arc(-u * .6, -u * .55, u * .95, 0, 6.3);
+        ctx.arc(u * .5, -u * .4, u * .85, 0, 6.3); ctx.arc(u * 1.4, 0, u * .65, 0, 6.3);
+        ctx.rect(-u * 1.5, -u * .1, u * 2.9, u * .7);
+        ctx.fill();
+        ctx.restore();
+    }
+    function hill(base, amp, f1, f2, ph, c1, c2) {
+        const g = ctx.createLinearGradient(0, base - amp, 0, H);
+        g.addColorStop(0, c1); g.addColorStop(1, c2);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, H);
+        for (let x = 0; x <= W + 8; x += 8) {
+            const y = base + Math.sin(x * f1 + ph) * amp + Math.sin(x * f2 + ph * 1.7) * amp * .45;
+            ctx.lineTo(x, y);
+        }
+        ctx.lineTo(W, H); ctx.closePath(); ctx.fill();
+    }
+    function drawLight(t) {
+        const sky = ctx.createLinearGradient(0, 0, 0, H);
+        sky.addColorStop(0, '#8fd0f8'); sky.addColorStop(.55, '#d6f0fd'); sky.addColorStop(1, '#fff4d9');
+        ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+
+        const m = Math.min(W, H), sx = W * .8, sy = H * .13 + 14, sr = m * .075;
+        const glow = ctx.createRadialGradient(sx, sy, sr * .5, sx, sy, sr * 5);
+        glow.addColorStop(0, 'rgba(255,240,170,.75)'); glow.addColorStop(1, 'rgba(255,240,170,0)');
+        ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+
+        ctx.save(); ctx.translate(sx, sy); ctx.rotate(t * .06);
+        const N = 16;
+        for (let i = 0; i < N; i++) {
+            const len = sr * (2.4 + (i % 2 ? .9 : 1.9) + Math.sin(t * 1.3 + i) * .35);
+            const w = i % 2 ? .06 : .09;
+            const g = ctx.createLinearGradient(0, 0, len, 0);
+            g.addColorStop(0, 'rgba(255,226,120,.55)'); g.addColorStop(1, 'rgba(255,226,120,0)');
+            ctx.save(); ctx.rotate(i * 6.2832 / N);
+            ctx.fillStyle = g; ctx.beginPath();
+            ctx.moveTo(sr * .9, -sr * w); ctx.lineTo(sr + len, 0); ctx.lineTo(sr * .9, sr * w); ctx.closePath(); ctx.fill();
+            ctx.restore();
+        }
+        ctx.restore();
+        const sun = ctx.createRadialGradient(sx - sr * .25, sy - sr * .25, sr * .1, sx, sy, sr);
+        sun.addColorStop(0, '#fffbd0'); sun.addColorStop(.6, '#ffe066'); sun.addColorStop(1, '#ffb82e');
+        ctx.fillStyle = sun; ctx.beginPath(); ctx.arc(sx, sy, sr * (1 + Math.sin(t * 1.6) * .02), 0, 6.3); ctx.fill();
+
+        for (const c of clouds) {
+            const span = W + 300, x = ((c.x * span + t * c.v) % span) - 150;
+            cloud(x, c.y * H, c.s * (m / 700 + .4), .92);
+        }
+
+        const b = H * .8, sway = t * .05;
+        hill(b - H * .02, H * .035, .004, .009, sway,      '#b9e6a0', '#d6f2b8');
+        hill(b + H * .04, H * .04,  .006, .013, sway + 2,  '#8fd18a', '#b5e6a2');
+        hill(b + H * .10, H * .045, .005, .011, sway + 4.5,'#62bb73', '#8dd592');
+    }
+
+    /* ---------- TEMA SCURO ---------- */
+    function drawDark(t, dt) {
+        const g = ctx.createLinearGradient(0, 0, 0, H);
+        g.addColorStop(0, '#04060f'); g.addColorStop(.6, '#0a1230'); g.addColorStop(1, '#1a1347');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+        const neb = [[.2, .3, '90,70,200', .16], [.85, .65, '40,120,220', .13], [.5, .95, '170,60,190', .12]];
+        neb.forEach((n, i) => {
+            const x = W * (n[0] + Math.sin(t * .03 + i) * .04), y = H * (n[1] + Math.cos(t * .025 + i) * .03), r = Math.max(W, H) * .55;
+            const rg = ctx.createRadialGradient(x, y, 0, x, y, r);
+            rg.addColorStop(0, 'rgba(' + n[2] + ',' + n[3] + ')'); rg.addColorStop(1, 'rgba(' + n[2] + ',0)');
+            ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+        });
+
+        const dx = Math.sin(t * .04) * 10, dy = Math.cos(t * .035) * 8;
+        for (const s of stars) {
+            const a = .35 + .65 * (.5 + .5 * Math.sin(t * s.sp + s.ph));
+            ctx.fillStyle = 'rgba(220,230,255,' + a.toFixed(3) + ')';
+            ctx.beginPath(); ctx.arc(s.x * W + dx * s.r, s.y * H + dy * s.r, s.r, 0, 6.3); ctx.fill();
+        }
+
+        const m = Math.min(W, H) * 1.05;
+        CONS.forEach((c, ci) => {
+            const cyc = 14, ph = ((t + ci * 3.1) % cyc) / cyc;           // 0..1
+            const draw = Math.min(1, ph / .35), fade = ph > .8 ? 1 - (ph - .8) / .2 : 1;
+            const pts = c.p.map(p => [W * c.cx + p[0] * c.s * m + dx * 1.5, H * c.cy + p[1] * c.s * m + dy * 1.5]);
+            const total = c.e.length, upto = draw * total;
+            ctx.lineWidth = 1; ctx.lineCap = 'round';
+            c.e.forEach((e, i) => {
+                const k = Math.max(0, Math.min(1, upto - i)); if (!k) return;
+                const a = pts[e[0]], b = pts[e[1]];
+                ctx.strokeStyle = 'rgba(150,180,255,' + (.5 * fade).toFixed(3) + ')';
+                ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k); ctx.stroke();
+            });
+            pts.forEach((p, i) => {
+                const tw = .75 + .25 * Math.sin(t * 2 + i * 1.7 + ci);
+                const r = 5 + 2 * tw;
+                const gl = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], r * 2.2);
+                gl.addColorStop(0, 'rgba(190,210,255,' + (.7 * tw).toFixed(3) + ')'); gl.addColorStop(1, 'rgba(190,210,255,0)');
+                ctx.fillStyle = gl; ctx.fillRect(p[0] - r * 2.2, p[1] - r * 2.2, r * 4.4, r * 4.4);
+                ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(p[0], p[1], 1.6 + tw * .6, 0, 6.3); ctx.fill();
+            });
+        });
+
+        if (!mqReduce.matches) {
+            nextShoot -= dt;
+            if (!shoot && nextShoot <= 0) { shoot = { x: W * (.3 + Math.random() * .7), y: H * Math.random() * .35, life: 0 }; nextShoot = 7 + Math.random() * 8; }
+            if (shoot) {
+                shoot.life += dt; const k = shoot.life / 1.1;
+                const x = shoot.x - k * W * .35, y = shoot.y + k * H * .16;
+                const gr = ctx.createLinearGradient(x, y, x + 90, y - 36);
+                gr.addColorStop(0, 'rgba(255,255,255,' + (1 - k).toFixed(3) + ')'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.strokeStyle = gr; ctx.lineWidth = 1.6;
+                ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 90, y - 36); ctx.stroke();
+                if (k >= 1) shoot = null;
+            }
+        }
+    }
+
+    function draw(t, dt) { root.classList.contains('dark') ? drawDark(t, dt || 0) : drawLight(t); }
+
+    function loop(ts) {
+        raf = requestAnimationFrame(loop);
+        if (ts - last < 33) return;                 // ~30 fps: fluido e leggero sulla batteria
+        const dt = Math.min(.1, (ts - last) / 1000); last = ts;
+        draw(ts / 1000, dt);
+    }
+    function start() { cancelAnimationFrame(raf); if (mqReduce.matches || document.hidden) { draw(performance.now() / 1000 + 20); return; } raf = requestAnimationFrame(loop); }
+
+    window.addEventListener('resize', resize);
+    document.addEventListener('visibilitychange', start);
+    if (mqReduce.addEventListener) mqReduce.addEventListener('change', start);
+    new MutationObserver(() => { draw(performance.now() / 1000 + (mqReduce.matches ? 20 : 0)); }).observe(root, { attributes: true, attributeFilter: ['class'] });
+    resize(); start();
+})();
+</script>
 </body>
 </html>
