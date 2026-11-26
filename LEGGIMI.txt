@@ -1,6 +1,12 @@
-Sfondo animato: tema chiaro = sole con raggi, nuvole e colline; tema scuro = costellazioni nello spazio (v13.10b).
+# Fidelity Wallet — PWA v13.11
 
-# Fidelity Wallet — PWA v13.10
+## Novità v13.11
+- La versione vicino al logo ora si aggiorna: l'app non usa più la copia in cache della pagina (il service worker chiede sempre la versione fresca alla rete) e confronta da sola la versione in uso con quella pubblicata. Se è diversa compare l'avviso «Aggiorna» (svuota solo le copie dell'app, mai le carte). Puoi anche toccare la versione accanto al logo, oppure usare «Controlla aggiornamenti» in fondo alle Impostazioni.
+- Condivisione multipla: tocca l'icona con la spunta accanto alla ricerca (o tieni premuta una carta), seleziona le carte (anche «Tutte»), poi «Condividi». Chi riceve il link le importa tutte insieme; le carte già presenti non vengono duplicate. Con 1–4 carte è disponibile anche il QR; con tante carte il link viene diviso in più parti.
+- Importazione più sicura: dai link ricevuti vengono copiati solo i campi noti (nome, codice, tipo, colore, dominio, intestatario) e il colore/dominio vengono controllati.
+- Sfondo animato: tema chiaro = sole con raggi, nuvole e colline; tema scuro = costellazioni nello spazio.
+- Service worker v13.11: apri l'app online una volta per ricevere l'aggiornamento.
+- Nota: il PDF della guida è fermo alla v13.2; la guida aggiornata è quella dentro l'app (pulsante con il libro).
 
 ## Novità v13.10
 - Icone a tutta grandezza: il logo riempie ora tutta l'icona, senza bordi né margini (anche quelle per la schermata Home).

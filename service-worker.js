@@ -1,5 +1,5 @@
-/* Fidelity Wallet – Service Worker v13.10 */
-const VERSION = 'v13-10';
+/* Fidelity Wallet – Service Worker v13.11 */
+const VERSION = 'v13-11';
 const SHELL_CACHE = 'fidelity-wallet-shell-' + VERSION;
 const RUNTIME_CACHE = 'fidelity-wallet-runtime-' + VERSION;
 const RUNTIME_MAX_ENTRIES = 150;
@@ -12,18 +12,18 @@ const APP_SHELL = [
   './manifest.webmanifest',
   './privacy.html',
   './Guida%20Utente%20Wallet%20Fedelta.pdf',
-  './icons/favicon-64.png?v=13.10',
-  './icons/icon-72.png?v=13.10',
-  './icons/icon-96.png?v=13.10',
-  './icons/icon-128.png?v=13.10',
-  './icons/icon-144.png?v=13.10',
-  './icons/icon-152.png?v=13.10',
-  './icons/icon-192.png?v=13.10',
-  './icons/icon-384.png?v=13.10',
-  './icons/icon-512.png?v=13.10',
-  './icons/icon-maskable-192.png?v=13.10',
-  './icons/icon-maskable-512.png?v=13.10',
-  './icons/apple-touch-icon.png?v=13.10'
+  './icons/favicon-64.png?v=13.11',
+  './icons/icon-72.png?v=13.11',
+  './icons/icon-96.png?v=13.11',
+  './icons/icon-128.png?v=13.11',
+  './icons/icon-144.png?v=13.11',
+  './icons/icon-152.png?v=13.11',
+  './icons/icon-192.png?v=13.11',
+  './icons/icon-384.png?v=13.11',
+  './icons/icon-512.png?v=13.11',
+  './icons/icon-maskable-192.png?v=13.11',
+  './icons/icon-maskable-512.png?v=13.11',
+  './icons/apple-touch-icon.png?v=13.11'
 ];
 
 // Librerie esterne (versioni fisse): precache "best effort", senza bloccare l'installazione.
@@ -98,7 +98,8 @@ function withTimeout(promise, ms) {
 async function handleNavigation(event) {
   const shell = await caches.open(SHELL_CACHE);
   try {
-    const network = (async () => (await event.preloadResponse) || fetch(event.request))();
+    // v13.11: sempre dalla rete e MAI dalla copia HTTP (GitHub Pages la tiene 10 minuti): la versione si aggiorna subito.
+    const network = fetch(event.request.url, { cache: 'no-cache', credentials: 'same-origin' });
     const response = await withTimeout(network, NAV_TIMEOUT_MS);
     if (response && response.ok) shell.put('./index.html', response.clone()).catch(() => {});
     return response;
@@ -111,7 +112,7 @@ async function handleNavigation(event) {
 async function staleWhileRevalidate(event, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(event.request, { ignoreSearch: false });
-  const update = fetch(event.request).then(res => {
+  const update = fetch(event.request, { cache: 'no-cache' }).then(res => {
     if (res && res.ok) cache.put(event.request, res.clone()).catch(() => {});
     return res;
   }).catch(() => null);

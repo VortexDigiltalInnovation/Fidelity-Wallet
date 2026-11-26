@@ -17,9 +17,9 @@
     
     <!-- Dynamic Manifest -->
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.10">
-    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.10">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.10">
+    <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon-64.png?v=13.11">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=13.11">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=13.11">
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -74,6 +74,14 @@
         header.sticky { padding-top: env(safe-area-inset-top); height: calc(3.5rem + env(safe-area-inset-top)); }
         .sticky.top-14 { top: calc(3.5rem + env(safe-area-inset-top)); }
         /* Pannelli a tutto schermo: margini sicuri e altezza reale (dvh) */
+        /* v13.11: selezione multipla */
+        .fw-sel-ov{position:absolute;inset:0;z-index:30;border-radius:inherit;cursor:pointer;background:rgba(15,23,42,.45);transition:background .15s}
+        .fw-sel-on .fw-sel-ov{background:rgba(79,70,229,.28)}
+        .fw-sel-on{outline:3px solid #6366f1;outline-offset:-3px}
+        .fw-sel-chk{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:9999px;border:3px solid #fff;background:rgba(0,0,0,.35);color:transparent;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+        .fw-sel-on .fw-sel-chk{background:#4f46e5;color:#fff}
+        #cards-container [data-cid]{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+        #fw-upd-banner{padding-top:max(.5rem, env(safe-area-inset-top))}
         #barcode-modal, #share-modal, #scanner-modal { padding-top: max(1rem, env(safe-area-inset-top)); padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
         #barcode-modal, #share-modal { overflow-y: auto; justify-content: flex-start; }
         #barcode-modal > div, #share-modal > div { margin-block: auto; }
@@ -195,10 +203,10 @@
     <!-- HEADER MINIMAL MOBILE-OPTIMIZED -->
     <header class="bg-cardLight/80 dark:bg-cardDark/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 sticky top-0 z-40 px-4 h-14 flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-2.5 min-w-0 flex-1">
-            <img src="./icons/icon-96.png?v=13.10" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
+            <img src="./icons/icon-96.png?v=13.11" alt="" width="32" height="32" class="w-8 h-8 rounded-xl shadow-md shadow-black/30 shrink-0">
             <div class="min-w-0">
                 <h1 class="font-black text-xs tracking-tight text-slate-900 dark:text-white flex items-center">
-                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" class="ml-1 text-[8px] font-bold text-slate-400">v13.10</span>
+                    Fidelity Wallet <span class="ml-1.5 px-1.5 py-0.2 rounded-full text-[8px] bg-emerald-500/20 text-emerald-500 font-extrabold uppercase">GPS</span> <span id="fw-ver-header" role="button" tabindex="0" title="Tocca per cercare aggiornamenti" onclick="fwCheckUpdate(true)" class="ml-1 text-[8px] font-bold text-slate-400 cursor-pointer underline decoration-dotted">v13.11</span>
                 </h1>
                 <p class="text-[10px] text-slate-500 dark:text-slate-400 block truncate" id="gps-status-text">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block align-middle mr-1 animate-pulse"></span>In attesa del GPS…
@@ -257,6 +265,10 @@
                 <span class="text-xs font-semibold hidden sm:inline">Preferite</span>
             </button>
 
+            <button aria-label="Seleziona più carte" aria-pressed="false" title="Seleziona più carte" onclick="fwSelToggle()" id="select-mode-btn" class="h-11 w-11 rounded-2xl bg-cardLight dark:bg-cardDark border border-slate-200 dark:border-slate-700/70 text-slate-600 dark:text-slate-300 flex items-center justify-center shadow-sm active:scale-95 transition">
+                <i class="fa-solid fa-square-check text-indigo-500 text-xs"></i>
+            </button>
+
             <button aria-label="Cambia vista: elenco o icone" onclick="toggleViewMode()" id="view-mode-btn" class="h-11 w-11 rounded-2xl bg-cardLight dark:bg-cardDark border border-slate-200 dark:border-slate-700/70 text-slate-600 dark:text-slate-300 flex items-center justify-center shadow-sm active:scale-95 transition shrink-0">
                 <i id="view-mode-icon" class="fa-solid fa-grip text-indigo-500 text-xs"></i>
             </button>
@@ -313,6 +325,26 @@
             <span class="text-[10px] font-bold tracking-tight">Opzioni</span>
         </button>
     </nav>
+
+    <!-- v13.11 BARRA SELEZIONE MULTIPLA (copre la barra in basso mentre si seleziona) -->
+    <div id="fw-sel-bar" class="hidden fixed bottom-0 left-0 right-0 z-[45] max-w-md mx-auto bg-cardLight/95 dark:bg-cardDark/95 backdrop-blur-xl border-t border-slate-200/80 dark:border-slate-800 px-3 pt-2 shadow-2xl" style="padding-bottom:max(.5rem, env(safe-area-inset-bottom))">
+        <div class="flex items-center gap-2">
+            <button type="button" onclick="fwSelExit()" class="h-12 px-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold active:scale-95">Annulla</button>
+            <button type="button" id="fw-sel-all" onclick="fwSelAll()" class="h-12 px-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold active:scale-95">Tutte</button>
+            <button type="button" id="fw-sel-qr" onclick="fwSelQr()" aria-label="Mostra QR" title="Mostra QR" class="hidden h-12 w-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 active:scale-95"><i class="fa-solid fa-qrcode"></i></button>
+            <button type="button" id="fw-sel-share" onclick="fwSelShare()" disabled class="flex-1 h-12 rounded-2xl bg-indigo-600 text-white text-xs font-bold flex items-center justify-center gap-2 active:scale-95 disabled:opacity-40"><i class="fa-solid fa-share-nodes"></i><span id="fw-sel-label">Seleziona le carte</span></button>
+        </div>
+    </div>
+
+    <!-- v13.11 AVVISO NUOVA VERSIONE -->
+    <div id="fw-upd-banner" class="hidden fixed top-0 left-0 right-0 z-[300] max-w-md mx-auto px-3">
+        <div class="mt-2 bg-indigo-600 text-white rounded-2xl shadow-2xl p-3 flex items-center gap-3">
+            <i class="fa-solid fa-arrow-rotate-right"></i>
+            <p class="text-xs font-semibold flex-1" id="fw-upd-text">Nuova versione disponibile.</p>
+            <button type="button" onclick="fwApplyUpdate()" class="h-9 px-3 rounded-xl bg-white text-indigo-700 text-xs font-extrabold active:scale-95">Aggiorna</button>
+            <button type="button" onclick="document.getElementById('fw-upd-banner').classList.add('hidden')" aria-label="Chiudi" class="w-8 h-8 text-white/80"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
 
     <!-- MODALE BARCODE (LUMINOSITÀ MASSIMA) -->
     <div id="barcode-modal" class="fixed inset-0 z-50 bg-black/98 backdrop-blur-md hidden flex flex-col items-center justify-center p-4">
@@ -520,11 +552,11 @@
             <button aria-label="Chiudi" onclick="closeShareModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 w-11 h-11 flex items-center justify-center rounded-full bg-slate-100 active:scale-95">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-            <h3 class="font-bold text-base text-slate-900 mb-1">Condividi Carta</h3>
+            <h3 id="share-modal-title" class="font-bold text-base text-slate-900 mb-1">Condividi Carta</h3>
             <p class="text-xs text-slate-500 text-center mb-4">Fai scansionare il QR oppure invialo con le app del telefono</p>
             <div id="share-qrcode-container" class="bg-white p-4 border border-slate-200 rounded-2xl shadow-inner flex justify-center mb-4"></div>
             <p id="share-card-info" class="text-xs font-semibold text-slate-700 text-center mb-4"></p>
-            <button type="button" onclick="shareCardSystem(fwShareCard && fwShareCard.id)" id="share-system-btn" class="w-full h-12 mb-2 bg-indigo-600 text-white font-bold rounded-2xl text-xs flex items-center justify-center gap-2 active:scale-95"><i class="fa-solid fa-share-from-square"></i><span>Condividi con…</span></button>
+            <button type="button" onclick="shareCardSystem()" id="share-system-btn" class="w-full h-12 mb-2 bg-indigo-600 text-white font-bold rounded-2xl text-xs flex items-center justify-center gap-2 active:scale-95"><i class="fa-solid fa-share-from-square"></i><span>Condividi con…</span></button>
             <p id="share-system-note" class="text-[11px] text-slate-500 text-center mb-3 min-h-[1rem]" role="status" aria-live="polite"></p>
             <button onclick="closeShareModal()" class="w-full h-12 bg-slate-100 text-slate-800 font-bold rounded-2xl text-xs active:scale-95">Chiudi</button>
         </div>
@@ -737,9 +769,10 @@
                     </div>
                 </div>
                 <div class="pt-3 pb-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                    <img src="./icons/icon-96.png?v=13.10" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.10</span></p>
+                    <img src="./icons/icon-96.png?v=13.11" alt="" width="40" height="40" class="w-10 h-10 rounded-xl mx-auto mb-1.5 shadow-md">
+                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-300">Fidelity Wallet · versione <span id="fw-ver-settings">13.11</span></p>
                     <p class="text-[10px] text-slate-400">Auto-compilazione carte • Negozi vicini &amp; Notifiche</p>
+                    <button type="button" onclick="fwCheckUpdate(true)" class="mt-2 h-9 px-4 rounded-xl bg-slate-200 dark:bg-slate-800 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 active:scale-95"><i class="fa-solid fa-arrow-rotate-right mr-1.5"></i>Controlla aggiornamenti</button>
                     <p class="text-[10px] mt-1"><a href="./privacy.html" target="_blank" rel="noopener" class="underline text-indigo-500">Informativa sulla privacy</a></p>
                 </div>
             </div>
@@ -751,10 +784,10 @@
         <div class="bg-cardLight dark:bg-cardDark text-slate-900 dark:text-slate-100 w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[94dvh] sm:h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-800">
             <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 shrink-0">
                 <div class="flex items-center gap-2 min-w-0">
-                    <img src="./icons/icon-96.png?v=13.10" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
+                    <img src="./icons/icon-96.png?v=13.11" alt="" width="36" height="36" class="w-9 h-9 rounded-xl shrink-0">
                     <div class="min-w-0">
                         <h3 class="font-bold text-sm">Guida Utente</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.10</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Fidelity Wallet · versione 13.11</p>
                     </div>
                 </div>
                 <button onclick="closeGuideModal()" aria-label="Chiudi guida" class="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -806,6 +839,7 @@
                         <li><b>Schermo acceso in cassa:</b> finché una carta è aperta lo schermo non si spegne (le app web non possono alzare la luminosità da sole: fallo dal telefono).</li>
                         <li><b>Cassa rapida e preferiti:</b> segna le carte più usate con la stella per averle nella barra in alto; cerca per nome o categoria.</li>
                         <li><b>Condivisione:</b> tocca l'icona di condivisione sulla carta, oppure apri la carta e premi <i>Condividi</i>: puoi inviarla con le app del telefono (WhatsApp, messaggi, e-mail…) oppure mostrare un QR che un familiare può inquadrare per importarla.</li>
+                        <li><b>Condividere più carte insieme:</b> tocca l'icona con la spunta accanto alla ricerca (oppure tieni premuta una carta), seleziona le carte, poi premi <i>Condividi</i>. Chi riceve il link le aggiunge tutte in un colpo; le carte già presenti non vengono duplicate. Con 1–4 carte puoi mostrare anche un QR.</li>
                         <li><b>Vibrazione (feedback aptico):</b> una breve vibrazione quando apri una carta, salvi, scansioni, elimini, completi un backup o arriva un avviso di prossimità. Si disattiva in <i>Impostazioni → Feedback aptico</i>. Non funziona su iPhone con Safari: il browser non la supporta.</li>
                         <li><b>Ordine delle carte:</b> in <i>Impostazioni → Ordine delle carte</i> scegli tra <i>Usate di recente</i> (predefinito), <i>Più usate</i>, <i>Come aggiunte</i> e <i>A–Z</i>. Le carte del negozio in cui ti trovi restano comunque in cima.</li>
                         <li><b>Controlli prima di salvare:</b> l'app ti avvisa se la cifra di controllo di un EAN-13 non torna (di solito è un errore di battitura), se il formato non è adatto o se esiste già una carta con lo stesso codice.</li>
@@ -833,14 +867,14 @@
                         <div><b>Non arrivano avvisi di prossimità.</b> Controlla che l'app sia aperta, che la posizione sia consentita (la riga in alto mostra la precisione e il negozio più vicino) e che il GPS non sia su <i>Off</i> nella barra in basso. In <i>Impostazioni → Rilevamento negozi</i> usa <i>Cerca ora</i>.</div>
                         <div><b>Le notifiche non compaiono.</b> Premi <i>Prova notifica</i> in <i>Impostazioni</i>. Su iPhone le notifiche funzionano solo dopo aver aggiunto l'app alla schermata Home.</div>
                         <div><b>Il browser chiede di consentire la modifica dei file.</b> Succede solo se premi <i>Salva ora</i> o <i>Riattiva l'accesso</i> per la cartella di backup: il permesso scade quando chiudi le schede dell'app. I backup automatici intanto restano nella memoria interna e passano nella cartella dopo il consenso.</div>
-                        <div><b>La versione sembra vecchia.</b> Guarda la versione accanto al logo e in fondo alle Impostazioni. Se è vecchia apri l'app con la connessione attiva e chiudila e riaprila una o due volte; se l'hai pubblicata tu, controlla di aver sostituito anche <i>service-worker.js</i>. L'icona sulla schermata Home si aggiorna dal browser anche dopo qualche giorno.</div>
+                        <div><b>La versione sembra vecchia.</b> Guarda la versione accanto al logo e in fondo alle Impostazioni: toccandola (o con <i>Controlla aggiornamenti</i>) l'app confronta la versione con quella pubblicata e ti propone di aggiornare. Se è vecchia apri l'app con la connessione attiva e chiudila e riaprila una o due volte; se l'hai pubblicata tu, controlla di aver sostituito anche <i>service-worker.js</i>. L'icona sulla schermata Home si aggiorna dal browser anche dopo qualche giorno.</div>
                         <div><b>Non sento la vibrazione.</b> Controlla che <i>Feedback aptico</i> sia attivo in Impostazioni e che il telefono non sia in modalità silenziosa o risparmio energetico. Su iPhone con Safari non è disponibile.</div>
                         <div><b>Il pulsante Installa non compare.</b> Apri l'app da un indirizzo HTTPS con Chrome, Edge o Safari.</div>
                         <div><b>Il negozio non viene trovato.</b> Su OpenStreetMap il punto vendita potrebbe avere un nome diverso o mancare: salva le coordinate dal modulo della carta con <i>GPS Attuale</i>.</div>
                     </div>
                 </details>
 
-                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.10 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.5)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
+                <p class="text-center text-[10px] text-slate-400 pt-1">Fidelity Wallet · v13.11 · <a href="./Guida%20Utente%20Wallet%20Fedelta.pdf" target="_blank" rel="noopener" class="underline">Guida in PDF (v13.2)</a> · <a href="./privacy.html" target="_blank" rel="noopener" class="underline">Privacy</a></p>
             </div>
         </div>
     </div>
@@ -875,6 +909,35 @@
                 if (event.data && event.data.type === 'OPEN_CARD') openBarcodeModal(event.data.cardId);
             });
         }
+
+        /* v13.11: controllo della versione. Confronta la versione in uso con quella pubblicata (sempre dalla rete, mai dalla cache)
+           e, se è diversa, propone di aggiornare: svuota solo le copie dell'app (non le carte) e ricarica. */
+        let fwLastUpdCheck = 0, fwRemoteVer = '';
+        async function fwCheckUpdate(manual) {
+            if (!navigator.onLine) { if (manual) alert('Sei offline: collegati a internet per cercare aggiornamenti.'); return; }
+            fwLastUpdCheck = Date.now();
+            try {
+                if (serviceWorkerReg) serviceWorkerReg.update().catch(() => {});
+                const res = await fetch('./index.html?_=' + Date.now(), { cache: 'no-store' });
+                const m = /FW_VERSION = '(\d[\d.]*)'/.exec(await res.text());
+                if (!m) throw new Error('versione non trovata');
+                fwRemoteVer = m[1];
+                if (fwRemoteVer !== FW_VERSION) {
+                    document.getElementById('fw-upd-text').textContent = 'Disponibile la versione ' + fwRemoteVer + ' (stai usando la ' + FW_VERSION + ').';
+                    document.getElementById('fw-upd-banner').classList.remove('hidden');
+                } else if (manual) alert('Hai già l\'ultima versione (' + FW_VERSION + ').');
+            } catch (e) { if (manual) alert('Impossibile controllare gli aggiornamenti ora. Riprova più tardi.'); }
+        }
+        async function fwApplyUpdate() {
+            try {
+                const keys = await caches.keys();
+                await Promise.all(keys.filter(k => k.startsWith('fidelity-wallet') || k.startsWith('wallet-fedelta')).map(k => caches.delete(k)));
+                if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); await Promise.all(regs.map(r => r.unregister())); }
+            } catch (e) {}
+            window.location.replace(window.location.pathname + '?u=' + Date.now());
+        }
+        window.addEventListener('load', () => setTimeout(() => fwCheckUpdate(false), 3000));
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && Date.now() - fwLastUpdCheck > 5 * 60 * 1000) fwCheckUpdate(false); });
 
         let deferredPrompt;
         window.addEventListener('appinstalled', () => document.getElementById('btn-install').classList.add('hidden'));
@@ -1007,19 +1070,14 @@
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            const sharedData = urlParams.get('card');
-            if (sharedData) {
+            const sharedRaw = urlParams.get('cards') || urlParams.get('card');
+            if (sharedRaw) {
                 try {
-                    const parsed = fwDecodeSharedCard(sharedData);
-                    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && parsed.name && parsed.code) {
-                        parsed.id = fwNewCardId(fwTakenIds());
-                        cards.push(parsed);
-                        saveToStorage();
-                        renderCards();
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        alert('Carta "' + sanitizeHTML(parsed.name) + '" importata con successo!');
-                    }
-                } catch(e) {}
+                    let parsed = fwDecodeSharedCard(sharedRaw);
+                    if (!Array.isArray(parsed)) parsed = [parsed];
+                    fwImportSharedCards(parsed);
+                } catch(e) { alert('Il link ricevuto non è valido o è incompleto.'); }
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
         });
 
@@ -1074,7 +1132,8 @@
             }
         }
 
-        function renderCards() {
+        function renderCards() { fwRenderCardsBase(); fwSelPaint(); }
+        function fwRenderCardsBase() {
             if (fwEnsureIds() && !fwCardsLoadFailed) { try { localStorage.setItem('fidelity_cards', JSON.stringify(cards)); } catch (e) {} }
             renderQuickAccessBar();
             const container = document.getElementById('cards-container');
@@ -1132,6 +1191,7 @@
                     
                     const item = document.createElement('div');
                     item.className = "bg-cardLight dark:bg-cardDark border border-slate-200/80 dark:border-slate-800/80 hover:border-indigo-500/80 rounded-2xl p-2.5 flex flex-col items-center justify-center cursor-pointer shadow-sm transition-all active:scale-95 group relative min-h-[96px]";
+                    item.dataset.cid = card.id;
                     item.onclick = () => openBarcodeModal(card.id);
 
                     const logoHtml = card.domain 
@@ -1154,6 +1214,7 @@
             container.className = "grid grid-cols-1 gap-3";
             filtered.forEach(card => {
                 const cardEl = document.createElement('div');
+                cardEl.dataset.cid = card.id;
                 const brandColor = card.color || '#6366f1';
                 
                 cardEl.className = "rounded-3xl p-3.5 flex flex-col justify-between shadow-md transition-all relative group overflow-hidden border";
@@ -1802,8 +1863,8 @@
             if (!('Notification' in window) || Notification.permission !== 'granted') return;
             const options = {
                 body: (address ? address + '\n' : '') + 'Tocca per aprire la carta.',
-                icon: './icons/icon-192.png?v=13.10',
-                badge: './icons/icon-96.png?v=13.10',
+                icon: './icons/icon-192.png?v=13.11',
+                badge: './icons/icon-96.png?v=13.11',
                 tag: 'fw-' + card.id,
                 data: { cardId: card.id },
                 actions: [{ action: 'open', title: 'Apri carta' }],
@@ -2301,7 +2362,7 @@
            Appena inserisci/scansioni una carta l'app: 1) riconosce il brand, 2) cerca il negozio più vicino su OpenStreetMap
            (indirizzo + coordinate), 3) ricava il dominio ufficiale (database interno -> sito del negozio su OSM -> Wikidata -> tentativo sul nome),
            4) scarica e memorizza il logo (resta disponibile anche offline) e il colore del brand, 5) salva tutto nella carta. */
-        const FW_VERSION = '13.10';
+        const FW_VERSION = '13.11';
         let fwEnrichBusy = false;
 
         function fwCleanDomain(u) {
@@ -2903,52 +2964,185 @@
             document.getElementById('scan-loading').classList.add('hidden');
         }
 
+        function fwSharePayload(c) { return { name: c.name, domain: c.domain, color: c.color, code: c.code, type: c.type, holder: c.holder }; }
         function fwCardShareUrl(card) {
-            const json = JSON.stringify({ name: card.name, domain: card.domain, color: card.color, code: card.code, type: card.type, holder: card.holder });
+            const json = JSON.stringify(fwSharePayload(card));
             let b64;
             try { b64 = btoa(json); } catch (e) { b64 = btoa(unescape(encodeURIComponent(json))); }
             return window.location.origin + window.location.pathname + '?card=' + encodeURIComponent(b64);
+        }
+        // v13.11: più carte in un solo link (?cards=). Con molte carte il link viene diviso in più parti.
+        function fwCardsShareUrl(list) {
+            if (list.length === 1) return fwCardShareUrl(list[0]);
+            const json = JSON.stringify(list.map(fwSharePayload));
+            return window.location.origin + window.location.pathname + '?cards=' + encodeURIComponent(btoa(unescape(encodeURIComponent(json))));
+        }
+        function fwShareChunks(list) {
+            const out = []; let cur = [];
+            list.forEach(c => {
+                const next = cur.concat([c]);
+                if (cur.length && fwCardsShareUrl(next).length > 3500) { out.push(cur); cur = [c]; } else cur = next;
+            });
+            if (cur.length) out.push(cur);
+            return out.map(g => ({ n: g.length, url: fwCardsShareUrl(g) }));
         }
         function fwDecodeSharedCard(raw) {
             const bin = atob(raw.replace(/ /g, '+'));
             try { return JSON.parse(decodeURIComponent(escape(bin))); } catch (e) { return JSON.parse(bin); }
         }
-        // La carta che si sta condividendo: resta valida anche dopo la chiusura della scheda aperta.
-        let fwShareCard = null;
+        // Importa una o più carte ricevute: copia solo i campi noti, controlla i valori e salta i doppioni.
+        function fwImportSharedCards(list) {
+            let added = 0, dup = 0, last = '';
+            list.forEach(p => {
+                if (!p || typeof p !== 'object' || Array.isArray(p) || !p.name || !p.code) return;
+                const name = String(p.name).trim().slice(0, 80), code = String(p.code).trim().slice(0, 300);
+                if (!name || !code) return;
+                if (cards.some(c => String(c.code).trim() === code && String(c.name).trim().toLowerCase() === name.toLowerCase())) { dup++; return; }
+                const card = { name: name, code: code };
+                const dom = fwCleanDomain(p.domain); if (dom) card.domain = dom;
+                if (/^#[0-9a-f]{3,8}$/i.test(String(p.color || ''))) card.color = p.color;
+                if (['EAN13', 'CODE128', 'QR'].includes(p.type)) card.type = p.type;
+                if (p.holder) card.holder = String(p.holder).trim().slice(0, 60);
+                card.id = fwNewCardId(fwTakenIds());
+                cards.push(card); added++; last = name;
+            });
+            if (added) { saveToStorage(); renderCards(); }
+            if (!added && !dup) { alert('Nessuna carta valida nel link ricevuto.'); return; }
+            let msg = added === 1 ? 'Carta "' + last + '" importata con successo!' : added + ' carte importate con successo!';
+            if (dup) msg += '\n' + (dup === 1 ? '1 carta era già presente e non è stata duplicata.' : dup + ' carte erano già presenti e non sono state duplicate.');
+            if (!added) msg = dup === 1 ? 'La carta era già presente: non è stata duplicata.' : 'Le ' + dup + ' carte erano già presenti: nessun doppione creato.';
+            alert(msg);
+        }
+        // Le carte che si stanno condividendo: restano valide anche dopo la chiusura della scheda aperta.
+        let fwShareCard = null, fwShareList = [];
         async function shareCardSystem(id) {
-            const card = id ? cards.find(c => fwSameId(c.id, id)) : (fwShareCard || activeCardForModal);
-            if (!card) return;
+            let list;
+            if (id) { const c = cards.find(c => fwSameId(c.id, id)); list = c ? [c] : []; }
+            else list = fwShareList.length ? fwShareList : [fwShareCard || activeCardForModal].filter(Boolean);
+            if (!list.length) return false;
             const note = document.getElementById('share-system-note');
             const say = t => { if (note && !document.getElementById('share-modal').classList.contains('hidden')) note.textContent = t; else alert(t); };
-            const url = fwCardShareUrl(card);
-            const text = 'Ti condivido la carta fedeltà ' + card.name + ' (codice ' + card.code + '). Aprendo il link la aggiungi al tuo Fidelity Wallet.';
-            if (navigator.share) {
-                try { await navigator.share({ title: 'Carta ' + card.name, text: text, url: url }); fwHaptic('success'); return; }
-                catch (e) { if (e && e.name === 'AbortError') return; }
+            const chunks = fwShareChunks(list);
+            const single = list.length === 1;
+            let text, title, url;
+            if (single) {
+                text = 'Ti condivido la carta fedeltà ' + list[0].name + ' (codice ' + list[0].code + '). Aprendo il link la aggiungi al tuo Fidelity Wallet.';
+                title = 'Carta ' + list[0].name; url = chunks[0].url;
+            } else {
+                const names = list.map(c => c.name).join(', ');
+                title = list.length + ' carte fedeltà';
+                if (chunks.length === 1) { text = 'Ti condivido ' + list.length + ' carte fedeltà (' + names + '). Aprendo il link le aggiungi al tuo Fidelity Wallet.'; url = chunks[0].url; }
+                else { text = 'Ti condivido ' + list.length + ' carte fedeltà (' + names + '). Apri tutti i link, uno dopo l\'altro, per aggiungerle al tuo Fidelity Wallet:\n' + chunks.map((c, i) => 'Parte ' + (i + 1) + ' di ' + chunks.length + ' (' + c.n + ' carte): ' + c.url).join('\n'); url = null; }
             }
-            try { await navigator.clipboard.writeText(text + '\n' + url); say('Condivisione non disponibile su questo dispositivo: testo e link copiati, incollali dove vuoi.'); }
-            catch (e) { window.prompt('Copia questo link e invialo:', url); }
+            if (navigator.share) {
+                try { await navigator.share(url ? { title: title, text: text, url: url } : { title: title, text: text }); fwHaptic('success'); return true; }
+                catch (e) { if (e && e.name === 'AbortError') return false; }
+            }
+            try { await navigator.clipboard.writeText(url ? text + '\n' + url : text); say('Condivisione non disponibile su questo dispositivo: testo e link copiati, incollali dove vuoi.'); return true; }
+            catch (e) { window.prompt('Copia questo testo e invialo:', url ? text + '\n' + url : text); return true; }
         }
 
-        function openShareModalFromCurrent() {
-            // v13.2: la carta va salvata PRIMA di chiudere la scheda aperta, che azzera activeCardForModal
-            // (prima il pulsante non faceva nulla perché la carta risultava già chiusa).
-            const card = activeCardForModal;
-            if (!card) return;
-            fwShareCard = card;
-            closeBarcodeModal();
-
-            const shareUrl = fwCardShareUrl(card);
+        function fwShowShareModal(list) {
+            fwShareList = list; fwShareCard = list[0];
+            const chunks = fwShareChunks(list);
             const sn = document.getElementById('share-system-note'); if (sn) sn.textContent = '';
-
-            document.getElementById('share-card-info').innerText = card.name + ' (' + card.code + ')';
+            document.getElementById('share-modal-title').innerText = list.length === 1 ? 'Condividi Carta' : 'Condividi ' + list.length + ' carte';
+            document.getElementById('share-card-info').innerText = list.length === 1 ? list[0].name + ' (' + list[0].code + ')' : list.map(c => c.name).join(', ');
             const container = document.getElementById('share-qrcode-container');
             container.innerHTML = '';
-            try { new QRCode(container, { text: shareUrl, width: 180, height: 180, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.L }); }
-            catch (e) { container.textContent = 'QR non disponibile: usa "Condividi con altre app".'; }
-
+            if (chunks.length === 1 && chunks[0].url.length <= 900) {
+                try { new QRCode(container, { text: chunks[0].url, width: 180, height: 180, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.L }); }
+                catch (e) { container.textContent = 'QR non disponibile: usa "Condividi con…".'; }
+            } else {
+                container.innerHTML = '<p class="text-xs text-slate-500 text-center px-2 py-6">Con tante carte il QR sarebbe troppo fitto per essere letto. Usa «Condividi con…» oppure scegli al massimo 4 carte per il QR.</p>';
+            }
             document.getElementById('share-modal').classList.remove('hidden');
         }
+        function openShareModalFromCurrent() {
+            // v13.2: la carta va salvata PRIMA di chiudere la scheda aperta, che azzera activeCardForModal
+            const card = activeCardForModal;
+            if (!card) return;
+            closeBarcodeModal();
+            fwShowShareModal([card]);
+        }
+
+        /* ===== v13.11 – selezione multipla delle carte da condividere ===== */
+        let fwSelMode = false;
+        const fwSel = new Set();
+        function fwSelCards() { return cards.filter(c => fwSel.has(String(c.id))); }
+        function fwSelUpdateBar() {
+            const n = fwSelCards().length;
+            const lab = document.getElementById('fw-sel-label'), btn = document.getElementById('fw-sel-share'), qr = document.getElementById('fw-sel-qr'), all = document.getElementById('fw-sel-all');
+            if (lab) lab.textContent = n === 0 ? 'Seleziona le carte' : (n === 1 ? 'Condividi 1 carta' : 'Condividi ' + n + ' carte');
+            if (btn) btn.disabled = n === 0;
+            if (qr) qr.classList.toggle('hidden', n < 1 || n > 4);
+            if (all) {
+                const ids = Array.from(document.querySelectorAll('#cards-container [data-cid]')).map(e => String(e.dataset.cid));
+                all.textContent = ids.length && ids.every(i => fwSel.has(i)) ? 'Nessuna' : 'Tutte';
+            }
+        }
+        function fwSelPaint() {
+            if (!fwSelMode) return;
+            document.querySelectorAll('#cards-container [data-cid]').forEach(el => {
+                el.querySelectorAll('.fw-sel-ov').forEach(x => x.remove());
+                const on = fwSel.has(String(el.dataset.cid));
+                el.classList.toggle('fw-sel-on', on);
+                const ov = document.createElement('div');
+                ov.className = 'fw-sel-ov';
+                ov.setAttribute('role', 'checkbox'); ov.setAttribute('aria-checked', on ? 'true' : 'false');
+                ov.onclick = e => { e.stopPropagation(); e.preventDefault(); fwSelFlip(el.dataset.cid); };
+                ov.innerHTML = '<span class="fw-sel-chk"><i class="fa-solid fa-check"></i></span>';
+                el.appendChild(ov);
+            });
+            fwSelUpdateBar();
+        }
+        function fwSelEnter(id) {
+            fwSelMode = true;
+            if (id != null) fwSel.add(String(id));
+            document.getElementById('fw-sel-bar').classList.remove('hidden');
+            const b = document.getElementById('select-mode-btn'); if (b) { b.setAttribute('aria-pressed', 'true'); b.classList.add('ring-2', 'ring-indigo-500'); }
+            renderCards(); fwHaptic('select');
+        }
+        function fwSelExit() {
+            fwSelMode = false; fwSel.clear();
+            document.getElementById('fw-sel-bar').classList.add('hidden');
+            const b = document.getElementById('select-mode-btn'); if (b) { b.setAttribute('aria-pressed', 'false'); b.classList.remove('ring-2', 'ring-indigo-500'); }
+            renderCards();
+        }
+        function fwSelToggle() { if (fwSelMode) fwSelExit(); else fwSelEnter(); }
+        function fwSelFlip(id) { id = String(id); if (fwSel.has(id)) fwSel.delete(id); else fwSel.add(id); fwSelPaint(); fwHaptic('select'); }
+        function fwSelAll() {
+            const ids = Array.from(document.querySelectorAll('#cards-container [data-cid]')).map(e => String(e.dataset.cid));
+            const every = ids.length && ids.every(i => fwSel.has(i));
+            ids.forEach(i => every ? fwSel.delete(i) : fwSel.add(i));
+            fwSelPaint();
+        }
+        async function fwSelShare() {
+            const list = fwSelCards();
+            if (!list.length) return;
+            fwShareList = list; fwShareCard = list[0];
+            if (await shareCardSystem()) fwSelExit();
+        }
+        function fwSelQr() { const list = fwSelCards(); if (list.length) fwShowShareModal(list); }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && fwSelMode) fwSelExit(); });
+        // Pressione prolungata su una carta: entra nella selezione e la seleziona
+        (function () {
+            const c = document.getElementById('cards-container');
+            if (!c) return;
+            let t = null, sx = 0, sy = 0, fired = false;
+            const stop = () => { clearTimeout(t); t = null; };
+            c.addEventListener('pointerdown', e => {
+                if (fwSelMode) return;
+                const el = e.target.closest && e.target.closest('[data-cid]');
+                if (!el) return;
+                sx = e.clientX; sy = e.clientY; fired = false; stop();
+                t = setTimeout(() => { fired = true; fwSelEnter(el.dataset.cid); }, 550);
+            });
+            c.addEventListener('pointermove', e => { if (t && (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10)) stop(); });
+            ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => c.addEventListener(ev, stop));
+            c.addEventListener('click', e => { if (fired) { e.stopPropagation(); e.preventDefault(); fired = false; } }, true);
+            c.addEventListener('contextmenu', e => { if (e.target.closest && e.target.closest('[data-cid]')) e.preventDefault(); });
+        })();
 
         function closeShareModal() {
             document.getElementById('share-modal').classList.add('hidden');
@@ -3935,7 +4129,7 @@
         if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', put); else put();
     })();
     </script>
-<!-- v13.10 CONFIGURAZIONE GUIDATA -->
+<!-- v13.11 CONFIGURAZIONE GUIDATA -->
 <div id="fw-tour" class="hidden fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-3" role="dialog" aria-modal="true" aria-labelledby="fw-tour-title">
   <div class="w-full max-w-md bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-3xl shadow-2xl p-5 relative">
     <button onclick="fwTourClose()" aria-label="Chiudi guida" class="absolute top-3 right-3 w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
@@ -3952,7 +4146,7 @@
   const KEY='fw_tour_done_v1';
   const btn=(fn,icon,label)=>`<button onclick="${fn}" class="w-full h-12 mt-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300 font-bold text-sm flex items-center justify-center gap-2"><i class="fa-solid ${icon}"></i>${label}</button>`;
   const steps=[
-    {t:'Benvenuto in Fidelity Wallet',h:`<img src="./icons/icon-192.png?v=13.10" alt="Logo Fidelity Wallet" class="w-24 h-24 rounded-3xl mx-auto mb-3 shadow-lg"><p class="text-sm text-center">Tutte le tue carte fedeltà in un unico posto, sempre con te, anche senza internet. Ti aiuto a configurare l'app in pochi passi.</p>`},
+    {t:'Benvenuto in Fidelity Wallet',h:`<img src="./icons/icon-192.png?v=13.11" alt="Logo Fidelity Wallet" class="w-24 h-24 rounded-3xl mx-auto mb-3 shadow-lg"><p class="text-sm text-center">Tutte le tue carte fedeltà in un unico posto, sempre con te, anche senza internet. Ti aiuto a configurare l'app in pochi passi.</p>`},
     {t:'Scegli il tema',h:`<p class="text-sm">Preferisci l'app chiara o scura? Puoi cambiarla quando vuoi con la luna in alto.</p>${btn("toggleTheme()","fa-circle-half-stroke","Cambia tema")}`},
     {t:'Posizione (consigliata)',h:`<p class="text-sm">Con la posizione l'app ti mostra per prima la carta del negozio in cui ti trovi. La posizione resta sul telefono.</p>${btn("fwTourGps()","fa-location-dot","Attiva la posizione")}<p id="fw-tour-gps" class="text-xs mt-2 text-slate-500"></p>`},
     {t:'Avvisi (facoltativo)',h:`<p class="text-sm">Ricevi un avviso quando sei vicino a un negozio di cui hai la carta.</p>${btn("requestNotificationPermission()","fa-bell","Attiva gli avvisi")}`},
